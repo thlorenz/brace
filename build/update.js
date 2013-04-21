@@ -5,14 +5,15 @@
 var path    =  require('path');
 var fs      =  require('fs');
 var workers =  require('./workers');
+var fixRequires = require('./fix-requires');
 
 require('shelljs/global');
 
-var braceroot    =  path.join(__dirname, '..');
-var themesdir    =  path.join(braceroot, 'themes');
-var languagesdir =  path.join(braceroot, 'languages');
-var workersdir   =  path.join(braceroot, 'workers');
-var buildroot    =  path.join(__dirname, 'ace-build');
+var braceroot =  path.join(__dirname, '..');
+var themedir  =  path.join(braceroot, 'theme');
+var modedir   =  path.join(braceroot, 'mode');
+var workerdir =  path.join(braceroot, 'worker');
+var buildroot =  path.join(__dirname, 'ace-build');
 
 +function updateCleanAndPutInOrder() {
 
@@ -32,33 +33,56 @@ var buildroot    =  path.join(__dirname, 'ace-build');
 
 
   +function themes() {
-    rm('-rf', themesdir);
-    mkdir(themesdir);
-    mv(path.join(buildroot, 'theme-*.js'), themesdir + '/');
+    rm('-rf', themedir);
+    mkdir(themedir);
+
+    ls(path.join(buildroot, 'theme-*.js'))
+      .forEach(function (file) {
+        var filename = path.basename(file).slice('theme-'.length);
+        mv(file, path.join(themedir, filename));
+      });
   }()
 
-  +function languages() {
-    rm('-rf', languagesdir);
-    mkdir(languagesdir);
+  +function modes() {
+    rm('-rf', modedir);
+    mkdir(modedir);
 
     ls(path.join(buildroot, 'mode-*.js'))
       .forEach(function (file) {
         var filename = path.basename(file).slice('mode-'.length);
-        mv(file, path.join(languagesdir, filename));
+        mv(file, path.join(modedir, filename));
       });
   }()
 
   +function workers() {
-    rm('-rf', workersdir);
-    mkdir(workersdir);
+    rm('-rf', workerdir);
+    mkdir(workerdir);
 
     ls(path.join(buildroot, 'worker-*.js'))
       .forEach(function (file) {
         var filename = path.basename(file).slice('worker-'.length);
-        mv(file, path.join(workersdir, filename));
+        mv(file, path.join(workerdir, filename));
       });
   }()
 
+}()
+
++function requires() {
+  function fixAllRequires(dir) {
+    ls(path.join(dir, '*.js'))
+      .forEach(function (entry) {
+        console.log('fixing', entry);
+        var file = path.join(dir, entry);
+        var src = fs.readFileSync(file, 'utf-8');
+        var fixed = fixRequires(src);
+        fs.writeFileSync(file, fixed, 'utf-8');
+      });
+  }
+
+  fixAllRequires(themedir);
+  fixAllRequires(modedir);
+  fixAllRequires(workerdir);
+  fixAllRequires(buildroot);
 }//()
 
 +function generateAcesForEachWorkerCombination () {
@@ -71,4 +95,4 @@ var buildroot    =  path.join(__dirname, 'ace-build');
       var p = path.join(braceroot, k + '.js'); 
       fs.writeFileSync(p, src, 'utf-8');
     });
-}()
+} //()
