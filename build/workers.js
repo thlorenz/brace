@@ -29,7 +29,8 @@ function minify(code) {
   return ast.transform(compressor).print_to_string();
 }
 
-var ones = exports.onelanguage = [ 'coffee', 'css', 'json', 'lua', 'php', 'xquery', 'javascript' ];
+// 'php', 'xquery' not supported since they cannot be inlined even when minified before stringify
+var ones = exports.onelanguage = [ 'coffee', 'css', 'json', 'lua', 'javascript' ]; 
 var twos = exports.twolanguages = [ 'css-javascript' ];
 
 var replace = exports.getInlines = function () {
