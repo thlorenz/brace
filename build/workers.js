@@ -1,6 +1,7 @@
 'use strict';
 
 var path = require('path')
+  , uglify = require('uglify-js')
   , fs = require('fs');
 
 var workers = { 
@@ -20,6 +21,14 @@ function getWorkers(lang) {
     });
 }
 
+function minify(code) {
+  var compressor = uglify.Compressor()
+    , ast = uglify.parse(code);
+
+  ast.figure_out_scope();
+  return ast.transform(compressor).print_to_string();
+}
+
 var ones = exports.onelanguage = [ 'coffee', 'css', 'json', 'lua', 'php', 'xquery', 'javascript' ];
 var twos = exports.twolanguages = [ 'css-javascript' ];
 
@@ -32,7 +41,7 @@ var replace = exports.getInlines = function () {
   ones.forEach(function (key) {
     var file = path.join(__dirname, '..', 'worker', key + '.js');
     var src = fs.readFileSync(file, 'utf-8');
-    inlines[key] = one.replace('{{src}}', JSON.stringify(src));
+    inlines[key] = one.replace('{{src}}', JSON.stringify(minify(src)));
   });
 
   twos.forEach(function (key) {
@@ -49,8 +58,8 @@ var replace = exports.getInlines = function () {
     inlines[key] = two
       .replace('{{name1}}', name1)
       .replace('{{name2}}', name2)
-      .replace('{{src1}}', JSON.stringify(src1))
-      .replace('{{src2}}', JSON.stringify(src2));
+      .replace('{{src1}}', JSON.stringify(minify(src1)))
+      .replace('{{src2}}', JSON.stringify(minify(src2)));
 
   });
 

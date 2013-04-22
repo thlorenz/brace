@@ -12,7 +12,9 @@
   },
   "homepage": "https://github.com/thlorenz/brace",
   "dependencies": {},
-  "devDependencies": {},
+  "devDependencies": {
+    "uglify-js": "~2.2.5"
+  },
   "keywords": [],
   "author": {
     "name": "Thorsten Lorenz",
