@@ -28,7 +28,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/theme/merbivore_soft', ['require', 'exports', 'module' , 'ace/lib/dom'], function(require, exports, module) {
+ace.define('ace/theme/merbivore_soft', ["require", 'exports', 'module' , 'ace/lib/dom'], function(acequire, exports, module) {
 
 exports.isDark = true;
 exports.cssClass = "ace-merbivore-soft";
@@ -131,6 +131,6 @@ text-decoration: underline\
 background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWOQkZH5zzBz5sz/AA8EBB6crd1rAAAAAElFTkSuQmCC) right repeat-y\
 }";
 
-var dom = require("../lib/dom");
+var dom = acequire("../lib/dom");
 dom.importCssString(exports.cssText, exports.cssClass);
 });

@@ -28,14 +28,14 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/mode/textile', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/textile_highlight_rules', 'ace/mode/matching_brace_outdent'], function(require, exports, module) {
+ace.define('ace/mode/textile', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/textile_highlight_rules', 'ace/mode/matching_brace_outdent'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextMode = require("./text").Mode;
-var Tokenizer = require("../tokenizer").Tokenizer;
-var TextileHighlightRules = require("./textile_highlight_rules").TextileHighlightRules;
-var MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutdent;
+var oop = acequire("../lib/oop");
+var TextMode = acequire("./text").Mode;
+var Tokenizer = acequire("../tokenizer").Tokenizer;
+var TextileHighlightRules = acequire("./textile_highlight_rules").TextileHighlightRules;
+var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
 
 var Mode = function() {
     this.$tokenizer = new Tokenizer(new TextileHighlightRules().getRules());
@@ -65,11 +65,11 @@ exports.Mode = Mode;
 
 });
 
-ace.define('ace/mode/textile_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/textile_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var TextileHighlightRules = function() {
     this.$rules = {
@@ -129,10 +129,10 @@ exports.TextileHighlightRules = TextileHighlightRules;
 
 });
 
-ace.define('ace/mode/matching_brace_outdent', ['require', 'exports', 'module' , 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/matching_brace_outdent', ["require", 'exports', 'module' , 'ace/range'], function(acequire, exports, module) {
 
 
-var Range = require("../range").Range;
+var Range = acequire("../range").Range;
 
 var MatchingBraceOutdent = function() {};
 

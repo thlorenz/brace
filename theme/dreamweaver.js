@@ -28,7 +28,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/theme/dreamweaver', ['require', 'exports', 'module' , 'ace/lib/dom'], function(require, exports, module) {
+ace.define('ace/theme/dreamweaver', ["require", 'exports', 'module' , 'ace/lib/dom'], function(acequire, exports, module) {
 exports.isDark = false;
 exports.cssClass = "ace-dreamweaver";
 exports.cssText = ".ace-dreamweaver .ace_gutter {\
@@ -168,6 +168,6 @@ color: rgb(255, 0, 0)\
 background: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==\") right repeat-y;\
 }";
 
-var dom = require("../lib/dom");
+var dom = acequire("../lib/dom");
 dom.importCssString(exports.cssText, exports.cssClass);
 });

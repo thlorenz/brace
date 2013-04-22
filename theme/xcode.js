@@ -28,7 +28,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/theme/xcode', ['require', 'exports', 'module' , 'ace/lib/dom'], function(require, exports, module) {
+ace.define('ace/theme/xcode', ["require", 'exports', 'module' , 'ace/lib/dom'], function(acequire, exports, module) {
 
 exports.isDark = false;
 exports.cssClass = "ace-xcode";
@@ -120,6 +120,6 @@ color: #008E00\
 background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==) right repeat-y;\
 }";
 
-var dom = require("../lib/dom");
+var dom = acequire("../lib/dom");
 dom.importCssString(exports.cssText, exports.cssClass);
 });

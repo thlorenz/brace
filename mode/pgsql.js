@@ -28,13 +28,13 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/mode/pgsql', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/pgsql_highlight_rules', 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/pgsql', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/pgsql_highlight_rules', 'ace/range'], function(acequire, exports, module) {
 
-var oop = require("../lib/oop");
-var TextMode = require("../mode/text").Mode;
-var Tokenizer = require("../tokenizer").Tokenizer;
-var PgsqlHighlightRules = require("./pgsql_highlight_rules").PgsqlHighlightRules;
-var Range = require("../range").Range;
+var oop = acequire("../lib/oop");
+var TextMode = acequire("../mode/text").Mode;
+var Tokenizer = acequire("../tokenizer").Tokenizer;
+var PgsqlHighlightRules = acequire("./pgsql_highlight_rules").PgsqlHighlightRules;
+var Range = acequire("../range").Range;
 
 var Mode = function() {
     this.$tokenizer = new Tokenizer(new PgsqlHighlightRules().getRules());
@@ -58,14 +58,14 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-ace.define('ace/mode/pgsql_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/doc_comment_highlight_rules', 'ace/mode/text_highlight_rules', 'ace/mode/perl_highlight_rules', 'ace/mode/python_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/pgsql_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/doc_comment_highlight_rules', 'ace/mode/text_highlight_rules', 'ace/mode/perl_highlight_rules', 'ace/mode/python_highlight_rules'], function(acequire, exports, module) {
 
-var oop = require("../lib/oop");
-var lang = require("../lib/lang");
-var DocCommentHighlightRules = require("./doc_comment_highlight_rules").DocCommentHighlightRules;
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
-var PerlHighlightRules = require("./perl_highlight_rules").PerlHighlightRules;
-var PythonHighlightRules = require("./python_highlight_rules").PythonHighlightRules;
+var oop = acequire("../lib/oop");
+var lang = acequire("../lib/lang");
+var DocCommentHighlightRules = acequire("./doc_comment_highlight_rules").DocCommentHighlightRules;
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
+var PerlHighlightRules = acequire("./perl_highlight_rules").PerlHighlightRules;
+var PythonHighlightRules = acequire("./python_highlight_rules").PythonHighlightRules;
 
 var PgsqlHighlightRules = function() {
     var keywords = (
@@ -604,11 +604,11 @@ oop.inherits(PgsqlHighlightRules, TextHighlightRules);
 exports.PgsqlHighlightRules = PgsqlHighlightRules;
 });
 
-ace.define('ace/mode/doc_comment_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/doc_comment_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var DocCommentHighlightRules = function() {
 
@@ -648,17 +648,17 @@ exports.DocCommentHighlightRules = DocCommentHighlightRules;
 
 });
 
-ace.define('ace/mode/perl_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/perl_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var PerlHighlightRules = function() {
 
     var keywords = (
         "base|constant|continue|else|elsif|for|foreach|format|goto|if|last|local|my|next|" +
-         "no|package|parent|redo|require|scalar|sub|unless|until|while|use|vars"
+         "no|package|parent|redo|acequire|scalar|sub|unless|until|while|use|vars"
     );
 
     var buildinConstants = ("ARGV|ENV|INC|SIG");
@@ -781,11 +781,11 @@ oop.inherits(PerlHighlightRules, TextHighlightRules);
 exports.PerlHighlightRules = PerlHighlightRules;
 });
 
-ace.define('ace/mode/python_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/python_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var PythonHighlightRules = function() {
 

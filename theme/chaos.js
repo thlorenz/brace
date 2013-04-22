@@ -21,7 +21,7 @@
  * IN THE SOFTWARE.
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/theme/chaos', ['require', 'exports', 'module' , 'ace/lib/dom'], function(require, exports, module) {
+ace.define('ace/theme/chaos', ["require", 'exports', 'module' , 'ace/lib/dom'], function(acequire, exports, module) {
 
 exports.isDark = true;
 exports.cssClass = "ace-chaos";
@@ -176,7 +176,7 @@ color: #000;\
 }\
 ";
 
-var dom = require("../lib/dom");
+var dom = acequire("../lib/dom");
 dom.importCssString(exports.cssText, exports.cssClass);
 
 });

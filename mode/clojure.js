@@ -28,15 +28,15 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/mode/clojure', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/clojure_highlight_rules', 'ace/mode/matching_parens_outdent', 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/clojure', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/clojure_highlight_rules', 'ace/mode/matching_parens_outdent', 'ace/range'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextMode = require("./text").Mode;
-var Tokenizer = require("../tokenizer").Tokenizer;
-var ClojureHighlightRules = require("./clojure_highlight_rules").ClojureHighlightRules;
-var MatchingParensOutdent = require("./matching_parens_outdent").MatchingParensOutdent;
-var Range = require("../range").Range;
+var oop = acequire("../lib/oop");
+var TextMode = acequire("./text").Mode;
+var Tokenizer = acequire("../tokenizer").Tokenizer;
+var ClojureHighlightRules = acequire("./clojure_highlight_rules").ClojureHighlightRules;
+var MatchingParensOutdent = acequire("./matching_parens_outdent").MatchingParensOutdent;
+var Range = acequire("../range").Range;
 
 var Mode = function() {
     this.$tokenizer = new Tokenizer(new ClojureHighlightRules().getRules());
@@ -85,11 +85,11 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-ace.define('ace/mode/clojure_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/clojure_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 
 
@@ -147,7 +147,7 @@ var ClojureHighlightRules = function() {
         're-matcher re-matches re-pattern re-seq read read-line read-string ' +
         'reduce ref ref-history-count ref-max-history ref-min-history ref-set ' +
         'refer refer-clojure release-pending-sends rem remove remove-method ' +
-        'remove-ns remove-watch repeat repeatedly replace replicate require ' +
+        'remove-ns remove-watch repeat repeatedly replace replicate acequire ' +
         'reset! reset-meta! resolve rest resultset-seq reverse reversible? rseq ' +
         'rsubseq second select-keys send send-off seq seq? seque sequence ' +
         'sequential? set set-validator! set? short short-array shorts ' +
@@ -253,10 +253,10 @@ oop.inherits(ClojureHighlightRules, TextHighlightRules);
 exports.ClojureHighlightRules = ClojureHighlightRules;
 });
 
-ace.define('ace/mode/matching_parens_outdent', ['require', 'exports', 'module' , 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/matching_parens_outdent', ["require", 'exports', 'module' , 'ace/range'], function(acequire, exports, module) {
 
 
-var Range = require("../range").Range;
+var Range = acequire("../range").Range;
 
 var MatchingParensOutdent = function() {};
 

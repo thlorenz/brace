@@ -28,17 +28,17 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/mode/coffee', ['require', 'exports', 'module' , 'ace/tokenizer', 'ace/mode/coffee_highlight_rules', 'ace/mode/matching_brace_outdent', 'ace/mode/folding/coffee', 'ace/range', 'ace/mode/text', 'ace/worker/worker_client', 'ace/lib/oop'], function(require, exports, module) {
+ace.define('ace/mode/coffee', ["require", 'exports', 'module' , 'ace/tokenizer', 'ace/mode/coffee_highlight_rules', 'ace/mode/matching_brace_outdent', 'ace/mode/folding/coffee', 'ace/range', 'ace/mode/text', 'ace/worker/worker_client', 'ace/lib/oop'], function(acequire, exports, module) {
 
 
-var Tokenizer = require("../tokenizer").Tokenizer;
-var Rules = require("./coffee_highlight_rules").CoffeeHighlightRules;
-var Outdent = require("./matching_brace_outdent").MatchingBraceOutdent;
-var FoldMode = require("./folding/coffee").FoldMode;
-var Range = require("../range").Range;
-var TextMode = require("./text").Mode;
-var WorkerClient = require("../worker/worker_client").WorkerClient;
-var oop = require("../lib/oop");
+var Tokenizer = acequire("../tokenizer").Tokenizer;
+var Rules = acequire("./coffee_highlight_rules").CoffeeHighlightRules;
+var Outdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
+var FoldMode = acequire("./folding/coffee").FoldMode;
+var Range = acequire("../range").Range;
+var TextMode = acequire("./text").Mode;
+var WorkerClient = acequire("../worker/worker_client").WorkerClient;
+var oop = acequire("../lib/oop");
 
 function Mode() {
     this.$tokenizer = new Tokenizer(new Rules().getRules());
@@ -113,11 +113,11 @@ exports.Mode = Mode;
 
 });
 
-ace.define('ace/mode/coffee_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/coffee_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-    var oop = require("../lib/oop");
-    var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+    var oop = acequire("../lib/oop");
+    var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
     oop.inherits(CoffeeHighlightRules, TextHighlightRules);
 
@@ -298,10 +298,10 @@ ace.define('ace/mode/coffee_highlight_rules', ['require', 'exports', 'module' , 
     exports.CoffeeHighlightRules = CoffeeHighlightRules;
 });
 
-ace.define('ace/mode/matching_brace_outdent', ['require', 'exports', 'module' , 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/matching_brace_outdent', ["require", 'exports', 'module' , 'ace/range'], function(acequire, exports, module) {
 
 
-var Range = require("../range").Range;
+var Range = acequire("../range").Range;
 
 var MatchingBraceOutdent = function() {};
 
@@ -338,12 +338,12 @@ var MatchingBraceOutdent = function() {};
 exports.MatchingBraceOutdent = MatchingBraceOutdent;
 });
 
-ace.define('ace/mode/folding/coffee', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/folding/coffee', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function(acequire, exports, module) {
 
 
-var oop = require("../../lib/oop");
-var BaseFoldMode = require("./fold_mode").FoldMode;
-var Range = require("../../range").Range;
+var oop = acequire("../../lib/oop");
+var BaseFoldMode = acequire("./fold_mode").FoldMode;
+var Range = acequire("../../range").Range;
 
 var FoldMode = exports.FoldMode = function() {};
 oop.inherits(FoldMode, BaseFoldMode);

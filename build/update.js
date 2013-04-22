@@ -65,14 +65,12 @@ var buildroot =  path.join(__dirname, 'ace-build');
       });
   }()
 
-}()
+} //()
 
 +function requires() {
   function fixAllRequires(dir) {
     ls(path.join(dir, '*.js'))
-      .forEach(function (entry) {
-        console.log('fixing', entry);
-        var file = path.join(dir, entry);
+      .forEach(function (file) {
         var src = fs.readFileSync(file, 'utf-8');
         var fixed = fixRequires(src);
         fs.writeFileSync(file, fixed, 'utf-8');
@@ -83,7 +81,7 @@ var buildroot =  path.join(__dirname, 'ace-build');
   fixAllRequires(modedir);
   fixAllRequires(workerdir);
   fixAllRequires(buildroot);
-}//()
+}()
 
 +function generateAcesForEachWorkerCombination () {
   var acesrc = fs.readFileSync(path.join(buildroot, 'ace.js'), 'utf-8');

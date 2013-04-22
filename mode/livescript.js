@@ -1,12 +1,12 @@
-ace.define('ace/mode/livescript', ['require', 'exports', 'module' , 'ace/tokenizer', 'ace/mode/matching_brace_outdent', 'ace/range', 'ace/mode/text'], function(require, exports, module) {
+ace.define('ace/mode/livescript', ["require", 'exports', 'module' , 'ace/tokenizer', 'ace/mode/matching_brace_outdent', 'ace/range', 'ace/mode/text'], function(acequire, exports, module) {
   var identifier, LiveScriptMode, keywordend, stringfill;
   identifier = '(?![\\d\\s])[$\\w\\xAA-\\uFFDC](?:(?!\\s)[$\\w\\xAA-\\uFFDC]|-[A-Za-z])*';
   exports.Mode = LiveScriptMode = (function(superclass){
     var indenter, prototype = extend$((import$(LiveScriptMode, superclass).displayName = 'LiveScriptMode', LiveScriptMode), superclass).prototype, constructor = LiveScriptMode;
     function LiveScriptMode(){
       var that;
-      this.$tokenizer = new (require('../tokenizer')).Tokenizer(LiveScriptMode.Rules);
-      if (that = require('../mode/matching_brace_outdent')) {
+      this.$tokenizer = new (acequire('../tokenizer')).Tokenizer(LiveScriptMode.Rules);
+      if (that = acequire('../mode/matching_brace_outdent')) {
         this.$outdent = new that.MatchingBraceOutdent;
       }
     }
@@ -25,7 +25,7 @@ ace.define('ace/mode/livescript', ['require', 'exports', 'module' , 'ace/tokeniz
     prototype.toggleCommentLines = function(state, doc, startRow, endRow){
       var comment, range, i$, i, out, line;
       comment = /^(\s*)#/;
-      range = new (require('../range')).Range(0, 0, 0, 0);
+      range = new (acequire('../range')).Range(0, 0, 0, 0);
       for (i$ = startRow; i$ <= endRow; ++i$) {
         i = i$;
         if (out = comment.test(line = doc.getLine(i))) {
@@ -48,7 +48,7 @@ ace.define('ace/mode/livescript', ['require', 'exports', 'module' , 'ace/tokeniz
       return (ref$ = this.$outdent) != null ? ref$.autoOutdent(doc, row) : void 8;
     };
     return LiveScriptMode;
-  }(require('../mode/text').Mode));
+  }(acequire('../mode/text').Mode));
   keywordend = '(?![$\\w]|-[A-Za-z]|\\s*:(?![:=]))';
   stringfill = {
     token: 'string',
@@ -247,10 +247,10 @@ function import$(obj, src){
 }
 });
 
-ace.define('ace/mode/matching_brace_outdent', ['require', 'exports', 'module' , 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/matching_brace_outdent', ["require", 'exports', 'module' , 'ace/range'], function(acequire, exports, module) {
 
 
-var Range = require("../range").Range;
+var Range = acequire("../range").Range;
 
 var MatchingBraceOutdent = function() {};
 

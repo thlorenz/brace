@@ -28,14 +28,14 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/mode/sql', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/sql_highlight_rules', 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/sql', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/sql_highlight_rules', 'ace/range'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextMode = require("./text").Mode;
-var Tokenizer = require("../tokenizer").Tokenizer;
-var SqlHighlightRules = require("./sql_highlight_rules").SqlHighlightRules;
-var Range = require("../range").Range;
+var oop = acequire("../lib/oop");
+var TextMode = acequire("./text").Mode;
+var Tokenizer = acequire("../tokenizer").Tokenizer;
+var SqlHighlightRules = acequire("./sql_highlight_rules").SqlHighlightRules;
+var Range = acequire("../range").Range;
 
 var Mode = function() {
     this.$tokenizer = new Tokenizer(new SqlHighlightRules().getRules());
@@ -52,11 +52,11 @@ exports.Mode = Mode;
 
 });
 
-ace.define('ace/mode/sql_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/sql_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var SqlHighlightRules = function() {
 

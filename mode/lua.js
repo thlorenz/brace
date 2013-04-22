@@ -28,16 +28,16 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/mode/lua', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/lua_highlight_rules', 'ace/mode/folding/lua', 'ace/range', 'ace/worker/worker_client'], function(require, exports, module) {
+ace.define('ace/mode/lua', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/lua_highlight_rules', 'ace/mode/folding/lua', 'ace/range', 'ace/worker/worker_client'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextMode = require("./text").Mode;
-var Tokenizer = require("../tokenizer").Tokenizer;
-var LuaHighlightRules = require("./lua_highlight_rules").LuaHighlightRules;
-var LuaFoldMode = require("./folding/lua").FoldMode;
-var Range = require("../range").Range;
-var WorkerClient = require("../worker/worker_client").WorkerClient;
+var oop = acequire("../lib/oop");
+var TextMode = acequire("./text").Mode;
+var Tokenizer = acequire("../tokenizer").Tokenizer;
+var LuaHighlightRules = acequire("./lua_highlight_rules").LuaHighlightRules;
+var LuaFoldMode = acequire("./folding/lua").FoldMode;
+var Range = acequire("../range").Range;
+var WorkerClient = acequire("../worker/worker_client").WorkerClient;
 
 var Mode = function() {
     this.$tokenizer = new Tokenizer(new LuaHighlightRules().getRules());
@@ -158,11 +158,11 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-ace.define('ace/mode/lua_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/lua_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var LuaHighlightRules = function() {
 
@@ -174,7 +174,7 @@ var LuaHighlightRules = function() {
     var builtinConstants = ("true|false|nil|_G|_VERSION");
 
     var functions = (
-        "string|xpcall|package|tostring|print|os|unpack|require|"+
+        "string|xpcall|package|tostring|print|os|unpack|acequire|"+
         "getfenv|setmetatable|next|assert|tonumber|io|rawequal|"+
         "collectgarbage|getmetatable|module|rawset|math|debug|"+
         "pcall|table|newproxy|type|coroutine|_G|select|gcinfo|"+
@@ -320,13 +320,13 @@ oop.inherits(LuaHighlightRules, TextHighlightRules);
 exports.LuaHighlightRules = LuaHighlightRules;
 });
 
-ace.define('ace/mode/folding/lua', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range', 'ace/token_iterator'], function(require, exports, module) {
+ace.define('ace/mode/folding/lua', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range', 'ace/token_iterator'], function(acequire, exports, module) {
 
 
-var oop = require("../../lib/oop");
-var BaseFoldMode = require("./fold_mode").FoldMode;
-var Range = require("../../range").Range;
-var TokenIterator = require("../../token_iterator").TokenIterator;
+var oop = acequire("../../lib/oop");
+var BaseFoldMode = acequire("./fold_mode").FoldMode;
+var Range = acequire("../../range").Range;
+var TokenIterator = acequire("../../token_iterator").TokenIterator;
 
 
 var FoldMode = exports.FoldMode = function() {};

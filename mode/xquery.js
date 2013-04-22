@@ -27,16 +27,16 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  * ***** END LICENSE BLOCK ***** */
-ace.define('ace/mode/xquery', ['require', 'exports', 'module' , 'ace/worker/worker_client', 'ace/lib/oop', 'ace/mode/text', 'ace/mode/xquery/XQueryLexer', 'ace/range', 'ace/mode/behaviour/xquery', 'ace/mode/folding/cstyle'], function(require, exports, module) {
+ace.define('ace/mode/xquery', ["require", 'exports', 'module' , 'ace/worker/worker_client', 'ace/lib/oop', 'ace/mode/text', 'ace/mode/xquery/XQueryLexer', 'ace/range', 'ace/mode/behaviour/xquery', 'ace/mode/folding/cstyle'], function(acequire, exports, module) {
 
 
-var WorkerClient = require("../worker/worker_client").WorkerClient;
-var oop = require("../lib/oop");
-var TextMode = require("./text").Mode;
-var XQueryLexer = require("./xquery/XQueryLexer").XQueryLexer;
-var Range = require("../range").Range;
-var XQueryBehaviour = require("./behaviour/xquery").XQueryBehaviour;
-var CStyleFoldMode = require("./folding/cstyle").FoldMode;
+var WorkerClient = acequire("../worker/worker_client").WorkerClient;
+var oop = acequire("../lib/oop");
+var TextMode = acequire("./text").Mode;
+var XQueryLexer = acequire("./xquery/XQueryLexer").XQueryLexer;
+var Range = acequire("../range").Range;
+var XQueryBehaviour = acequire("./behaviour/xquery").XQueryBehaviour;
+var CStyleFoldMode = acequire("./folding/cstyle").FoldMode;
 
 
 var Mode = function(parent) {
@@ -138,9 +138,9 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
  
-ace.define('ace/mode/xquery/XQueryLexer', ['require', 'exports', 'module' , 'ace/mode/xquery/XQueryTokenizer'], function(require, exports, module) {
+ace.define('ace/mode/xquery/XQueryLexer', ["require", 'exports', 'module' , 'ace/mode/xquery/XQueryTokenizer'], function(acequire, exports, module) {
   
-  var XQueryTokenizer = require("./XQueryTokenizer").XQueryTokenizer;
+  var XQueryTokenizer = acequire("./XQueryTokenizer").XQueryTokenizer;
   
   var TokenHandler = function(code) {
       
@@ -412,7 +412,7 @@ exports.XQueryLexer = function() {
 };
 });
 
-                                                            ace.define('ace/mode/xquery/XQueryTokenizer', ['require', 'exports', 'module' ], function(require, exports, module) {
+                                                            ace.define('ace/mode/xquery/XQueryTokenizer', ["require", 'exports', 'module' ], function(acequire, exports, module) {
                                                             var XQueryTokenizer = exports.XQueryTokenizer = function XQueryTokenizer(string, parsingEventHandler)
                                                             {
                                                               init(string, parsingEventHandler);
@@ -2232,14 +2232,14 @@ XQueryTokenizer.TOKEN =
   "'}}'"
 ];
                                                             });
-ace.define('ace/mode/behaviour/xquery', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/behaviour', 'ace/mode/behaviour/cstyle', 'ace/mode/behaviour/xml', 'ace/token_iterator'], function(require, exports, module) {
+ace.define('ace/mode/behaviour/xquery', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/behaviour', 'ace/mode/behaviour/cstyle', 'ace/mode/behaviour/xml', 'ace/token_iterator'], function(acequire, exports, module) {
 
 
-  var oop = require("../../lib/oop");
-  var Behaviour = require('../behaviour').Behaviour;
-  var CstyleBehaviour = require('./cstyle').CstyleBehaviour;
-  var XmlBehaviour = require("../behaviour/xml").XmlBehaviour;
-  var TokenIterator = require("../../token_iterator").TokenIterator;
+  var oop = acequire("../../lib/oop");
+  var Behaviour = acequire('../behaviour').Behaviour;
+  var CstyleBehaviour = acequire('./cstyle').CstyleBehaviour;
+  var XmlBehaviour = acequire("../behaviour/xml").XmlBehaviour;
+  var TokenIterator = acequire("../../token_iterator").TokenIterator;
 
 function hasType(token, type) {
     var hasType = true;
@@ -2296,13 +2296,13 @@ function hasType(token, type) {
   exports.XQueryBehaviour = XQueryBehaviour;
 });
 
-ace.define('ace/mode/behaviour/cstyle', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/behaviour', 'ace/token_iterator', 'ace/lib/lang'], function(require, exports, module) {
+ace.define('ace/mode/behaviour/cstyle', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/behaviour', 'ace/token_iterator', 'ace/lib/lang'], function(acequire, exports, module) {
 
 
-var oop = require("../../lib/oop");
-var Behaviour = require("../behaviour").Behaviour;
-var TokenIterator = require("../../token_iterator").TokenIterator;
-var lang = require("../../lib/lang");
+var oop = acequire("../../lib/oop");
+var Behaviour = acequire("../behaviour").Behaviour;
+var TokenIterator = acequire("../../token_iterator").TokenIterator;
+var lang = acequire("../../lib/lang");
 
 var SAFE_INSERT_IN_TOKENS =
     ["text", "paren.rparen", "punctuation.operator"];
@@ -2619,13 +2619,13 @@ oop.inherits(CstyleBehaviour, Behaviour);
 exports.CstyleBehaviour = CstyleBehaviour;
 });
 
-ace.define('ace/mode/behaviour/xml', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/behaviour', 'ace/mode/behaviour/cstyle', 'ace/token_iterator'], function(require, exports, module) {
+ace.define('ace/mode/behaviour/xml', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/behaviour', 'ace/mode/behaviour/cstyle', 'ace/token_iterator'], function(acequire, exports, module) {
 
 
-var oop = require("../../lib/oop");
-var Behaviour = require("../behaviour").Behaviour;
-var CstyleBehaviour = require("./cstyle").CstyleBehaviour;
-var TokenIterator = require("../../token_iterator").TokenIterator;
+var oop = acequire("../../lib/oop");
+var Behaviour = acequire("../behaviour").Behaviour;
+var CstyleBehaviour = acequire("./cstyle").CstyleBehaviour;
+var TokenIterator = acequire("../../token_iterator").TokenIterator;
 
 function hasType(token, type) {
     var hasType = true;
@@ -2695,12 +2695,12 @@ oop.inherits(XmlBehaviour, Behaviour);
 exports.XmlBehaviour = XmlBehaviour;
 });
 
-ace.define('ace/mode/folding/cstyle', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/range', 'ace/mode/folding/fold_mode'], function(require, exports, module) {
+ace.define('ace/mode/folding/cstyle', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/range', 'ace/mode/folding/fold_mode'], function(acequire, exports, module) {
 
 
-var oop = require("../../lib/oop");
-var Range = require("../../range").Range;
-var BaseFoldMode = require("./fold_mode").FoldMode;
+var oop = acequire("../../lib/oop");
+var Range = acequire("../../range").Range;
+var BaseFoldMode = acequire("./fold_mode").FoldMode;
 
 var FoldMode = exports.FoldMode = function(commentRegex) {
     if (commentRegex) {

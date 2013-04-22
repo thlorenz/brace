@@ -28,14 +28,14 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/mode/asciidoc', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/asciidoc_highlight_rules', 'ace/mode/folding/asciidoc'], function(require, exports, module) {
+ace.define('ace/mode/asciidoc', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/asciidoc_highlight_rules', 'ace/mode/folding/asciidoc'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextMode = require("./text").Mode;
-var Tokenizer = require("../tokenizer").Tokenizer;
-var AsciidocHighlightRules = require("./asciidoc_highlight_rules").AsciidocHighlightRules;
-var AsciidocFoldMode = require("./folding/asciidoc").FoldMode;
+var oop = acequire("../lib/oop");
+var TextMode = acequire("./text").Mode;
+var Tokenizer = acequire("../tokenizer").Tokenizer;
+var AsciidocHighlightRules = acequire("./asciidoc_highlight_rules").AsciidocHighlightRules;
+var AsciidocFoldMode = acequire("./folding/asciidoc").FoldMode;
 
 var Mode = function() {
     var highlighter = new AsciidocHighlightRules();
@@ -63,11 +63,11 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-ace.define('ace/mode/asciidoc_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/asciidoc_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var AsciidocHighlightRules = function() {
     var identifierRe = "[a-zA-Z\u00a1-\uffff]+\\b";
@@ -258,12 +258,12 @@ oop.inherits(AsciidocHighlightRules, TextHighlightRules);
 exports.AsciidocHighlightRules = AsciidocHighlightRules;
 });
 
-ace.define('ace/mode/folding/asciidoc', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/folding/asciidoc', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function(acequire, exports, module) {
 
 
-var oop = require("../../lib/oop");
-var BaseFoldMode = require("./fold_mode").FoldMode;
-var Range = require("../../range").Range;
+var oop = acequire("../../lib/oop");
+var BaseFoldMode = acequire("./fold_mode").FoldMode;
+var Range = acequire("../../range").Range;
 
 var FoldMode = exports.FoldMode = function() {};
 oop.inherits(FoldMode, BaseFoldMode);

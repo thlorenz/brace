@@ -28,15 +28,15 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/mode/abap', ['require', 'exports', 'module' , 'ace/tokenizer', 'ace/mode/abap_highlight_rules', 'ace/mode/folding/coffee', 'ace/range', 'ace/mode/text', 'ace/lib/oop'], function(require, exports, module) {
+ace.define('ace/mode/abap', ["require", 'exports', 'module' , 'ace/tokenizer', 'ace/mode/abap_highlight_rules', 'ace/mode/folding/coffee', 'ace/range', 'ace/mode/text', 'ace/lib/oop'], function(acequire, exports, module) {
 
 
-var Tokenizer = require("../tokenizer").Tokenizer;
-var Rules = require("./abap_highlight_rules").AbapHighlightRules;
-var FoldMode = require("./folding/coffee").FoldMode;
-var Range = require("../range").Range;
-var TextMode = require("./text").Mode;
-var oop = require("../lib/oop");
+var Tokenizer = acequire("../tokenizer").Tokenizer;
+var Rules = acequire("./abap_highlight_rules").AbapHighlightRules;
+var FoldMode = acequire("./folding/coffee").FoldMode;
+var Range = acequire("../range").Range;
+var TextMode = acequire("./text").Mode;
+var oop = acequire("../lib/oop");
 
 function Mode() {
     this.$tokenizer = new Tokenizer(new Rules().getRules());
@@ -76,11 +76,11 @@ exports.Mode = Mode;
 
 });
 
-ace.define('ace/mode/abap_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/abap_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var AbapHighlightRules = function() {
 
@@ -172,12 +172,12 @@ oop.inherits(AbapHighlightRules, TextHighlightRules);
 exports.AbapHighlightRules = AbapHighlightRules;
 });
 
-ace.define('ace/mode/folding/coffee', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/folding/coffee', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function(acequire, exports, module) {
 
 
-var oop = require("../../lib/oop");
-var BaseFoldMode = require("./fold_mode").FoldMode;
-var Range = require("../../range").Range;
+var oop = acequire("../../lib/oop");
+var BaseFoldMode = acequire("./fold_mode").FoldMode;
+var Range = acequire("../../range").Range;
 
 var FoldMode = exports.FoldMode = function() {};
 oop.inherits(FoldMode, BaseFoldMode);

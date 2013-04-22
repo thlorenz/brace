@@ -28,14 +28,14 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-ace.define('ace/mode/sass', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/sass_highlight_rules', 'ace/mode/folding/coffee'], function(require, exports, module) {
+ace.define('ace/mode/sass', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/sass_highlight_rules', 'ace/mode/folding/coffee'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextMode = require("./text").Mode;
-var Tokenizer = require("../tokenizer").Tokenizer;
-var SassHighlightRules = require("./sass_highlight_rules").SassHighlightRules;
-var FoldMode = require("./folding/coffee").FoldMode;
+var oop = acequire("../lib/oop");
+var TextMode = acequire("./text").Mode;
+var Tokenizer = acequire("../tokenizer").Tokenizer;
+var SassHighlightRules = acequire("./sass_highlight_rules").SassHighlightRules;
+var FoldMode = acequire("./folding/coffee").FoldMode;
 
 var Mode = function() {
     this.$tokenizer = new Tokenizer(new SassHighlightRules().getRules());
@@ -51,12 +51,12 @@ exports.Mode = Mode;
 
 });
 
-ace.define('ace/mode/sass_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/scss_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/sass_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/scss_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var lang = require("../lib/lang");
-var ScssHighlightRules = require("./scss_highlight_rules").ScssHighlightRules;
+var oop = acequire("../lib/oop");
+var lang = acequire("../lib/lang");
+var ScssHighlightRules = acequire("./scss_highlight_rules").ScssHighlightRules;
 
 var SassHighlightRules = function() {
     ScssHighlightRules.call(this);
@@ -100,12 +100,12 @@ exports.SassHighlightRules = SassHighlightRules;
 
 });
 
-ace.define('ace/mode/scss_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/scss_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var lang = require("../lib/lang");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var lang = acequire("../lib/lang");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var ScssHighlightRules = function() {
     
@@ -354,12 +354,12 @@ exports.ScssHighlightRules = ScssHighlightRules;
 
 });
 
-ace.define('ace/mode/folding/coffee', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/folding/coffee', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function(acequire, exports, module) {
 
 
-var oop = require("../../lib/oop");
-var BaseFoldMode = require("./fold_mode").FoldMode;
-var Range = require("../../range").Range;
+var oop = acequire("../../lib/oop");
+var BaseFoldMode = acequire("./fold_mode").FoldMode;
+var Range = acequire("../../range").Range;
 
 var FoldMode = exports.FoldMode = function() {};
 oop.inherits(FoldMode, BaseFoldMode);

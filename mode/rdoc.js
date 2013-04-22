@@ -10,15 +10,15 @@
  * AGPL (http://www.gnu.org/licenses/agpl-3.0.txt) for more details.
  *
  */
-ace.define('ace/mode/rdoc', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/text_highlight_rules', 'ace/mode/rdoc_highlight_rules', 'ace/mode/matching_brace_outdent'], function(require, exports, module) {
+ace.define('ace/mode/rdoc', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/text_highlight_rules', 'ace/mode/rdoc_highlight_rules', 'ace/mode/matching_brace_outdent'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextMode = require("./text").Mode;
-var Tokenizer = require("../tokenizer").Tokenizer;
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
-var RDocHighlightRules = require("./rdoc_highlight_rules").RDocHighlightRules;
-var MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutdent;
+var oop = acequire("../lib/oop");
+var TextMode = acequire("./text").Mode;
+var Tokenizer = acequire("../tokenizer").Tokenizer;
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
+var RDocHighlightRules = acequire("./rdoc_highlight_rules").RDocHighlightRules;
+var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
 
 var Mode = function(suppressHighlighting) {
 	this.$tokenizer = new Tokenizer(new RDocHighlightRules().getRules());
@@ -34,13 +34,13 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 });
-ace.define('ace/mode/rdoc_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/text_highlight_rules', 'ace/mode/latex_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/rdoc_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/text_highlight_rules', 'ace/mode/latex_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var lang = require("../lib/lang");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
-var LaTeXHighlightRules = require("./latex_highlight_rules");
+var oop = acequire("../lib/oop");
+var lang = acequire("../lib/lang");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
+var LaTeXHighlightRules = acequire("./latex_highlight_rules");
 
 var RDocHighlightRules = function() {
 
@@ -110,11 +110,11 @@ oop.inherits(RDocHighlightRules, TextHighlightRules);
 
 exports.RDocHighlightRules = RDocHighlightRules;
 });
-ace.define('ace/mode/latex_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+ace.define('ace/mode/latex_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
 
-var oop = require("../lib/oop");
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var LatexHighlightRules = function() {   
     this.$rules = {
@@ -143,10 +143,10 @@ exports.LatexHighlightRules = LatexHighlightRules;
 
 });
 
-ace.define('ace/mode/matching_brace_outdent', ['require', 'exports', 'module' , 'ace/range'], function(require, exports, module) {
+ace.define('ace/mode/matching_brace_outdent', ["require", 'exports', 'module' , 'ace/range'], function(acequire, exports, module) {
 
 
-var Range = require("../range").Range;
+var Range = acequire("../range").Range;
 
 var MatchingBraceOutdent = function() {};
 
