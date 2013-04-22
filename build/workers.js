@@ -20,8 +20,8 @@ function getWorkers(lang) {
     });
 }
 
-var ones = exports.onelanguage = [ 'ace-coffee', 'ace-css', 'ace-json', 'ace-lua', 'ace-php', 'ace-xquery', 'ace-javascript' ];
-var twos = exports.twolanguages = [ 'ace-css-javascript' ];
+var ones = exports.onelanguage = [ 'coffee', 'css', 'json', 'lua', 'php', 'xquery', 'javascript' ];
+var twos = exports.twolanguages = [ 'css-javascript' ];
 
 var replace = exports.getInlines = function () {
   var inlines = {};
@@ -30,15 +30,15 @@ var replace = exports.getInlines = function () {
     ;
 
   ones.forEach(function (key) {
-    var file = path.join(__dirname, '..', 'worker', key.split('-')[1] + '.js');
+    var file = path.join(__dirname, '..', 'worker', key + '.js');
     var src = fs.readFileSync(file, 'utf-8');
     inlines[key] = one.replace('{{src}}', JSON.stringify(src));
   });
 
   twos.forEach(function (key) {
     var splits = key.split('-')
-      , name1 = splits[1]
-      , name2 = splits[2];
+      , name1 = splits[0]
+      , name2 = splits[1];
 
     var file1 = path.join(__dirname, '..', 'worker', name1 + '.js');
     var file2 = path.join(__dirname, '..', 'worker', name2 + '.js');
