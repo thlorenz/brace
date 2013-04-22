@@ -15212,3 +15212,4 @@ dom.importCssString(exports.cssText, exports.cssClass);
                 });
             })();
         
+module.exports = window.ace.acequire("ace/ace");
