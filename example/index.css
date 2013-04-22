@@ -1,10 +1,23 @@
-#editor { 
+div.editor { 
   position: absolute;
-  top: 49px;
-  right: 0;
-  bottom: 0;
+  width: 50%;
+  height: 50%;
+  background: black;
+}
+
+#javascript-editor {
   left: 0;
-  width: 100%;
+  top: 0;
+}
+
+#coffee-editor {
+  top: 50%;
+  bottom: 0;
+}
+
+#css-editor {
+  top: 0;
+  left: 50%;
 }
 
 h1 {
