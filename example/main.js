@@ -1,12 +1,11 @@
 'use strict';
 
-// require the javascript specific ace just as ace since this is how we exposed it in the build script
-var ace = require('ace');
+// initialize ace editor customized for javascript
+var ace = require('brace/javascript');
 
-// require mode and theme under the id we exposed theme as in the build script
-// note that ace has to be required first since mode and theme depend on it being initialized
-require('ace/mode/javascript');
-require('ace/theme/monokai');
+// initialize javascript mode and monokai theme after editor itself
+require('brace/mode/javascript');
+require('brace/theme/monokai');
 
 var editor = ace.edit("editor");
 editor.setTheme("ace/theme/monokai");
