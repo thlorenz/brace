@@ -30,7 +30,7 @@ var replace = exports.getInlines = function () {
     ;
 
   ones.forEach(function (key) {
-    var file = path.join(__dirname, '..', 'workers', key.split('-')[1] + '.js');
+    var file = path.join(__dirname, '..', 'worker', key.split('-')[1] + '.js');
     var src = fs.readFileSync(file, 'utf-8');
     inlines[key] = one.replace('{{src}}', JSON.stringify(src));
   });
@@ -40,8 +40,8 @@ var replace = exports.getInlines = function () {
       , name1 = splits[1]
       , name2 = splits[2];
 
-    var file1 = path.join(__dirname, '..', 'workers', name1 + '.js');
-    var file2 = path.join(__dirname, '..', 'workers', name2 + '.js');
+    var file1 = path.join(__dirname, '..', 'worker', name1 + '.js');
+    var file2 = path.join(__dirname, '..', 'worker', name2 + '.js');
 
     var src1 = fs.readFileSync(file1, 'utf-8');
     var src2 = fs.readFileSync(file2, 'utf-8');
