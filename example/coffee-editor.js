@@ -1,5 +1,5 @@
 // initialize ace editor customized for coffee
-var ace = require('brace/coffee');
+var ace = require('brace');
 
 // initialize coffee mode and monokai theme after editor itself
 require('brace/mode/coffee');

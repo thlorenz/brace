@@ -139,7 +139,7 @@ oop.inherits(Mode, TextMode);
     };
 
     this.createWorker = function(session) {
-        var worker = new WorkerClient(["ace"], "ace/mode/lua_worker", "Worker");
+        var worker = new WorkerClient(["ace"], require("../worker/lua"), "Worker");
         worker.attachToDocument(session.getDocument());
         
         worker.on("error", function(e) {

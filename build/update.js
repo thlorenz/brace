@@ -2,18 +2,20 @@
 
 /*jshint asi: true */
 
-var path    =  require('path');
-var fs      =  require('fs');
-var workers =  require('./workers');
-var fixRequires = require('./fix-requires');
+var path             =  require('path');
+var fs               =  require('fs');
+var workers          =  require('./workers');
+var stringifyWorkers =  require('./stringify-workers');
+var fixRequires      =  require('./fix-requires');
 
 require('shelljs/global');
 
-var braceroot =  path.join(__dirname, '..');
-var themedir  =  path.join(braceroot, 'theme');
-var modedir   =  path.join(braceroot, 'mode');
-var workerdir =  path.join(braceroot, 'worker');
-var buildroot =  path.join(__dirname, 'ace-build');
+var braceroot    =  path.join(__dirname, '..');
+var themedir     =  path.join(braceroot, 'theme');
+var modedir      =  path.join(braceroot, 'mode');
+var workersrcdir =  path.join(braceroot, 'workersrc');
+var workerdir    =  path.join(braceroot, 'worker');
+var buildroot    =  path.join(__dirname, 'ace-build');
 
 +function updateCleanAndPutInOrder() {
 
@@ -55,13 +57,13 @@ var buildroot =  path.join(__dirname, 'ace-build');
   }()
 
   +function workers() {
-    rm('-rf', workerdir);
-    mkdir(workerdir);
+    rm('-rf', workersrcdir);
+    mkdir(workersrcdir);
 
     ls(path.join(buildroot, 'worker-*.js'))
       .forEach(function (file) {
         var filename = path.basename(file).slice('worker-'.length);
-        mv(file, path.join(workerdir, filename));
+        mv(file, path.join(workersrcdir, filename));
       });
   }()
 
@@ -79,19 +81,39 @@ var buildroot =  path.join(__dirname, 'ace-build');
 
   fixAllRequires(themedir);
   fixAllRequires(modedir);
-  fixAllRequires(workerdir);
+  fixAllRequires(workersrcdir);
   fixAllRequires(buildroot);
 }()
 
-+function generateAcesForEachWorkerCombination () {
-  var acesrc = fs.readFileSync(path.join(buildroot, 'ace.js'), 'utf-8');
-  var rx = /this\.\$worker *= *new +Worker\(workerUrl\);/;
-  var inlines = workers.getInlines();
-  Object.keys(inlines)
-    .forEach(function (k) {
-      var src = acesrc.replace(rx, inlines[k]);
-      src += '\nmodule.exports = window.ace.acequire("ace/ace");';
-      var p = path.join(braceroot, k + '.js'); 
-      fs.writeFileSync(p, src, 'utf-8');
++function injectWorkersIntoModes() {
+  ls(path.join(modedir, '*.js'))
+    .forEach(function (file) {
+      var src = fs.readFileSync(file, 'utf-8');
+      var fixed = src;
+      workers.supported
+        .forEach(function (lang) {
+          fixed = fixed
+            .replace(
+                '"ace/mode/' + lang + '_worker"'
+              , 'require("../worker/' + lang + '")'
+            );
+        });
+
+      fs.writeFileSync(file, fixed, 'utf-8');
     });
 }()
+
++function workers() {
+  var acesrc = fs.readFileSync(path.join(buildroot, 'ace.js'), 'utf-8');
+  var workerBlob = fs.readFileSync(path.join(__dirname, 'worker-blob.js'), 'utf-8');
+
+  var rx = /this\.\$worker *= *new +Worker\(workerUrl\);/;
+  var src = acesrc.replace(rx, workerBlob);
+
+  src += '\nmodule.exports = window.ace.acequire("ace/ace");';
+  fs.writeFileSync(path.join(braceroot, 'index.js'), src, 'utf-8');
+
+  rm('-rf', workerdir);
+  mkdir(workerdir);
+  stringifyWorkers(); 
+}();

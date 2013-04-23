@@ -132,7 +132,7 @@ oop.inherits(Mode, TextMode);
     };
 
     this.createWorker = function(session) {
-        var worker = new WorkerClient(["ace"], "ace/mode/javascript_worker", "JavaScriptWorker");
+        var worker = new WorkerClient(["ace"], require("../worker/javascript"), "JavaScriptWorker");
         worker.attachToDocument(session.getDocument());
 
         worker.on("jslint", function(results) {
@@ -961,7 +961,7 @@ oop.inherits(Mode, TextMode);
     };
 
     this.createWorker = function(session) {
-        var worker = new WorkerClient(["ace"], "ace/mode/css_worker", "Worker");
+        var worker = new WorkerClient(["ace"], require("../worker/css"), "Worker");
         worker.attachToDocument(session.getDocument());
 
         worker.on("csslint", function(e) {
@@ -1984,7 +1984,7 @@ oop.inherits(Mode, TextMode);
     };
 
     this.createWorker = function(session) {
-        var worker = new WorkerClient(["ace"], "ace/mode/lua_worker", "Worker");
+        var worker = new WorkerClient(["ace"], require("../worker/lua"), "Worker");
         worker.attachToDocument(session.getDocument());
         
         worker.on("error", function(e) {

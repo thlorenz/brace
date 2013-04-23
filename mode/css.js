@@ -77,7 +77,7 @@ oop.inherits(Mode, TextMode);
     };
 
     this.createWorker = function(session) {
-        var worker = new WorkerClient(["ace"], "ace/mode/css_worker", "Worker");
+        var worker = new WorkerClient(["ace"], require("../worker/css"), "Worker");
         worker.attachToDocument(session.getDocument());
 
         worker.on("csslint", function(e) {

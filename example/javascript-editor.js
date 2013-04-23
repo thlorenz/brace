@@ -1,5 +1,5 @@
 // initialize ace editor customized for javascript
-var ace = require('brace/javascript');
+var ace = require('brace');
 
 // initialize javascript mode and monokai theme after editor itself
 require('brace/mode/javascript');
