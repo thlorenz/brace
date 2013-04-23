@@ -29,6 +29,7 @@
     "node": ">=0.6"
   },
   "testling": {
+    "files": "test/*.js",
     "browsers": {
       "ie": [ 10 ],
       "ff": [
