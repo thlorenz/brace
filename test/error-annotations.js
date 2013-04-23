@@ -30,10 +30,10 @@ var test = require('tape');
   ['javascript', 'coffee', 'json', 'lua'].forEach(createEditorElem);
   loadStyle();
 
-  require('../example/javascript-editor');
-  require('../example/coffee-editor');
-  require('../example/json-editor');
-  require('../example/lua-editor');
+  require('./fixtures/javascript-editor');
+  require('./fixtures/coffee-editor');
+  require('./fixtures/json-editor');
+  require('./fixtures/lua-editor');
 }()
 
 test('error annotations provided by inlined worker', function (t) {
