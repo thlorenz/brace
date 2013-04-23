@@ -1,10 +1,7 @@
-// initialize ace editor customized for coffee
 var ace = require('brace');
-
-// initialize coffee mode and monokai theme after editor itself
 require('brace/mode/coffee');
-require('brace/theme/monokai');
+require('brace/theme/vibrant_ink');
 
 var editor = ace.edit('coffee-editor');
-editor.setTheme('ace/theme/monokai');
+editor.setTheme('ace/theme/vibrant_ink');
 editor.getSession().setMode('ace/mode/coffee');

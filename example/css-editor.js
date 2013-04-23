@@ -1,10 +1,7 @@
-// initialize ace editor customized for css
-var ace = require('brace/css');
-
-// initialize css mode and monokai theme after editor itself
+var ace = require('brace');
 require('brace/mode/css');
-require('brace/theme/monokai');
+require('brace/theme/solarized_light');
 
 var editor = ace.edit('css-editor');
-editor.setTheme('ace/theme/monokai');
+editor.setTheme('ace/theme/solarized_light');
 editor.getSession().setMode('ace/mode/css');
