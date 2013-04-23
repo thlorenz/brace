@@ -27,5 +27,24 @@
   "license": "MIT",
   "engine": {
     "node": ">=0.6"
+  },
+  "testling": {
+    "browsers": {
+      "ie": [ 10 ],
+      "ff": [
+        10,
+        14,
+        15,
+        "nightly"
+      ],
+      "chrome": [
+        10,
+        25,
+        26,
+        "canary"
+      ],
+      "safari": [ ],
+      "opera": [ 12 ]
+    }
   }
 }
