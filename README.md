@@ -1,10 +1,10 @@
 # brace
 
-[See if your browser is supported](http://thlorenz.github.io/brace/).
-
 [browserify](https://github.com/substack/node-browserify) compatible version of the [ace editor](http://ajaxorg.github.io/ace/).
 
 [![browser support](http://ci.testling.com/thlorenz/brace.png)](http://ci.testling.com/thlorenz/brace)
+
+[Try it in your browser](http://thlorenz.github.io/brace/).
 
 ## Installation
 
