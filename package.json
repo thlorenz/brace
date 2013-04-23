@@ -4,7 +4,7 @@
   "description": "browserify compatible version of the ace editor.",
   "main": "brace.js",
   "scripts": {
-    "test": "node-trap test/*.js"
+    "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html"
   },
   "repository": {
     "type": "git",
@@ -14,7 +14,9 @@
   "dependencies": {},
   "devDependencies": {
     "uglify-js": "~2.2.5",
-    "tape": "~0.3.3"
+    "tape": "~0.3.3",
+    "browserify": "~2.13.2",
+    "opener": "~1.3.0"
   },
   "keywords": [],
   "author": {
