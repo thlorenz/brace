@@ -29,6 +29,11 @@ div.editor {
   bottom: 0;
 }
 
+#lua-editor {
+  left: 50%;
+  bottom: 0;
+}
+
 h1 {
   position: absolute;
   top: 0;
