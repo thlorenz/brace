@@ -13,7 +13,8 @@
   "homepage": "https://github.com/thlorenz/brace",
   "dependencies": {},
   "devDependencies": {
-    "uglify-js": "~2.2.5"
+    "uglify-js": "~2.2.5",
+    "tape": "~0.3.3"
   },
   "keywords": [],
   "author": {
