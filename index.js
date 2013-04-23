@@ -14651,20 +14651,21 @@ var WorkerClient = function(topLevelNamespaces, mod, classname) {
         });
     }
 
-    var blob;
+        var blob;
+    var workerSrc = mod.src;
+    window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
 
-var workerSrc = mod.src;
-try { 
-  window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
-  blob = new BlobBuilder();
-  blob.append(workerSrc);
-  blob = blob.getBlob();
-} catch(e) {
-  blob = new Blob([workerSrc]);
-}
-var blobUrl = (window.URL || window.webkitURL).createObjectURL(blob);
+    try {
+      blob = new BlobBuilder();
+      blob.append(workerSrc);
+      blob = blob.getBlob('application/javascript');
+    } catch (e) {
+      blob = new Blob([ workerSrc ], { type: 'application/javascript' });
+    }
 
-this.$worker = new Worker(blobUrl);
+    var blobUrl = (window.URL || window.webkitURL).createObjectURL(blob);
+
+    this.$worker = new Worker(blobUrl);
 
     this.$worker.postMessage({
         init : true,
