@@ -29,7 +29,7 @@
     "node": ">=0.6"
   },
   "testling": {
-    "files": "test/*.js",
+    "files": "test/error-annotations.js",
     "browsers": {
       "ie": [ 10 ],
       "ff": [
