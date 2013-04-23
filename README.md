@@ -44,6 +44,13 @@ With brace, you have two options:
 - create the bundle as explained above and provide it to others so they can include it in their html page simply via a
   script tag
 
+## What if my browser doesn't support it?
+
+If brace is unable to inline the web worker, it just falls back to provide the ace editor without annotation support.
+This means the editor is fully functional, but doesn't display errors/warnings on the left side.
+
+As far as I understand, the original ace editor behaves in exactly the same way.
+
 ## How does it work?
 
 brace has an [update script](https://github.com/thlorenz/brace/blob/master/build/update.js) which automatically pulls
