@@ -64,5 +64,5 @@ test('error annotations provided by inlined worker', function (t) {
     t.equal(err.line, '6', 'on line 6')
 
     t.end()
-  }, 1500);
+  }, 4000);
 })
