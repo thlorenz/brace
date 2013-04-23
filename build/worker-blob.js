@@ -1,7 +1,8 @@
     var blob;
     var workerSrc = mod.src;
-    window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
+    var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
 
+    // Older, deprecated way of creating a blob
     try {
       blob = new BlobBuilder();
       blob.append(workerSrc);
