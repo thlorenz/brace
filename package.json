@@ -1,6 +1,6 @@
 {
   "name": "brace",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "browserify compatible version of the ace editor.",
   "main": "brace.js",
   "scripts": {
@@ -31,7 +31,9 @@
   "testling": {
     "files": "test/*.js",
     "browsers": {
-      "ie": [ 10 ],
+      "ie": [
+        10
+      ],
       "ff": [
         10,
         14,
@@ -44,8 +46,13 @@
         26,
         "canary"
       ],
-      "safari": [ 5, 6 ],
-      "opera": [ 12 ]
+      "safari": [
+        5,
+        6
+      ],
+      "opera": [
+        12
+      ]
     }
   }
 }
