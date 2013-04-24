@@ -1,6 +1,6 @@
 {
   "name": "brace",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "browserify compatible version of the ace editor.",
   "main": "brace.js",
   "scripts": {
@@ -20,7 +20,15 @@
     "browserify": "~2.13.2",
     "opener": "~1.3.0"
   },
-  "keywords": [ "ace", "editor", "browser", "package", "bundle", "inline", "browserify" ],
+  "keywords": [
+    "ace",
+    "editor",
+    "browser",
+    "package",
+    "bundle",
+    "inline",
+    "browserify"
+  ],
   "author": {
     "name": "Thorsten Lorenz",
     "email": "thlorenz@gmx.de",
@@ -50,7 +58,9 @@
       "safari": [
         6
       ],
-      "opera": [ 12 ]
+      "opera": [
+        12
+      ]
     }
   }
 }
