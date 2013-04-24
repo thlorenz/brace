@@ -14638,7 +14638,7 @@ var WorkerClient = function(topLevelNamespaces, mod, classname) {
 
     var workerUrl;
     if (config.get("packaged")) {
-        workerUrl = config.moduleUrl(mod, "worker");
+        workerUrl = config.moduleUrl(mod.id, "worker");
     } else {
         var normalizePath = this.$normalizePath;
         if (acequire.nameToUrl && !acequire.toUrl)
@@ -14651,19 +14651,9 @@ var WorkerClient = function(topLevelNamespaces, mod, classname) {
         });
     }
 
-        var blob;
-    var workerSrc = mod.src;
-    var BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder || window.MSBlobBuilder;
-
-    // Older, deprecated way of creating a blob
-    try {
-      blob = new BlobBuilder();
-      blob.append(workerSrc);
-      blob = blob.getBlob('application/javascript');
-    } catch (e) {
-      blob = new Blob([ workerSrc ], { type: 'application/javascript' });
-    }
-
+        var workerSrc = mod.src;
+    var Blob = require('w3c-blob');
+    var blob = new Blob([ workerSrc ], { type: 'application/javascript' });
     var blobUrl = (window.URL || window.webkitURL).createObjectURL(blob);
 
     this.$worker = new Worker(blobUrl);
@@ -14671,7 +14661,7 @@ var WorkerClient = function(topLevelNamespaces, mod, classname) {
     this.$worker.postMessage({
         init : true,
         tlns: tlns,
-        module: mod,
+        module: mod.id,
         classname: classname
     });
 

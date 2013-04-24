@@ -27,7 +27,7 @@ module.exports = function () {
       var stringified = JSON.stringify(minify(src));
 
       // need a String object here so we can attach extra props like src
-      var code =  'module.exports = new String(\'' + 'ace/mode/' + worker + '_worker\');\n'
+      var code =  'module.exports.id = \'ace/mode/' + worker + '_worker\';\n'
                 + 'module.exports.src = ' + stringified + ';';
 
       fs.writeFileSync(dst, code, 'utf-8');

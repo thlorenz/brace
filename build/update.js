@@ -107,8 +107,16 @@ var buildroot    =  path.join(__dirname, 'ace-build');
   var acesrc = fs.readFileSync(path.join(buildroot, 'ace.js'), 'utf-8');
   var workerBlob = fs.readFileSync(path.join(__dirname, 'worker-blob.js'), 'utf-8');
 
-  var rx = /this\.\$worker *= *new +Worker\(workerUrl\);/;
-  var src = acesrc.replace(rx, workerBlob);
+  var newWorkerRx = /this\.\$worker *= *new +Worker\(workerUrl\);/;
+  var src = acesrc
+    // VERY BRITTLE - may easily break with future ace versions
+    // replace mod with mod.id in the following two lines inside 
+    // WorkerClient  function definition
+    //  * workerUrl = config.moduleUrl(mod, "worker");
+    //  * module: mod,
+    .replace('workerUrl = config.moduleUrl(mod, "worker");', 'workerUrl = config.moduleUrl(mod.id, "worker");')
+    .replace('module: mod,', 'module: mod.id,')
+    .replace(newWorkerRx, workerBlob);
 
   src += '\nmodule.exports = window.ace.acequire("ace/ace");';
   fs.writeFileSync(path.join(braceroot, 'index.js'), src, 'utf-8');
