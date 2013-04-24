@@ -4,7 +4,10 @@
 
 [![browser support](http://ci.testling.com/thlorenz/brace.png)](http://ci.testling.com/thlorenz/brace)
 
+***This badge shows which browsers support annotations, however the editor itself works in pretty much every browser.***
+
 [Try it in your browser](http://thlorenz.github.io/brace/).
+
 
 ## Installation
 
