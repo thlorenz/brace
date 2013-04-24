@@ -11,7 +11,9 @@
     "url": "git://github.com/thlorenz/brace.git"
   },
   "homepage": "https://github.com/thlorenz/brace",
-  "dependencies": {},
+  "dependencies": {
+    "w3c-blob": "0.0.1"
+  },
   "devDependencies": {
     "uglify-js": "~2.2.5",
     "tape": "~0.3.3",
