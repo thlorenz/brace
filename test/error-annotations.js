@@ -44,25 +44,44 @@ test('error annotations provided by inlined worker', function (t) {
   }
 
   // give editors time to initialize and workers to do the annotations
-  setTimeout(function () {
-  
-    var err;
-    err = getError('javascript')
+  var jsCount     =  0
+    , coffeeCount =  0
+    , jsonCount   =  0
+    , luaCount    =  0;
+
+  var max = 10; // give it a max of 10 seconds
+
+  +function javascript() {
+    var err = getError('javascript')
+    if (!err.length && ++jsCount < max) return setTimeout(javascript, 1000)
+
     t.equal(err.length, 1, 'javascript editor shows one error')
     t.equal(err.line, '5', 'on line 5')
+  }()
 
-    err = getError('coffee')
+  +function coffee() {
+    var err = getError('coffee')
+    if (!err.length && ++coffeeCount < max) return setTimeout(coffee, 1000)
+
     t.equal(err.length, 1, 'coffee editor shows one error')
     t.equal(err.line, '5', 'on line 5')
+  }()
 
-    err = getError('json')
+  +function json() {
+    var err = getError('json')
+    if (!err.length && ++jsonCount < max) return setTimeout(json, 1000)
+
     t.equal(err.length, 1, 'json editor shows one error')
     t.equal(err.line, '5', 'on line 5')
+  }()
 
-    err = getError('lua')
+  +function lua() {
+    var err = getError('lua')
+    if (!err.length && ++luaCount < max) return setTimeout(lua, 1000)
+
     t.equal(err.length, 1, 'lua editor shows one error')
     t.equal(err.line, '6', 'on line 6')
 
     t.end()
-  }, 4000);
+  }()
 })

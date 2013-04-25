@@ -42,13 +42,13 @@
     "files": "test/*.js",
     "browsers": [
       "firefox/10..nightly",
-      "chrome/18..canary",
+      "chrome/20..canary",
       "safari/latest",
       "android/latest",
-      "ie/9..latest",
-      "opera/latest",
       "iphone/latest",
-      "ipad/latest"
+      "ipad/latest",
+      "ie/9..latest",
+      "opera/latest"
     ]
   }
 }
