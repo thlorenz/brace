@@ -40,27 +40,15 @@
   },
   "testling": {
     "files": "test/*.js",
-    "browsers": {
-      "ie": [
-        10
-      ],
-      "ff": [
-        10,
-        14,
-        15,
-        "nightly"
-      ],
-      "chrome": [
-        10,
-        25,
-        "canary"
-      ],
-      "safari": [
-        6
-      ],
-      "opera": [
-        12
-      ]
-    }
+    "browsers": [
+      "firefox/10..nightly",
+      "chrome/18..canary",
+      "safari/latest",
+      "android/latest",
+      "ie/9..latest",
+      "opera/latest",
+      "iphone/latest",
+      "ipad/latest"
+    ]
   }
 }

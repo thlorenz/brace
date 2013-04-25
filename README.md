@@ -2,7 +2,7 @@
 
 [browserify](https://github.com/substack/node-browserify) compatible version of the [ace editor](http://ajaxorg.github.io/ace/).
 
-[![browser support](http://ci.testling.com/thlorenz/brace.png)](http://ci.testling.com/thlorenz/brace)
+[![browser support](https://ci.testling.com/thlorenz/brace.png)](https://ci.testling.com/thlorenz/brace)
 
 ***This badge shows which browsers support annotations, however the editor itself works in pretty much every browser.***
 
