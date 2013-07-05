@@ -2,7 +2,7 @@
   "name": "brace",
   "version": "0.1.2",
   "description": "browserify compatible version of the ace editor.",
-  "main": "brace.js",
+  "main": "index.js",
   "scripts": {
     "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html"
   },
