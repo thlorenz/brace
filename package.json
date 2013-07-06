@@ -41,14 +41,17 @@
   "testling": {
     "files": "test/*.js",
     "browsers": [
-      "firefox/10..nightly",
-      "chrome/20..canary",
-      "safari/latest",
-      "android/latest",
-      "iphone/latest",
-      "ipad/latest",
-      "ie/9..latest",
-      "opera/latest"
+      "ie/8..latest",
+      "firefox/17..latest",
+      "firefox/nightly",
+      "chrome/22..latest",
+      "chrome/canary",
+      "opera/12..latest",
+      "opera/next",
+      "safari/5.1..latest",
+      "ipad/6.0..latest",
+      "iphone/6.0..latest",
+      "android-browser/4.2..latest"
     ]
   }
 }
