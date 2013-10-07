@@ -9,7 +9,7 @@ var LatexFoldMode = acequire("./folding/latex").FoldMode;
 var Range = acequire("../range").Range;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new LatexHighlightRules().getRules());
+    this.HighlightRules = LatexHighlightRules;
     this.foldingRules = new LatexFoldMode();
 };
 oop.inherits(Mode, TextMode);

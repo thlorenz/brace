@@ -43,9 +43,8 @@ var PascalHighlightRules = acequire("./pascal_highlight_rules").PascalHighlightR
 var FoldMode = acequire("./folding/coffee").FoldMode;
 
 var Mode = function() {
-    var highlighter = new PascalHighlightRules();
+    this.HighlightRules = PascalHighlightRules;
     this.foldingRules = new FoldMode();
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
 };
 oop.inherits(Mode, TextMode);
 
@@ -89,15 +88,15 @@ var PascalHighlightRules = function() {
          { token: 'constant.numeric.pascal',
            regex: '\\b((0(x|X)[0-9a-fA-F]*)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b' },
          { token: 'punctuation.definition.comment.pascal',
-           regex: '--',
-           push: 
+           regex: '--.*$',
+           push_: 
             [ { token: 'comment.line.double-dash.pascal.one',
                 regex: '$',
                 next: 'pop' },
               { defaultToken: 'comment.line.double-dash.pascal.one' } ] },
          { token: 'punctuation.definition.comment.pascal',
-           regex: '//',
-           push: 
+           regex: '//.*$',
+           push_: 
             [ { token: 'comment.line.double-slash.pascal.two',
                 regex: '$',
                 next: 'pop' },

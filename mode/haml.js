@@ -43,10 +43,8 @@ var HamlHighlightRules = acequire("./haml_highlight_rules").HamlHighlightRules;
 var FoldMode = acequire("./folding/coffee").FoldMode;
 
 var Mode = function() {
-    var highlighter = new HamlHighlightRules();
-    this.foldingRules = new FoldMode();    
-    
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
+    this.HighlightRules = HamlHighlightRules;
+    this.foldingRules = new FoldMode();
 };
 oop.inherits(Mode, TextMode);
 

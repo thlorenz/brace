@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2010, Ajax.org B.V.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
@@ -40,18 +40,12 @@ color: #DEDEDE\
 width: 1px;\
 background: #1a1a1a\
 }\
-.ace-tomorrow-night-bright .ace_scroller {\
-background-color: #000000\
-}\
-.ace-tomorrow-night-bright .ace_text-layer {\
+.ace-tomorrow-night-bright {\
+background-color: #000000;\
 color: #DEDEDE\
 }\
 .ace-tomorrow-night-bright .ace_cursor {\
-border-left: 2px solid #9F9F9F\
-}\
-.ace-tomorrow-night-bright .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #9F9F9F\
+color: #9F9F9F\
 }\
 .ace-tomorrow-night-bright .ace_marker-layer .ace_selection {\
 background: #424242\
@@ -72,6 +66,9 @@ background: #2A2A2A\
 }\
 .ace-tomorrow-night-bright .ace_gutter-active-line {\
 background-color: #2A2A2A\
+}\
+.ace-tomorrow-night-bright .ace_stack {\
+background-color: rgb(66, 90, 44);\
 }\
 .ace-tomorrow-night-bright .ace_marker-layer .ace_selected-word {\
 border: 1px solid #424242\
@@ -121,7 +118,7 @@ color: #7AA6DA\
 .ace-tomorrow-night-bright .ace_support.ace_type {\
 color: #E7C547\
 }\
-.ace-tomorrow-night-bright .ace_markup.ace_heading,\
+.ace-tomorrow-night-bright .ace_heading,\
 .ace-tomorrow-night-bright .ace_string {\
 color: #B9CA4A\
 }\
@@ -135,11 +132,8 @@ color: #D54E53\
 .ace-tomorrow-night-bright .ace_comment {\
 color: #969896\
 }\
-.ace-tomorrow-night-bright .ace_markup.ace_underline {\
-text-decoration: underline\
-}\
 .ace-tomorrow-night-bright .ace_indent-guide {\
-background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNgYGD4z7Bq1ar/AAz9A/2naJQKAAAAAElFTkSuQmCC) right repeat-y\
+background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNgYGBgYFBXV/8PAAJoAXX4kT2EAAAAAElFTkSuQmCC) right repeat-y;\
 }";
 
 var dom = acequire("../lib/dom");

@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2010, Ajax.org B.V.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
@@ -40,18 +40,12 @@ color: #C5C9C9\
 width: 1px;\
 background: #555651\
 }\
-.ace-mono-industrial .ace_scroller {\
-background-color: #222C28\
-}\
-.ace-mono-industrial .ace_text-layer {\
+.ace-mono-industrial {\
+background-color: #222C28;\
 color: #FFFFFF\
 }\
 .ace-mono-industrial .ace_cursor {\
-border-left: 2px solid #FFFFFF\
-}\
-.ace-mono-industrial .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #FFFFFF\
+color: #FFFFFF\
 }\
 .ace-mono-industrial .ace_marker-layer .ace_selection {\
 background: rgba(145, 153, 148, 0.40)\
@@ -132,16 +126,12 @@ background-color: #151C19\
 .ace-mono-industrial .ace_entity.ace_other.ace_attribute-name {\
 color: #909993\
 }\
-.ace-mono-industrial .ace_markup.ace_underline {\
-text-decoration: underline\
-}\
 .ace-mono-industrial .ace_entity.ace_name.ace_tag {\
 color: #A65EFF\
 }\
 .ace-mono-industrial .ace_indent-guide {\
-background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNQ0tH4zzBz5sz/ABAOBECKH+evAAAAAElFTkSuQmCC) right repeat-y\
-}\
-";
+background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNQ1NbwZfALD/4PAAlTArlEC4r/AAAAAElFTkSuQmCC) right repeat-y;\
+}";
 
 var dom = acequire("../lib/dom");
 dom.importCssString(exports.cssText, exports.cssClass);

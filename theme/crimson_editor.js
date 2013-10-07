@@ -43,18 +43,12 @@ text-align: right;\
 width: 1px;\
 background: #e8e8e8;\
 }\
-.ace-crimson-editor .ace_scroller {\
+.ace-crimson-editor {\
 background-color: #FFFFFF;\
-}\
-.ace-crimson-editor .ace_text-layer {\
 color: rgb(64, 64, 64);\
 }\
 .ace-crimson-editor .ace_cursor {\
-border-left: 2px solid black;\
-}\
-.ace-crimson-editor .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid black;\
+color: black;\
 }\
 .ace-crimson-editor .ace_invisible {\
 color: rgb(191, 191, 191);\

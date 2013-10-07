@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2010, Ajax.org B.V.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
@@ -40,18 +40,12 @@ color: #C5C8C6\
 width: 1px;\
 background: #25282c\
 }\
-.ace-tomorrow-night .ace_scroller {\
-background-color: #1D1F21\
-}\
-.ace-tomorrow-night .ace_text-layer {\
+.ace-tomorrow-night  {\
+background-color: #1D1F21;\
 color: #C5C8C6\
 }\
 .ace-tomorrow-night .ace_cursor {\
-border-left: 2px solid #AEAFAD\
-}\
-.ace-tomorrow-night .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #AEAFAD\
+color: #AEAFAD\
 }\
 .ace-tomorrow-night .ace_marker-layer .ace_selection {\
 background: #373B41\
@@ -121,7 +115,7 @@ color: #81A2BE\
 .ace-tomorrow-night .ace_support.ace_type {\
 color: #F0C674\
 }\
-.ace-tomorrow-night .ace_markup.ace_heading,\
+.ace-tomorrow-night .ace_heading,\
 .ace-tomorrow-night .ace_string {\
 color: #B5BD68\
 }\
@@ -135,11 +129,8 @@ color: #CC6666\
 .ace-tomorrow-night .ace_comment {\
 color: #969896\
 }\
-.ace-tomorrow-night .ace_markup.ace_underline {\
-text-decoration: underline\
-}\
 .ace-tomorrow-night .ace_indent-guide {\
-background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWOQlVf8z7Bq1ar/AA/hBFp7egmpAAAAAElFTkSuQmCC) right repeat-y\
+background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNgYGBgYHB3d/8PAAOIAdULw8qMAAAAAElFTkSuQmCC) right repeat-y;\
 }";
 
 var dom = acequire("../lib/dom");

@@ -39,7 +39,7 @@ var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOut
 var C9StyleFoldMode = acequire("./folding/c9search").FoldMode;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new C9SearchHighlightRules().getRules());
+    this.HighlightRules = C9SearchHighlightRules;
     this.$outdent = new MatchingBraceOutdent();
     this.foldingRules = new C9StyleFoldMode();
 };

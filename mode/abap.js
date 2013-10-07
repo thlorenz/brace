@@ -39,7 +39,7 @@ var TextMode = acequire("./text").Mode;
 var oop = acequire("../lib/oop");
 
 function Mode() {
-    this.$tokenizer = new Tokenizer(new Rules().getRules());
+    this.HighlightRules = Rules;
     this.foldingRules = new FoldMode();
 }
 

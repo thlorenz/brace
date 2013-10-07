@@ -41,7 +41,7 @@ var CStyleFoldMode = acequire("./folding/cstyle").FoldMode;
 var WorkerClient = acequire("../worker/worker_client").WorkerClient;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new HighlightRules().getRules());
+    this.HighlightRules = HighlightRules;
     this.$outdent = new MatchingBraceOutdent();
     this.$behaviour = new CstyleBehaviour();
     this.foldingRules = new CStyleFoldMode();

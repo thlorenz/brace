@@ -40,7 +40,7 @@ var Range = acequire("../range").Range;
 var FoldMode = acequire("./folding/coffee").FoldMode;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new RubyHighlightRules().getRules());
+    this.HighlightRules = RubyHighlightRules;
     this.$outdent = new MatchingBraceOutdent();
     this.foldingRules = new FoldMode();
 };
@@ -54,7 +54,7 @@ oop.inherits(Mode, TextMode);
     this.getNextLineIndent = function(state, line, tab) {
         var indent = this.$getIndent(line);
 
-        var tokenizedLine = this.$tokenizer.getLineTokens(line, state);
+        var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
         var tokens = tokenizedLine.tokens;
 
         if (tokens.length && tokens[tokens.length-1].type == "comment") {
@@ -75,7 +75,7 @@ oop.inherits(Mode, TextMode);
     };
 
     this.checkOutdent = function(state, line, input) {
-        return /\s+end$/.test(line + input) || /\s+}$/.test(line + input) || /\s+else$/.test(line + input);
+        return /^\s+end$/.test(line + input) || /^\s+}$/.test(line + input) || /^\s+else$/.test(line + input);
     };
 
     this.autoOutdent = function(state, doc, row) {
