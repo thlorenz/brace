@@ -38,8 +38,9 @@ Cursor and selection styles from textmate.css. */\
 background: #e8e8e8;\
 color: #AAA;\
 }\
-.ace-github .ace_scroller {\
+.ace-github  {\
 background: #fff;\
+color: #000;\
 }\
 .ace-github .ace_keyword {\
 font-weight: bold;\
@@ -82,14 +83,8 @@ color: teal;\
 .ace-github .ace_constant.ace_language {\
 font-weight: bold;\
 }\
-.ace-github .ace_text-layer {\
-}\
 .ace-github .ace_cursor {\
-border-left: 2px solid black;\
-}\
-.ace-github .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid black;\
+color: black;\
 }\
 .ace-github .ace_marker-layer .ace_active-line {\
 background: rgb(255, 255, 204);\

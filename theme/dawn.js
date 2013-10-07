@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2010, Ajax.org B.V.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
@@ -40,18 +40,12 @@ color: #333\
 width: 1px;\
 background: #e8e8e8\
 }\
-.ace-dawn .ace_scroller {\
-background-color: #F9F9F9\
-}\
-.ace-dawn .ace_text-layer {\
+.ace-dawn {\
+background-color: #F9F9F9;\
 color: #080808\
 }\
 .ace-dawn .ace_cursor {\
-border-left: 2px solid #000000\
-}\
-.ace-dawn .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #000000\
+color: #000000\
 }\
 .ace-dawn .ace_marker-layer .ace_selection {\
 background: rgba(39, 95, 255, 0.30)\
@@ -110,7 +104,7 @@ color: #B4371F\
 background-color: #794938;\
 border-color: #080808\
 }\
-.ace-dawn .ace_markup.ace_list,\
+.ace-dawn .ace_list,\
 .ace-dawn .ace_support.ace_function {\
 color: #693A17\
 }\
@@ -131,14 +125,11 @@ color: #5A525F\
 .ace-dawn .ace_variable {\
 color: #234A97\
 }\
-.ace-dawn .ace_markup.ace_underline {\
-text-decoration: underline\
-}\
-.ace-dawn .ace_markup.ace_heading {\
+.ace-dawn .ace_heading {\
 color: #19356D\
 }\
 .ace-dawn .ace_indent-guide {\
-background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4+fPnf4ZVq1b9BwAkVQboFQv98gAAAABJRU5ErkJggg==) right repeat-y\
+background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNgYGBgYLh/5+x/AAizA4hxNNsZAAAAAElFTkSuQmCC) right repeat-y;\
 }";
 
 var dom = acequire("../lib/dom");

@@ -40,7 +40,8 @@ var Range = acequire("../range").Range;
 var WorkerClient = acequire("../worker/worker_client").WorkerClient;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new LuaHighlightRules().getRules());
+    this.HighlightRules = LuaHighlightRules;
+    
     this.foldingRules = new LuaFoldMode();
 };
 oop.inherits(Mode, TextMode);
@@ -94,7 +95,7 @@ oop.inherits(Mode, TextMode);
         var indent = this.$getIndent(line);
         var level = 0;
 
-        var tokenizedLine = this.$tokenizer.getLineTokens(line, state);
+        var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
         var tokens = tokenizedLine.tokens;
 
         if (state == "start") {
@@ -117,7 +118,7 @@ oop.inherits(Mode, TextMode);
         if (line.match(/^\s*[\)\}\]]$/))
             return true;
 
-        var tokens = this.$tokenizer.getLineTokens(line.trim(), state).tokens;
+        var tokens = this.getTokenizer().getLineTokens(line.trim(), state).tokens;
 
         if (!tokens || !tokens.length)
             return false;
@@ -128,7 +129,7 @@ oop.inherits(Mode, TextMode);
     this.autoOutdent = function(state, session, row) {
         var prevLine = session.getLine(row - 1);
         var prevIndent = this.$getIndent(prevLine).length;
-        var prevTokens = this.$tokenizer.getLineTokens(prevLine, "start").tokens;
+        var prevTokens = this.getTokenizer().getLineTokens(prevLine, "start").tokens;
         var tabLength = session.getTabString().length;
         var expectedIndent = prevIndent + tabLength * getNetIndentLevel(prevTokens);
         var curIndent = this.$getIndent(session.getLine(row)).length;
@@ -227,7 +228,7 @@ var LuaHighlightRules = function() {
         "start" : [{
             stateName: "bracketedComment",
             onMatch : function(value, currentState, stack){
-                stack.unshift(this.next, value.length, currentState);
+                stack.unshift(this.next, value.length - 2, currentState);
                 return "comment";
             },
             regex : /\-\-\[=*\[/,
@@ -243,7 +244,7 @@ var LuaHighlightRules = function() {
                         }
                         return "comment";
                     },
-                    regex : /(?:[^\\]|\\.)*?\]=*\]/,
+                    regex : /\]=*\]/,
                     next  : "start"
                 }, {
                     defaultToken : "comment"
@@ -275,7 +276,7 @@ var LuaHighlightRules = function() {
                         return "comment";
                     },
                     
-                    regex : /(?:[^\\]|\\.)*?\]=*\]/,
+                    regex : /\]=*\]/,
                     next  : "start"
                 }, {
                     defaultToken : "comment"

@@ -38,7 +38,7 @@ var SassHighlightRules = acequire("./sass_highlight_rules").SassHighlightRules;
 var FoldMode = acequire("./folding/coffee").FoldMode;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new SassHighlightRules().getRules());
+    this.HighlightRules = SassHighlightRules;
     this.foldingRules = new FoldMode();
 };
 oop.inherits(Mode, TextMode);

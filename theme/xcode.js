@@ -3,7 +3,7 @@
  *
  * Copyright (c) 2010, Ajax.org B.V.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
@@ -41,18 +41,12 @@ color: #333\
 width: 1px;\
 background: #e8e8e8\
 }\
-.ace-xcode .ace_scroller {\
-background-color: #FFFFFF\
-}\
-.ace-xcode .ace_text-layer {\
+.ace-xcode {\
+background-color: #FFFFFF;\
 color: #000000\
 }\
 .ace-xcode .ace_cursor {\
-border-left: 2px solid #000000\
-}\
-.ace-xcode .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #000000\
+color: #000000\
 }\
 .ace-xcode .ace_marker-layer .ace_selection {\
 background: #B5D5FF\
@@ -117,7 +111,7 @@ color: #DF0002\
 color: #008E00\
 }\
 .ace-xcode .ace_indent-guide {\
-background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==) right repeat-y;\
+background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==) right repeat-y\
 }";
 
 var dom = acequire("../lib/dom");

@@ -42,9 +42,7 @@ var Tokenizer = acequire("../tokenizer").Tokenizer;
 var SchemeHighlightRules = acequire("./scheme_highlight_rules").SchemeHighlightRules;
 
 var Mode = function() {
-    var highlighter = new SchemeHighlightRules();
-    
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
+    this.HighlightRules = SchemeHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 

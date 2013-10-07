@@ -43,10 +43,8 @@ var ObjectiveCHighlightRules = acequire("./objectivec_highlight_rules").Objectiv
 var CStyleFoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
-    var highlighter = new ObjectiveCHighlightRules();
+    this.HighlightRules = ObjectiveCHighlightRules;
     this.foldingRules = new CStyleFoldMode();
-
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
 };
 oop.inherits(Mode, TextMode);
 
@@ -499,17 +497,17 @@ var c_cppHighlightRules = function() {
                 next : "qstring"
             }, {
                 token : "constant.numeric", // hex
-                regex : "0[xX][0-9a-fA-F]+\\b"
+                regex : "0[xX][0-9a-fA-F]+(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b"
             }, {
                 token : "constant.numeric", // float
-                regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
+                regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?(L|l|UL|ul|u|U|F|f|ll|LL|ull|ULL)?\\b"
             }, {
                 token : "keyword", // pre-compiler directives
-                regex : "(?:#include|#import|#pragma|#line|#define|#undef|#if|#ifdef|#else|#elif|#ifndef)\\b",
+                regex : "#\\s*(?:include|import|pragma|line|define|undef|if|ifdef|else|elif|ifndef)\\b",
                 next  : "directive"
             }, {
                 token : "keyword", // special case pre-compiler directive
-                regex : "(?:#endif)\\b"
+                regex : "(?:#\\s*endif)\\b"
             }, {
                 token : "support.function.C99.c",
                 regex : cFunctions
