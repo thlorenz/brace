@@ -11,7 +11,6 @@ module.exports = [
   , '  position: absolute;'
   , '  width: 50%;'
   , '  height: 50%;'
-  , '  background: black;'
   , '}'
   , ''
   , '#javascript-editor {'
