@@ -39,7 +39,7 @@ var XQueryBehaviour = acequire("./behaviour/xquery").XQueryBehaviour;
 var CStyleFoldMode = acequire("./folding/cstyle").FoldMode;
 
 
-var Mode = function(parent) {
+var Mode = function() {
     this.$tokenizer   = new XQueryLexer();
     this.$behaviour   = new XQueryBehaviour();
     this.foldingRules = new CStyleFoldMode();

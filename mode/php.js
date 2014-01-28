@@ -70,7 +70,7 @@ oop.inherits(Mode, TextMode);
     );
 
        
-    this.lineCommentStart = ["#", "//"];
+    this.lineCommentStart = ["//", "#"];
     this.blockComment = {start: "/*", end: "*/"};
 
     this.getNextLineIndent = function(state, line, tab) {
@@ -1273,7 +1273,7 @@ var HtmlHighlightRules = function() {
             next : "style"
         }, {
             token : "meta.tag", // opening tag
-            regex : "<\\/?",
+            regex : "<\\/?(?=\\S)",
             next : "tag"
         }, {
             token : "text",

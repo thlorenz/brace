@@ -290,7 +290,10 @@ function github_embed(tag, prefix) {
 var MarkdownHighlightRules = function() {
 
     this.$rules = {
-        "basic" : [{ // code span `
+        "basic" : [{
+            token : "constant.language.escape",
+            regex : /\\[\\`*_{}\[\]()#+\-.!]/
+        }, { // code span `
             token : "support.function",
             regex : "(`+)(.*?[^`])(\\1)"
         }, { // reference
@@ -965,7 +968,7 @@ var HtmlHighlightRules = function() {
             next : "style"
         }, {
             token : "meta.tag", // opening tag
-            regex : "<\\/?",
+            regex : "<\\/?(?=\\S)",
             next : "tag"
         }, {
             token : "text",
@@ -1757,6 +1760,7 @@ ace.define('ace/mode/coffee_highlight_rules', ["require", 'exports', 'module' , 
                     regex : '"""',
                     next : [
                         {token : "string", regex : '"""', next : "start"},
+                        {token : "paren.string", regex : '#{', push : "start"},
                         {token : "constant.language.escape", regex : stringEscape},
                         {defaultToken: "string"}
                     ]
@@ -1771,6 +1775,7 @@ ace.define('ace/mode/coffee_highlight_rules', ["require", 'exports', 'module' , 
                     stateName: "qqstring",
                     token : "string.start", regex : '"', next : [
                         {token : "string.end", regex : '"', next : "start"},
+                        {token : "paren.string", regex : '#{', push : "start"},
                         {token : "constant.language.escape", regex : stringEscape},
                         {defaultToken: "string"}
                     ]
@@ -1781,6 +1786,21 @@ ace.define('ace/mode/coffee_highlight_rules', ["require", 'exports', 'module' , 
                         {token : "constant.language.escape", regex : stringEscape},
                         {defaultToken: "string"}
                     ]
+                }, {
+                    regex: "[{}]", onMatch: function(val, state, stack) {
+                        this.next = "";
+                        if (val == "{" && stack.length) {
+                            stack.unshift("start", state);
+                            return "paren";
+                        }
+                        if (val == "}" && stack.length) {
+                            stack.shift();
+                            this.next = stack.shift();
+                            if (this.next.indexOf("string") != -1)
+                                return "paren.string";
+                        }
+                        return "paren";
+                    }
                 }, {
                     token : "string.regex",
                     regex : "///",

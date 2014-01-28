@@ -41,13 +41,11 @@ color: rgb(136, 136, 136);\
 width: 1px;\
 background: #ebebeb;\
 }\
-.ace-eclipse .ace_scroller {\
+.ace-eclipse {\
 background-color: #FFFFFF;\
 }\
 .ace-eclipse .ace_fold {\
 background-color: rgb(60, 76, 114);\
-}\
-.ace-eclipse .ace_text-layer {\
 }\
 .ace-eclipse .ace_cursor {\
 border-left: 2px solid black;\
@@ -70,7 +68,7 @@ color: rgb(60, 76, 114);\
 color: rgb(42, 0, 255);\
 }\
 .ace-eclipse .ace_comment {\
-color: rgb(63, 127, 95);\
+color: rgb(113, 150, 130);\
 }\
 .ace-eclipse .ace_comment.ace_doc {\
 color: rgb(63, 95, 191);\
@@ -79,9 +77,10 @@ color: rgb(63, 95, 191);\
 color: rgb(127, 159, 191);\
 }\
 .ace-eclipse .ace_constant.ace_numeric {\
+color: darkblue;\
 }\
 .ace-eclipse .ace_tag {\
-color: rgb(63, 127, 127);\
+color: rgb(25, 118, 116);\
 }\
 .ace-eclipse .ace_type {\
 color: rgb(127, 0, 127);\
@@ -97,7 +96,10 @@ margin: -1px 0 0 -1px;\
 border: 1px solid rgb(192, 192, 192);\
 }\
 .ace-eclipse .ace_meta.ace_tag {\
-color:rgb(63, 127, 127);\
+color:rgb(25, 118, 116);\
+}\
+.ace-eclipse .ace_invisible {\
+color: #ddd;\
 }\
 .ace-eclipse .ace_entity.ace_other.ace_attribute-name {\
 color:rgb(127, 0, 127);\
