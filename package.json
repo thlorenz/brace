@@ -4,6 +4,7 @@
   "description": "browserify compatible version of the ace editor.",
   "main": "index.js",
   "scripts": {
+    "update": "(cd build && node ./update)",
     "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html"
   },
   "repository": {
