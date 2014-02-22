@@ -39,7 +39,7 @@ var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOut
 var FoldMode = acequire("./folding/coffee").FoldMode;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new YamlHighlightRules().getRules());
+    this.HighlightRules = YamlHighlightRules;
     this.$outdent = new MatchingBraceOutdent();
     this.foldingRules = new FoldMode();
 };
@@ -118,7 +118,7 @@ var YamlHighlightRules = function() {
                 regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
             }, {
                 token : "string", // multi line string start
-                regex : '[\\|>]\\w*',
+                regex : '[|>][-+\\d\\s]*$',
                 next : "qqstring"
             }, {
                 token : "string", // single quoted string

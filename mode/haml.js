@@ -43,10 +43,8 @@ var HamlHighlightRules = acequire("./haml_highlight_rules").HamlHighlightRules;
 var FoldMode = acequire("./folding/coffee").FoldMode;
 
 var Mode = function() {
-    var highlighter = new HamlHighlightRules();
-    this.foldingRules = new FoldMode();    
-    
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
+    this.HighlightRules = HamlHighlightRules;
+    this.foldingRules = new FoldMode();
 };
 oop.inherits(Mode, TextMode);
 
@@ -339,11 +337,13 @@ var RubyHighlightRules = function() {
                 rules: {
                     heredoc: [{
                         onMatch:  function(value, currentState, stack) {
-                            if (value == stack[1]) {
+                            if (value === stack[1]) {
                                 stack.shift();
                                 stack.shift();
+                                this.next = stack[0] || "start";
                                 return "support.class";
                             }
+                            this.next = "";
                             return "string";
                         },
                         regex: ".*$",
@@ -354,16 +354,26 @@ var RubyHighlightRules = function() {
                         regex: "^ +"
                     }, {
                         onMatch:  function(value, currentState, stack) {
-                            if (value == stack[1]) {
+                            if (value === stack[1]) {
                                 stack.shift();
                                 stack.shift();
+                                this.next = stack[0] || "start";
                                 return "support.class";
                             }
+                            this.next = "";
                             return "string";
                         },
                         regex: ".*$",
                         next: "start"
                     }]
+                }
+            }, {
+                regex : "$",
+                token : "empty",
+                next : function(currentState, stack) {
+                    if (stack[0] === "heredoc" || stack[0] === "indentedHeredoc")
+                        return stack[0];
+                    return currentState;
                 }
             }, {
                 token : "keyword.operator",

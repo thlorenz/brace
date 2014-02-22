@@ -45,11 +45,7 @@ background-color: #FDF6E3;\
 color: #586E75\
 }\
 .ace-solarized-light .ace_cursor {\
-border-left: 2px solid #000000\
-}\
-.ace-solarized-light .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #000000\
+color: #000000\
 }\
 .ace-solarized-light .ace_marker-layer .ace_selection {\
 background:  rgba(7, 54, 67, 0.09)\
@@ -116,9 +112,6 @@ color: #D30102\
 .ace-solarized-light .ace_comment,\
 .ace-solarized-light .ace_entity.ace_other.ace_attribute-name {\
 color: #93A1A1\
-}\
-.ace-solarized-light .ace_markup.ace_underline {\
-text-decoration: underline\
 }\
 .ace-solarized-light .ace_indent-guide {\
 background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWNgYGBgYHjy8NJ/AAjgA5fzQUmBAAAAAElFTkSuQmCC) right repeat-y;\

@@ -37,7 +37,7 @@ var MysqlHighlightRules = acequire("./mysql_highlight_rules").MysqlHighlightRule
 var Range = acequire("../range").Range;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new MysqlHighlightRules().getRules());
+    this.HighlightRules = MysqlHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 
@@ -127,7 +127,7 @@ var MysqlHighlightRules = function() {
         "comment" : [
             {token : "comment", regex : "\\*\\/", next : "start"},
             {defaultToken : "comment"}
-        ],
+        ]
     };
 
     this.embedRules(DocCommentHighlightRules, "doc-", [ DocCommentHighlightRules.getEndRule("start") ]);

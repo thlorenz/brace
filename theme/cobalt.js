@@ -45,11 +45,7 @@ background-color: #002240;\
 color: #FFFFFF\
 }\
 .ace-cobalt .ace_cursor {\
-border-left: 2px solid #FFFFFF\
-}\
-.ace-cobalt .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #FFFFFF\
+color: #FFFFFF\
 }\
 .ace-cobalt .ace_marker-layer .ace_selection {\
 background: rgba(179, 101, 57, 0.75)\
@@ -129,14 +125,11 @@ color: #FF80E1\
 .ace-cobalt .ace_meta.ace_tag {\
 color: #9EFFFF\
 }\
-.ace-cobalt .ace_markup.ace_underline {\
-text-decoration: underline\
-}\
-.ace-cobalt .ace_markup.ace_heading {\
+.ace-cobalt .ace_heading {\
 color: #C8E4FD;\
 background-color: #001221\
 }\
-.ace-cobalt .ace_markup.ace_list {\
+.ace-cobalt .ace_list {\
 background-color: #130D26\
 }\
 .ace-cobalt .ace_indent-guide {\

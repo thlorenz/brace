@@ -43,9 +43,8 @@ var PascalHighlightRules = acequire("./pascal_highlight_rules").PascalHighlightR
 var FoldMode = acequire("./folding/coffee").FoldMode;
 
 var Mode = function() {
-    var highlighter = new PascalHighlightRules();
+    this.HighlightRules = PascalHighlightRules;
     this.foldingRules = new FoldMode();
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
 };
 oop.inherits(Mode, TextMode);
 

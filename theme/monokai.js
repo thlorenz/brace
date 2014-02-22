@@ -45,11 +45,7 @@ background-color: #272822;\
 color: #F8F8F2\
 }\
 .ace-monokai .ace_cursor {\
-border-left: 2px solid #F8F8F0\
-}\
-.ace-monokai .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #F8F8F0\
+color: #F8F8F0\
 }\
 .ace-monokai .ace_marker-layer .ace_selection {\
 background: #49483E\
@@ -82,6 +78,10 @@ color: #52524d\
 .ace-monokai .ace_meta.ace_tag,\
 .ace-monokai .ace_storage {\
 color: #F92672\
+}\
+.ace-monokai .ace_punctuation,\
+.ace-monokai .ace_punctuation.ace_tag {\
+color: #fff\
 }\
 .ace-monokai .ace_constant.ace_character,\
 .ace-monokai .ace_constant.ace_language,\
@@ -126,9 +126,6 @@ color: #E6DB74\
 }\
 .ace-monokai .ace_comment {\
 color: #75715E\
-}\
-.ace-monokai .ace_markup.ace_underline {\
-text-decoration: underline\
 }\
 .ace-monokai .ace_indent-guide {\
 background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAEklEQVQImWPQ0FD0ZXBzd/wPAAjVAoxeSgNeAAAAAElFTkSuQmCC) right repeat-y;\

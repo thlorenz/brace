@@ -38,7 +38,7 @@ var AdaHighlightRules = acequire("./ada_highlight_rules").AdaHighlightRules;
 var Range = acequire("../range").Range;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new AdaHighlightRules().getRules());
+    this.HighlightRules = AdaHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 

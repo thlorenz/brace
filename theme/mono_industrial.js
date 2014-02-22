@@ -45,11 +45,7 @@ background-color: #222C28;\
 color: #FFFFFF\
 }\
 .ace-mono-industrial .ace_cursor {\
-border-left: 2px solid #FFFFFF\
-}\
-.ace-mono-industrial .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #FFFFFF\
+color: #FFFFFF\
 }\
 .ace-mono-industrial .ace_marker-layer .ace_selection {\
 background: rgba(145, 153, 148, 0.40)\
@@ -129,9 +125,6 @@ background-color: #151C19\
 }\
 .ace-mono-industrial .ace_entity.ace_other.ace_attribute-name {\
 color: #909993\
-}\
-.ace-mono-industrial .ace_markup.ace_underline {\
-text-decoration: underline\
 }\
 .ace-mono-industrial .ace_entity.ace_name.ace_tag {\
 color: #A65EFF\

@@ -38,7 +38,7 @@ var VerilogHighlightRules = acequire("./verilog_highlight_rules").VerilogHighlig
 var Range = acequire("../range").Range;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new VerilogHighlightRules().getRules());
+    this.HighlightRules = VerilogHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 

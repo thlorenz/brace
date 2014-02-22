@@ -44,15 +44,8 @@ background: #3b3b3b\
 background-color: #323232;\
 color: #FFFFFF\
 }\
-.ace-idle-fingers .ace_text-layer {\
-color: #FFFFFF\
-}\
 .ace-idle-fingers .ace_cursor {\
-border-left: 2px solid #91FF00\
-}\
-.ace-idle-fingers .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #91FF00\
+color: #91FF00\
 }\
 .ace-idle-fingers .ace_marker-layer .ace_selection {\
 background: rgba(90, 100, 126, 0.88)\
@@ -120,9 +113,6 @@ color: #FFE5BB\
 }\
 .ace-idle-fingers .ace_entity.ace_name {\
 color: #FFC66D\
-}\
-.ace-idle-fingers .ace_markup.ace_underline {\
-text-decoration: underline\
 }\
 .ace-idle-fingers .ace_collab.ace_user1 {\
 color: #323232;\
