@@ -38,9 +38,7 @@ var Tokenizer = acequire("../tokenizer").Tokenizer;
 var LispHighlightRules = acequire("./lisp_highlight_rules").LispHighlightRules;
 
 var Mode = function() {
-    var highlighter = new LispHighlightRules();
-    
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
+    this.HighlightRules = LispHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 

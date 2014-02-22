@@ -41,7 +41,7 @@ var CssBehaviour = acequire("./behaviour/css").CssBehaviour;
 var CStyleFoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new CssHighlightRules().getRules());
+    this.HighlightRules = CssHighlightRules;
     this.$outdent = new MatchingBraceOutdent();
     this.$behaviour = new CssBehaviour();
     this.foldingRules = new CStyleFoldMode();
@@ -55,7 +55,7 @@ oop.inherits(Mode, TextMode);
 
     this.getNextLineIndent = function(state, line, tab) {
         var indent = this.$getIndent(line);
-        var tokens = this.$tokenizer.getLineTokens(line, state).tokens;
+        var tokens = this.getTokenizer().getLineTokens(line, state).tokens;
         if (tokens.length && tokens[tokens.length-1].type == "comment") {
             return indent;
         }
@@ -123,11 +123,80 @@ var CssHighlightRules = function() {
         "support.constant.fonts": supportConstantFonts
     }, "text", true);
 
-    var base_ruleset = [
-        {
+    this.$rules = {
+        "start" : [{
             token : "comment", // multi line comment
             regex : "\\/\\*",
-            next : "ruleset_comment"
+            push : "comment"
+        }, {
+            token: "paren.lparen",
+            regex: "\\{",
+            push:  "ruleset"
+        }, {
+            token: "string",
+            regex: "@.*?{",
+            push:  "media"
+        }, {
+            token: "keyword",
+            regex: "#[a-z0-9-_]+"
+        }, {
+            token: "variable",
+            regex: "\\.[a-z0-9-_]+"
+        }, {
+            token: "string",
+            regex: ":[a-z0-9-_]+"
+        }, {
+            token: "constant",
+            regex: "[a-z0-9-_]+"
+        }, {
+            caseInsensitive: true
+        }],
+
+        "media" : [{
+            token : "comment", // multi line comment
+            regex : "\\/\\*",
+            push : "comment"
+        }, {
+            token: "paren.lparen",
+            regex: "\\{",
+            push:  "ruleset"
+        }, {
+            token: "string",
+            regex: "\\}",
+            next:  "pop"
+        }, {
+            token: "keyword",
+            regex: "#[a-z0-9-_]+"
+        }, {
+            token: "variable",
+            regex: "\\.[a-z0-9-_]+"
+        }, {
+            token: "string",
+            regex: ":[a-z0-9-_]+"
+        }, {
+            token: "constant",
+            regex: "[a-z0-9-_]+"
+        }, {
+            caseInsensitive: true
+        }],
+
+        "comment" : [{
+            token : "comment",
+            regex : "\\*\\/",
+            next : "pop"
+        }, {
+            defaultToken : "comment"
+        }],
+
+        "ruleset" : [
+        {
+            token : "paren.rparen",
+            regex : "\\}",
+            next:   "pop"
+        }, {
+            token : "comment", // multi line comment
+            regex : "\\/\\*",
+            push : "comment"
         }, {
             token : "string", // single line
             regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
@@ -160,114 +229,10 @@ var CssHighlightRules = function() {
             regex : "\\-?[a-zA-Z_][a-zA-Z0-9_\\-]*"
         }, {
             caseInsensitive: true
-        }
-      ];
-
-    var ruleset = lang.copyArray(base_ruleset);
-    ruleset.unshift({
-        token : "paren.rparen",
-        regex : "\\}",
-        next:   "start"
-    });
-
-    var media_ruleset = lang.copyArray( base_ruleset );
-    media_ruleset.unshift({
-        token : "paren.rparen",
-        regex : "\\}",
-        next:   "media"
-    });
-
-    var base_comment = [{
-          token : "comment", // comment spanning whole line
-          regex : ".+"
-    }];
-
-    var comment = lang.copyArray(base_comment);
-    comment.unshift({
-          token : "comment", // closing comment
-          regex : ".*?\\*\\/",
-          next : "start"
-    });
-
-    var media_comment = lang.copyArray(base_comment);
-    media_comment.unshift({
-          token : "comment", // closing comment
-          regex : ".*?\\*\\/",
-          next : "media"
-    });
-
-    var ruleset_comment = lang.copyArray(base_comment);
-    ruleset_comment.unshift({
-          token : "comment", // closing comment
-          regex : ".*?\\*\\/",
-          next : "ruleset"
-    });
-
-    this.$rules = {
-        "start" : [{
-            token : "comment", // multi line comment
-            regex : "\\/\\*",
-            next : "comment"
-        }, {
-            token: "paren.lparen",
-            regex: "\\{",
-            next:  "ruleset"
-        }, {
-            token: "string",
-            regex: "@.*?{",
-            next:  "media"
-        },{
-            token: "keyword",
-            regex: "#[a-z0-9-_]+"
-        },{
-            token: "variable",
-            regex: "\\.[a-z0-9-_]+"
-        },{
-            token: "string",
-            regex: ":[a-z0-9-_]+"
-        },{
-            token: "constant",
-            regex: "[a-z0-9-_]+"
-        },{
-            caseInsensitive: true
-        }],
-
-        "media" : [ {
-            token : "comment", // multi line comment
-            regex : "\\/\\*",
-            next : "media_comment"
-        }, {
-            token: "paren.lparen",
-            regex: "\\{",
-            next:  "media_ruleset"
-        },{
-            token: "string",
-            regex: "\\}",
-            next:  "start"
-        },{
-            token: "keyword",
-            regex: "#[a-z0-9-_]+"
-        },{
-            token: "variable",
-            regex: "\\.[a-z0-9-_]+"
-        },{
-            token: "string",
-            regex: ":[a-z0-9-_]+"
-        },{
-            token: "constant",
-            regex: "[a-z0-9-_]+"
-        },{
-            caseInsensitive: true
-        }],
-
-        "comment" : comment,
-
-        "ruleset" : ruleset,
-        "ruleset_comment" : ruleset_comment,
-
-        "media_ruleset" : media_ruleset,
-        "media_comment" : media_comment
+        }]
     };
+
+    this.normalizeRules();
 };
 
 oop.inherits(CssHighlightRules, TextHighlightRules);
@@ -527,7 +492,7 @@ var CstyleBehaviour = function () {
             }
             var rightChar = line.substring(cursor.column, cursor.column + 1);
             if (rightChar == '}' || closing !== "") {
-                var openBracePos = session.findMatchingBracket({row: cursor.row, column: cursor.column}, '}');
+                var openBracePos = session.findMatchingBracket({row: cursor.row, column: cursor.column+1}, '}');
                 if (!openBracePos)
                      return null;
 
@@ -742,7 +707,7 @@ oop.inherits(FoldMode, BaseFoldMode);
     this.foldingStartMarker = /(\{|\[)[^\}\]]*$|^\s*(\/\*)/;
     this.foldingStopMarker = /^[^\[\{]*(\}|\])|^[\s\*]*(\*\/)/;
 
-    this.getFoldWidgetRange = function(session, foldStyle, row) {
+    this.getFoldWidgetRange = function(session, foldStyle, row, forceMultiline) {
         var line = session.getLine(row);
         var match = line.match(this.foldingStartMarker);
         if (match) {
@@ -750,11 +715,20 @@ oop.inherits(FoldMode, BaseFoldMode);
 
             if (match[1])
                 return this.openingBracketBlock(session, match[1], row, i);
-
-            return session.getCommentFoldRange(row, i + match[0].length, 1);
+                
+            var range = session.getCommentFoldRange(row, i + match[0].length, 1);
+            
+            if (range && !range.isMultiLine()) {
+                if (forceMultiline) {
+                    range = this.getSectionRange(session, row);
+                } else if (foldStyle != "all")
+                    range = null;
+            }
+            
+            return range;
         }
 
-        if (foldStyle !== "markbeginend")
+        if (foldStyle === "markbegin")
             return;
 
         var match = line.match(this.foldingStopMarker);
@@ -766,6 +740,38 @@ oop.inherits(FoldMode, BaseFoldMode);
 
             return session.getCommentFoldRange(row, i, -1);
         }
+    };
+    
+    this.getSectionRange = function(session, row) {
+        var line = session.getLine(row);
+        var startIndent = line.search(/\S/);
+        var startRow = row;
+        var startColumn = line.length;
+        row = row + 1;
+        var endRow = row;
+        var maxRow = session.getLength();
+        while (++row < maxRow) {
+            line = session.getLine(row);
+            var indent = line.search(/\S/);
+            if (indent === -1)
+                continue;
+            if  (startIndent > indent)
+                break;
+            var subRange = this.getFoldWidgetRange(session, "all", row);
+            
+            if (subRange) {
+                if (subRange.start.row <= startRow) {
+                    break;
+                } else if (subRange.isMultiLine()) {
+                    row = subRange.end.row;
+                } else if (startIndent == indent) {
+                    break;
+                }
+            }
+            endRow = row;
+        }
+        
+        return new Range(startRow, startColumn, endRow, session.getLine(endRow).length);
     };
 
 }).call(FoldMode.prototype);

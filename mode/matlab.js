@@ -38,7 +38,7 @@ var MatlabHighlightRules = acequire("./matlab_highlight_rules").MatlabHighlightR
 var Range = acequire("../range").Range;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new MatlabHighlightRules().getRules());
+    this.HighlightRules = MatlabHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 

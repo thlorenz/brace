@@ -38,14 +38,14 @@ var AsciidocHighlightRules = acequire("./asciidoc_highlight_rules").AsciidocHigh
 var AsciidocFoldMode = acequire("./folding/asciidoc").FoldMode;
 
 var Mode = function() {
-    var highlighter = new AsciidocHighlightRules();
+    this.HighlightRules = AsciidocHighlightRules;
     
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
     this.foldingRules = new AsciidocFoldMode();    
 };
 oop.inherits(Mode, TextMode);
 
 (function() {
+    this.type = "text";
     this.getNextLineIndent = function(state, line, tab) {
         if (state == "listblock") {
             var match = /^((?:.+)?)([-+*][ ]+)/.exec(line);

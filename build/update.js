@@ -17,7 +17,7 @@ var workersrcdir =  path.join(braceroot, 'workersrc');
 var workerdir    =  path.join(braceroot, 'worker');
 var buildroot    =  path.join(__dirname, 'ace-build');
 
-var aceTag = 'v1.1.1';
+var aceTag = '3bded0bc1b5b51f74afd2f8dafb768ab8f35b00b';  // 2013.12.02 Version 1.1.2 - tag missing
 
 +function updateCleanAndPutInOrder() {
 

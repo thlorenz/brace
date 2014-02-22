@@ -40,17 +40,12 @@ color: #4D4D4C\
 width: 1px;\
 background: #f6f6f6\
 }\
-.ace-tomorrow,\
-.ace-tomorrow .ace_scroller {\
+.ace-tomorrow {\
 background-color: #FFFFFF;\
 color: #4D4D4C\
 }\
 .ace-tomorrow .ace_cursor {\
-border-left: 2px solid #AEAFAD\
-}\
-.ace-tomorrow .ace_overwrite-cursors .ace_cursor {\
-border-left: 0px;\
-border-bottom: 1px solid #AEAFAD\
+color: #AEAFAD\
 }\
 .ace-tomorrow .ace_marker-layer .ace_selection {\
 background: #D6D6D6\
@@ -120,7 +115,7 @@ color: #4271AE\
 .ace-tomorrow .ace_support.ace_type {\
 color: #C99E00\
 }\
-.ace-tomorrow .ace_markup.ace_heading,\
+.ace-tomorrow .ace_heading,\
 .ace-tomorrow .ace_string {\
 color: #718C00\
 }\
@@ -133,9 +128,6 @@ color: #C82829\
 }\
 .ace-tomorrow .ace_comment {\
 color: #8E908C\
-}\
-.ace-tomorrow .ace_markup.ace_underline {\
-text-decoration: underline\
 }\
 .ace-tomorrow .ace_indent-guide {\
 background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bdu3f/BwAlfgctduB85QAAAABJRU5ErkJggg==) right repeat-y\

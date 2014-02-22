@@ -37,8 +37,7 @@ var Tokenizer = acequire("../tokenizer").Tokenizer;
 var PropertiesHighlightRules = acequire("./properties_highlight_rules").PropertiesHighlightRules;
 
 var Mode = function() {
-    var highlighter = new PropertiesHighlightRules();
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
+    this.HighlightRules = PropertiesHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 
@@ -69,7 +68,7 @@ var PropertiesHighlightRules = function() {
                 next  : "value"
             }, {
                 token : "constant.language.escape",
-                regex : escapeRe,
+                regex : escapeRe
             }, {
                 defaultToken: "variable"
             }

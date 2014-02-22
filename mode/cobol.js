@@ -38,7 +38,7 @@ var CobolHighlightRules = acequire("./cobol_highlight_rules").CobolHighlightRule
 var Range = acequire("../range").Range;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new CobolHighlightRules().getRules());
+    this.HighlightRules = CobolHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 

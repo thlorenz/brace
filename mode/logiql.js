@@ -42,9 +42,8 @@ var CstyleBehaviour = acequire("./behaviour/cstyle").CstyleBehaviour;
 var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
 
 var Mode = function() {
-    var highlighter = new LogiQLHighlightRules();
+    this.HighlightRules = LogiQLHighlightRules;
     this.foldingRules = new FoldMode();
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
     this.$outdent = new MatchingBraceOutdent();
     this.$behaviour = new CstyleBehaviour();
 };
@@ -57,7 +56,7 @@ oop.inherits(Mode, TextMode);
     this.getNextLineIndent = function(state, line, tab) {
         var indent = this.$getIndent(line);
 
-        var tokenizedLine = this.$tokenizer.getLineTokens(line, state);
+        var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
         var tokens = tokenizedLine.tokens;
         var endState = tokenizedLine.state;
         if (/comment|string/.test(endState))  
@@ -158,7 +157,7 @@ var LogiQLHighlightRules = function() {
            regex: '//.*',
             },
          { token: 'constant.numeric',
-           regex: '\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?',
+           regex: '\\d+(?:\\.\\d+)?(?:[eE][+-]?\\d+)?[fd]?',
             },
          { token: 'string',
            regex: '"',
@@ -432,7 +431,7 @@ var CstyleBehaviour = function () {
             }
             var rightChar = line.substring(cursor.column, cursor.column + 1);
             if (rightChar == '}' || closing !== "") {
-                var openBracePos = session.findMatchingBracket({row: cursor.row, column: cursor.column}, '}');
+                var openBracePos = session.findMatchingBracket({row: cursor.row, column: cursor.column+1}, '}');
                 if (!openBracePos)
                      return null;
 

@@ -39,9 +39,8 @@ var AssemblyX86HighlightRules = acequire("./assembly_x86_highlight_rules").Assem
 var FoldMode = acequire("./folding/coffee").FoldMode;
 
 var Mode = function() {
-    var highlighter = new AssemblyX86HighlightRules();
+    this.HighlightRules = AssemblyX86HighlightRules;
     this.foldingRules = new FoldMode();
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
 };
 oop.inherits(Mode, TextMode);
 

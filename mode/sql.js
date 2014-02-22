@@ -38,7 +38,7 @@ var SqlHighlightRules = acequire("./sql_highlight_rules").SqlHighlightRules;
 var Range = acequire("../range").Range;
 
 var Mode = function() {
-    this.$tokenizer = new Tokenizer(new SqlHighlightRules().getRules());
+    this.HighlightRules = SqlHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 
