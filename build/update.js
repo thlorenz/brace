@@ -13,6 +13,7 @@ require('shelljs/global');
 var braceroot    =  path.join(__dirname, '..');
 var themedir     =  path.join(braceroot, 'theme');
 var modedir      =  path.join(braceroot, 'mode');
+var extdir      =  path.join(braceroot, 'ext');
 var workersrcdir =  path.join(braceroot, 'workersrc');
 var workerdir    =  path.join(braceroot, 'worker');
 var buildroot    =  path.join(__dirname, 'ace-build');
@@ -58,7 +59,18 @@ var aceTag = '3bded0bc1b5b51f74afd2f8dafb768ab8f35b00b';  // 2013.12.02 Version 
         mv(file, path.join(modedir, filename));
       });
   }()
+    
+  +function exts() {
+    rm('-rf', extdir);
+    mkdir(extdir);
 
+    ls(path.join(buildroot, 'ext-*.js'))
+      .forEach(function (file) {
+        var filename = path.basename(file).slice('ext-'.length);
+        mv(file, path.join(extdir, filename));
+      });
+  }()
+    
   +function workers() {
     rm('-rf', workersrcdir);
     mkdir(workersrcdir);
@@ -84,6 +96,7 @@ var aceTag = '3bded0bc1b5b51f74afd2f8dafb768ab8f35b00b';  // 2013.12.02 Version 
 
   fixAllRequires(themedir);
   fixAllRequires(modedir);
+  fixAllRequires(extdir);
   fixAllRequires(workersrcdir);
   fixAllRequires(buildroot);
 }()
