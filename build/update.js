@@ -130,8 +130,8 @@ var aceTag = 'v1.1.4';
     // WorkerClient  function definition
     //  * workerUrl = config.moduleUrl(mod, "worker");
     //  * module: mod,
-    .replace('workerUrl = config.moduleUrl(mod, "worker");', 'workerUrl = config.moduleUrl(mod.id, "worker");')
-    .replace('module: mod,', 'module: mod.id,')
+    .replace('workerUrl = workerUrl || config.moduleUrl(mod, "worker");', 'workerUrl = workerUrl || config.moduleUrl(mod.id, "worker")')
+    .replace('module : mod,', 'module : mod.id,')
     .replace(newWorkerRx, workerBlob);
 
   src += '\nmodule.exports = window.ace.acequire("ace/ace");';

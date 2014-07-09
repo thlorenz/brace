@@ -15919,7 +15919,7 @@ var WorkerClient = function(topLevelNamespaces, mod, classname, workerUrl) {
         acequire.toUrl = acequire.nameToUrl;
     
     if (config.get("packaged") || !acequire.toUrl) {
-        workerUrl = workerUrl || config.moduleUrl(mod, "worker");
+        workerUrl = workerUrl || config.moduleUrl(mod.id, "worker")
     } else {
         var normalizePath = this.$normalizePath;
         workerUrl = workerUrl || normalizePath(acequire.toUrl("ace/worker/worker.js", null, "_"));
@@ -15953,7 +15953,7 @@ var WorkerClient = function(topLevelNamespaces, mod, classname, workerUrl) {
     this.$worker.postMessage({
         init : true,
         tlns : tlns,
-        module : mod,
+        module : mod.id,
         classname : classname
     });
 
