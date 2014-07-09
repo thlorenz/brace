@@ -1,279 +1,10 @@
-/* ***** BEGIN LICENSE BLOCK *****
- * Distributed under the BSD license:
- *
- * Copyright (c) 2010, Ajax.org B.V.
- * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of Ajax.org B.V. nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL AJAX.ORG B.V. BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * ***** END LICENSE BLOCK ***** */
-
-ace.define('ace/mode/liquid', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/liquid_highlight_rules', 'ace/mode/matching_brace_outdent', 'ace/range'], function(acequire, exports, module) {
-
-var oop = acequire("../lib/oop");
-var TextMode = acequire("./text").Mode;
-var Tokenizer = acequire("../tokenizer").Tokenizer;
-var LiquidHighlightRules = acequire("./liquid_highlight_rules").LiquidHighlightRules;
-var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
-var Range = acequire("../range").Range;
-
-var Mode = function() {
-    this.HighlightRules = LiquidHighlightRules;
-    this.$outdent = new MatchingBraceOutdent();
-};
-oop.inherits(Mode, TextMode);
-
-(function() {
-
-    this.blockComment = {start: "<!--", end: "-->"};
-
-    this.getNextLineIndent = function(state, line, tab) {
-        var indent = this.$getIndent(line);
-
-        var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
-        var tokens = tokenizedLine.tokens;
-        var endState = tokenizedLine.state;
-
-        if (tokens.length && tokens[tokens.length-1].type == "comment") {
-            return indent;
-        }
-
-        if (state == "start") {
-            var match = line.match(/^.*[\{\(\[]\s*$/);
-            if (match) {
-                indent += tab;
-            }
-        }
-
-        return indent;
-    };
-
-    this.checkOutdent = function(state, line, input) {
-        return this.$outdent.checkOutdent(line, input);
-    };
-
-    this.autoOutdent = function(state, doc, row) {
-        this.$outdent.autoOutdent(doc, row);
-    };
-
-}).call(Mode.prototype);
-
-exports.Mode = Mode;
-});
-
-ace.define('ace/mode/liquid_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules', 'ace/mode/html_highlight_rules'], function(acequire, exports, module) {
-
-
-var oop = acequire("../lib/oop");
-var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
-var HtmlHighlightRules = acequire("./html_highlight_rules").HtmlHighlightRules;
-
-var LiquidHighlightRules = function() {
-    HtmlHighlightRules.call(this);
-    var functions = (
-        "date|capitalize|downcase|upcase|first|last|join|sort|map|size|escape|" +
-         "escape_once|strip_html|strip_newlines|newline_to_br|replace|replace_first|" +
-         "truncate|truncatewords|prepend|append|minus|plus|times|divided_by|split"
-    );
-
-    var keywords = (
-        "capture|endcapture|case|endcase|when|comment|endcomment|" +
-        "cycle|for|endfor|in|reversed|if|endif|else|elsif|include|endinclude|unless|endunless|" +
-        "style|text|image|widget|plugin|marker|endmarker|tablerow|endtablerow"
-    );
-
-    var builtinVariables = 'forloop|tablerowloop';
-
-    var definitions = ("assign");
-
-    var keywordMapper = this.createKeywordMapper({
-        "variable.language": builtinVariables,
-        "keyword": keywords,
-        "support.function": functions,
-        "keyword.definition": definitions
-    }, "identifier");
-    for (var rule in this.$rules) {
-        this.$rules[rule].unshift({
-            token : "variable",
-            regex : "{%",
-            push : "liquid-start"
-        }, {
-            token : "variable",
-            regex : "{{",
-            push : "liquid-start"
-        });
-    }
-
-    this.addRules({
-        "liquid-start" : [{
-            token: "variable",
-            regex: "}}",
-            next: "pop"
-        }, {
-            token: "variable",
-            regex: "%}",
-            next: "pop"
-        }, {
-            token : "string", // single line
-            regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
-        }, {
-            token : "string", // single line
-            regex : "['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"
-        }, {
-            token : "constant.numeric", // hex
-            regex : "0[xX][0-9a-fA-F]+\\b"
-        }, {
-            token : "constant.numeric", // float
-            regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
-        }, {
-            token : "constant.language.boolean",
-            regex : "(?:true|false)\\b"
-        }, {
-            token : keywordMapper,
-            regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
-        }, {
-            token : "keyword.operator",
-            regex : "\/|\\*|\\-|\\+|=|!=|\\?\\:"
-        }, {
-            token : "paren.lparen",
-            regex : /[\[\({]/
-        }, {
-            token : "paren.rparen",
-            regex : /[\])}]/
-        }, {
-            token : "text",
-            regex : "\\s+"
-        }]
-    });
-
-    this.normalizeRules();
-};
-oop.inherits(LiquidHighlightRules, TextHighlightRules);
-
-exports.LiquidHighlightRules = LiquidHighlightRules;
-});
-
-ace.define('ace/mode/html_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/css_highlight_rules', 'ace/mode/javascript_highlight_rules', 'ace/mode/xml_highlight_rules'], function(acequire, exports, module) {
-
-
-var oop = acequire("../lib/oop");
-var lang = acequire("../lib/lang");
-var CssHighlightRules = acequire("./css_highlight_rules").CssHighlightRules;
-var JavaScriptHighlightRules = acequire("./javascript_highlight_rules").JavaScriptHighlightRules;
-var XmlHighlightRules = acequire("./xml_highlight_rules").XmlHighlightRules;
-
-var tagMap = lang.createMap({
-    a           : 'anchor',
-    button 	    : 'form',
-    form        : 'form',
-    img         : 'image',
-    input       : 'form',
-    label       : 'form',
-    option      : 'form',
-    script      : 'script',
-    select      : 'form',
-    textarea    : 'form',
-    style       : 'style',
-    table       : 'table',
-    tbody       : 'table',
-    td          : 'table',
-    tfoot       : 'table',
-    th          : 'table',
-    tr          : 'table'
-});
-
-var HtmlHighlightRules = function() {
-    XmlHighlightRules.call(this);
-
-    this.addRules({
-        attributes: [{
-            include : "space"
-        }, {
-            token : "entity.other.attribute-name",
-            regex : "[-_a-zA-Z0-9:]+"
-        }, {
-            token : "keyword.operator.separator",
-            regex : "=",
-            push : [{
-                include: "space"
-            }, {
-                token : "string",
-                regex : "[^<>='\"`\\s]+",
-                next : "pop"
-            }, {
-                token : "empty",
-                regex : "",
-                next : "pop"
-            }]
-        }, {
-            include : "string"
-        }],
-        tag: [{
-            token : function(start, tag) {
-                var group = tagMap[tag];
-                return ["meta.tag.punctuation.begin",
-                    "meta.tag.name" + (group ? "." + group : "")];
-            },
-            regex : "(<)([-_a-zA-Z0-9:]+)",
-            next: "start_tag_stuff"
-        }, {
-            token : function(start, tag) {
-                var group = tagMap[tag];
-                return ["meta.tag.punctuation.begin",
-                    "meta.tag.name" + (group ? "." + group : "")];
-            },
-            regex : "(</)([-_a-zA-Z0-9:]+)",
-            next: "end_tag_stuff"
-        }],
-        start_tag_stuff: [
-            {include : "attributes"},
-            {token : "meta.tag.punctuation.end", regex : "/?>", next : "start"}
-        ],
-        end_tag_stuff: [
-            {include : "space"},
-            {token : "meta.tag.punctuation.end", regex : ">", next : "start"}
-        ]
-    });
-
-    this.embedTagRules(CssHighlightRules, "css-", "style");
-    this.embedTagRules(JavaScriptHighlightRules, "js-", "script");
-
-    if (this.constructor === HtmlHighlightRules)
-        this.normalizeRules();
-};
-
-oop.inherits(HtmlHighlightRules, XmlHighlightRules);
-
-exports.HtmlHighlightRules = HtmlHighlightRules;
-});
-
-ace.define('ace/mode/css_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
-
+ace.define("ace/mode/css_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+"use strict";
 
 var oop = acequire("../lib/oop");
 var lang = acequire("../lib/lang");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
-var supportType = exports.supportType = "animation-fill-mode|alignment-adjust|alignment-baseline|animation-delay|animation-direction|animation-duration|animation-iteration-count|animation-name|animation-play-state|animation-timing-function|animation|appearance|azimuth|backface-visibility|background-attachment|background-break|background-clip|background-color|background-image|background-origin|background-position|background-repeat|background-size|background|baseline-shift|binding|bleed|bookmark-label|bookmark-level|bookmark-state|bookmark-target|border-bottom|border-bottom-color|border-bottom-left-radius|border-bottom-right-radius|border-bottom-style|border-bottom-width|border-collapse|border-color|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-left|border-left-color|border-left-style|border-left-width|border-radius|border-right|border-right-color|border-right-style|border-right-width|border-spacing|border-style|border-top|border-top-color|border-top-left-radius|border-top-right-radius|border-top-style|border-top-width|border-width|border|bottom|box-align|box-decoration-break|box-direction|box-flex-group|box-flex|box-lines|box-ordinal-group|box-orient|box-pack|box-shadow|box-sizing|break-after|break-before|break-inside|caption-side|clear|clip|color-profile|color|column-count|column-fill|column-gap|column-rule|column-rule-color|column-rule-style|column-rule-width|column-span|column-width|columns|content|counter-increment|counter-reset|crop|cue-after|cue-before|cue|cursor|direction|display|dominant-baseline|drop-initial-after-adjust|drop-initial-after-align|drop-initial-before-adjust|drop-initial-before-align|drop-initial-size|drop-initial-value|elevation|empty-cells|fit|fit-position|float-offset|float|font-family|font-size|font-size-adjust|font-stretch|font-style|font-variant|font-weight|font|grid-columns|grid-rows|hanging-punctuation|height|hyphenate-after|hyphenate-before|hyphenate-character|hyphenate-lines|hyphenate-resource|hyphens|icon|image-orientation|image-rendering|image-resolution|inline-box-align|left|letter-spacing|line-height|line-stacking-ruby|line-stacking-shift|line-stacking-strategy|line-stacking|list-style-image|list-style-position|list-style-type|list-style|margin-bottom|margin-left|margin-right|margin-top|margin|mark-after|mark-before|mark|marks|marquee-direction|marquee-play-count|marquee-speed|marquee-style|max-height|max-width|min-height|min-width|move-to|nav-down|nav-index|nav-left|nav-right|nav-up|opacity|orphans|outline-color|outline-offset|outline-style|outline-width|outline|overflow-style|overflow-x|overflow-y|overflow|padding-bottom|padding-left|padding-right|padding-top|padding|page-break-after|page-break-before|page-break-inside|page-policy|page|pause-after|pause-before|pause|perspective-origin|perspective|phonemes|pitch-range|pitch|play-during|position|presentation-level|punctuation-trim|quotes|rendering-intent|resize|rest-after|rest-before|rest|richness|right|rotation-point|rotation|ruby-align|ruby-overhang|ruby-position|ruby-span|size|speak-header|speak-numeral|speak-punctuation|speak|speech-rate|stress|string-set|table-layout|target-name|target-new|target-position|target|text-align-last|text-align|text-decoration|text-emphasis|text-height|text-indent|text-justify|text-outline|text-shadow|text-transform|text-wrap|top|transform-origin|transform-style|transform|transition-delay|transition-duration|transition-property|transition-timing-function|transition|unicode-bidi|vertical-align|visibility|voice-balance|voice-duration|voice-family|voice-pitch-range|voice-pitch|voice-rate|voice-stress|voice-volume|volume|white-space-collapse|white-space|widows|width|word-break|word-spacing|word-wrap|z-index";
+var supportType = exports.supportType = "animation-fill-mode|alignment-adjust|alignment-baseline|animation-delay|animation-direction|animation-duration|animation-iteration-count|animation-name|animation-play-state|animation-timing-function|animation|appearance|azimuth|backface-visibility|background-attachment|background-break|background-clip|background-color|background-image|background-origin|background-position|background-repeat|background-size|background|baseline-shift|binding|bleed|bookmark-label|bookmark-level|bookmark-state|bookmark-target|border-bottom|border-bottom-color|border-bottom-left-radius|border-bottom-right-radius|border-bottom-style|border-bottom-width|border-collapse|border-color|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-left|border-left-color|border-left-style|border-left-width|border-radius|border-right|border-right-color|border-right-style|border-right-width|border-spacing|border-style|border-top|border-top-color|border-top-left-radius|border-top-right-radius|border-top-style|border-top-width|border-width|border|bottom|box-align|box-decoration-break|box-direction|box-flex-group|box-flex|box-lines|box-ordinal-group|box-orient|box-pack|box-shadow|box-sizing|break-after|break-before|break-inside|caption-side|clear|clip|color-profile|color|column-count|column-fill|column-gap|column-rule|column-rule-color|column-rule-style|column-rule-width|column-span|column-width|columns|content|counter-increment|counter-reset|crop|cue-after|cue-before|cue|cursor|direction|display|dominant-baseline|drop-initial-after-adjust|drop-initial-after-align|drop-initial-before-adjust|drop-initial-before-align|drop-initial-size|drop-initial-value|elevation|empty-cells|fit|fit-position|float-offset|float|font-family|font-size|font-size-adjust|font-stretch|font-style|font-variant|font-weight|font|grid-columns|grid-rows|hanging-punctuation|height|hyphenate-after|hyphenate-before|hyphenate-character|hyphenate-lines|hyphenate-resource|hyphens|icon|image-orientation|image-rendering|image-resolution|inline-box-align|left|letter-spacing|line-height|line-stacking-ruby|line-stacking-shift|line-stacking-strategy|line-stacking|list-style-image|list-style-position|list-style-type|list-style|margin-bottom|margin-left|margin-right|margin-top|margin|mark-after|mark-before|mark|marks|marquee-direction|marquee-play-count|marquee-speed|marquee-style|max-height|max-width|min-height|min-width|move-to|nav-down|nav-index|nav-left|nav-right|nav-up|opacity|orphans|outline-color|outline-offset|outline-style|outline-width|outline|overflow-style|overflow-x|overflow-y|overflow|padding-bottom|padding-left|padding-right|padding-top|padding|page-break-after|page-break-before|page-break-inside|page-policy|page|pause-after|pause-before|pause|perspective-origin|perspective|phonemes|pitch-range|pitch|play-during|pointer-events|position|presentation-level|punctuation-trim|quotes|rendering-intent|resize|rest-after|rest-before|rest|richness|right|rotation-point|rotation|ruby-align|ruby-overhang|ruby-position|ruby-span|size|speak-header|speak-numeral|speak-punctuation|speak|speech-rate|stress|string-set|table-layout|target-name|target-new|target-position|target|text-align-last|text-align|text-decoration|text-emphasis|text-height|text-indent|text-justify|text-outline|text-shadow|text-transform|text-wrap|top|transform-origin|transform-style|transform|transition-delay|transition-duration|transition-property|transition-timing-function|transition|unicode-bidi|vertical-align|visibility|voice-balance|voice-duration|voice-family|voice-pitch-range|voice-pitch|voice-rate|voice-stress|voice-volume|volume|white-space-collapse|white-space|widows|width|word-break|word-spacing|word-wrap|z-index";
 var supportFunction = exports.supportFunction = "rgb|rgba|url|attr|counter|counters";
 var supportConstant = exports.supportConstant = "absolute|after-edge|after|all-scroll|all|alphabetic|always|antialiased|armenian|auto|avoid-column|avoid-page|avoid|balance|baseline|before-edge|before|below|bidi-override|block-line-height|block|bold|bolder|border-box|both|bottom|box|break-all|break-word|capitalize|caps-height|caption|center|central|char|circle|cjk-ideographic|clone|close-quote|col-resize|collapse|column|consider-shifts|contain|content-box|cover|crosshair|cubic-bezier|dashed|decimal-leading-zero|decimal|default|disabled|disc|disregard-shifts|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ease-in|ease-in-out|ease-out|ease|ellipsis|end|exclude-ruby|fill|fixed|georgian|glyphs|grid-height|groove|hand|hanging|hebrew|help|hidden|hiragana-iroha|hiragana|horizontal|icon|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|ideographic|inactive|include-ruby|inherit|initial|inline-block|inline-box|inline-line-height|inline-table|inline|inset|inside|inter-ideograph|inter-word|invert|italic|justify|katakana-iroha|katakana|keep-all|last|left|lighter|line-edge|line-through|line|linear|list-item|local|loose|lower-alpha|lower-greek|lower-latin|lower-roman|lowercase|lr-tb|ltr|mathematical|max-height|max-size|medium|menu|message-box|middle|move|n-resize|ne-resize|newspaper|no-change|no-close-quote|no-drop|no-open-quote|no-repeat|none|normal|not-allowed|nowrap|nw-resize|oblique|open-quote|outset|outside|overline|padding-box|page|pointer|pre-line|pre-wrap|pre|preserve-3d|progress|relative|repeat-x|repeat-y|repeat|replaced|reset-size|ridge|right|round|row-resize|rtl|s-resize|scroll|se-resize|separate|slice|small-caps|small-caption|solid|space|square|start|static|status-bar|step-end|step-start|steps|stretch|strict|sub|super|sw-resize|table-caption|table-cell|table-column-group|table-column|table-footer-group|table-header-group|table-row-group|table-row|table|tb-rl|text-after-edge|text-before-edge|text-bottom|text-size|text-top|text|thick|thin|transparent|underline|upper-alpha|upper-latin|upper-roman|uppercase|use-script|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace|z-index|zero";
 var supportConstantColor = exports.supportConstantColor = "aqua|black|blue|fuchsia|gray|green|lime|maroon|navy|olive|orange|purple|red|silver|teal|white|yellow";
@@ -411,8 +142,52 @@ exports.CssHighlightRules = CssHighlightRules;
 
 });
 
-ace.define('ace/mode/javascript_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/doc_comment_highlight_rules', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
+ace.define("ace/mode/doc_comment_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+"use strict";
 
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
+
+var DocCommentHighlightRules = function() {
+
+    this.$rules = {
+        "start" : [ {
+            token : "comment.doc.tag",
+            regex : "@[\\w\\d_]+" // TODO: fix email addresses
+        }, {
+            token : "comment.doc.tag",
+            regex : "\\bTODO\\b"
+        }, {
+            defaultToken : "comment.doc"
+        }]
+    };
+};
+
+oop.inherits(DocCommentHighlightRules, TextHighlightRules);
+
+DocCommentHighlightRules.getStartRule = function(start) {
+    return {
+        token : "comment.doc", // doc comment
+        regex : "\\/\\*(?=\\*)",
+        next  : start
+    };
+};
+
+DocCommentHighlightRules.getEndRule = function (start) {
+    return {
+        token : "comment.doc", // closing comment
+        regex : "\\*\\/",
+        next  : start
+    };
+};
+
+
+exports.DocCommentHighlightRules = DocCommentHighlightRules;
+
+});
+
+ace.define("ace/mode/javascript_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+"use strict";
 
 var oop = acequire("../lib/oop");
 var DocCommentHighlightRules = acequire("./doc_comment_highlight_rules").DocCommentHighlightRules;
@@ -544,8 +319,11 @@ var JavaScriptHighlightRules = function() {
                 token : ["punctuation.operator", "support.constant"],
                 regex : /(\.)(s(?:ystemLanguage|cr(?:ipts|ollbars|een(?:X|Y|Top|Left))|t(?:yle(?:Sheets)?|atus(?:Text|bar)?)|ibling(?:Below|Above)|ource|uffixes|e(?:curity(?:Policy)?|l(?:ection|f)))|h(?:istory|ost(?:name)?|as(?:h|Focus))|y|X(?:MLDocument|SLDocument)|n(?:ext|ame(?:space(?:s|URI)|Prop))|M(?:IN_VALUE|AX_VALUE)|c(?:haracterSet|o(?:n(?:structor|trollers)|okieEnabled|lorDepth|mp(?:onents|lete))|urrent|puClass|l(?:i(?:p(?:boardData)?|entInformation)|osed|asses)|alle(?:e|r)|rypto)|t(?:o(?:olbar|p)|ext(?:Transform|Indent|Decoration|Align)|ags)|SQRT(?:1_2|2)|i(?:n(?:ner(?:Height|Width)|put)|ds|gnoreCase)|zIndex|o(?:scpu|n(?:readystatechange|Line)|uter(?:Height|Width)|p(?:sProfile|ener)|ffscreenBuffering)|NEGATIVE_INFINITY|d(?:i(?:splay|alog(?:Height|Top|Width|Left|Arguments)|rectories)|e(?:scription|fault(?:Status|Ch(?:ecked|arset)|View)))|u(?:ser(?:Profile|Language|Agent)|n(?:iqueID|defined)|pdateInterval)|_content|p(?:ixelDepth|ort|ersonalbar|kcs11|l(?:ugins|atform)|a(?:thname|dding(?:Right|Bottom|Top|Left)|rent(?:Window|Layer)?|ge(?:X(?:Offset)?|Y(?:Offset)?))|r(?:o(?:to(?:col|type)|duct(?:Sub)?|mpter)|e(?:vious|fix)))|e(?:n(?:coding|abledPlugin)|x(?:ternal|pando)|mbeds)|v(?:isibility|endor(?:Sub)?|Linkcolor)|URLUnencoded|P(?:I|OSITIVE_INFINITY)|f(?:ilename|o(?:nt(?:Size|Family|Weight)|rmName)|rame(?:s|Element)|gColor)|E|whiteSpace|l(?:i(?:stStyleType|n(?:eHeight|kColor))|o(?:ca(?:tion(?:bar)?|lName)|wsrc)|e(?:ngth|ft(?:Context)?)|a(?:st(?:M(?:odified|atch)|Index|Paren)|yer(?:s|X)|nguage))|a(?:pp(?:MinorVersion|Name|Co(?:deName|re)|Version)|vail(?:Height|Top|Width|Left)|ll|r(?:ity|guments)|Linkcolor|bove)|r(?:ight(?:Context)?|e(?:sponse(?:XML|Text)|adyState))|global|x|m(?:imeTypes|ultiline|enubar|argin(?:Right|Bottom|Top|Left))|L(?:N(?:10|2)|OG(?:10E|2E))|b(?:o(?:ttom|rder(?:Width|RightWidth|BottomWidth|Style|Color|TopWidth|LeftWidth))|ufferDepth|elow|ackground(?:Color|Image)))\b/
             }, {
+                token : ["support.constant"],
+                regex : /that\b/
+            }, {
                 token : ["storage.type", "punctuation.operator", "support.function.firebug"],
-                regex : /(console)(\.)(warn|info|log|error|time|timeEnd|assert)\b/
+                regex : /(console)(\.)(warn|info|log|error|time|trace|timeEnd|assert)\b/
             }, {
                 token : keywordMapper,
                 regex : identifierRe
@@ -603,14 +381,14 @@ var JavaScriptHighlightRules = function() {
                 regex: "\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"
             }, {
                 token: "string.regexp",
-                regex: "/\\w*",
+                regex: "/[sxngimy]*",
                 next: "no_regex"
             }, {
                 token : "invalid",
                 regex: /\{\d+\b,?\d*\}[+*]|[+*$^?][+*]|[$^][?]|\?{3,}/
             }, {
                 token : "constant.language.escape",
-                regex: /\(\?[:=!]|\)|\{\d+\b,?\d*\}|[+*]\?|[()$^+*?]/
+                regex: /\(\?[:=!]|\)|\{\d+\b,?\d*\}|[+*]\?|[()$^+*?.]/
             }, {
                 token : "constant.language.delimiter",
                 regex: /\|/
@@ -720,111 +498,81 @@ oop.inherits(JavaScriptHighlightRules, TextHighlightRules);
 exports.JavaScriptHighlightRules = JavaScriptHighlightRules;
 });
 
-ace.define('ace/mode/doc_comment_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
-
-
-var oop = acequire("../lib/oop");
-var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
-
-var DocCommentHighlightRules = function() {
-
-    this.$rules = {
-        "start" : [ {
-            token : "comment.doc.tag",
-            regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        }, {
-            token : "comment.doc.tag",
-            regex : "\\bTODO\\b"
-        }, {
-            defaultToken : "comment.doc"
-        }]
-    };
-};
-
-oop.inherits(DocCommentHighlightRules, TextHighlightRules);
-
-DocCommentHighlightRules.getStartRule = function(start) {
-    return {
-        token : "comment.doc", // doc comment
-        regex : "\\/\\*(?=\\*)",
-        next  : start
-    };
-};
-
-DocCommentHighlightRules.getEndRule = function (start) {
-    return {
-        token : "comment.doc", // closing comment
-        regex : "\\*\\/",
-        next  : start
-    };
-};
-
-
-exports.DocCommentHighlightRules = DocCommentHighlightRules;
-
-});
-
-ace.define('ace/mode/xml_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/xml_util', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
-
+ace.define("ace/mode/xml_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+"use strict";
 
 var oop = acequire("../lib/oop");
-var xmlUtil = acequire("./xml_util");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var XmlHighlightRules = function(normalize) {
     this.$rules = {
         start : [
-            {token : "punctuation.string.begin", regex : "<\\!\\[CDATA\\[", next : "cdata"},
+            {token : "string.cdata.xml", regex : "<\\!\\[CDATA\\[", next : "cdata"},
             {
-                token : ["punctuation.instruction.begin", "keyword.instruction"],
-                regex : "(<\\?)(xml)(?=[\\s])", next : "xml_declaration"
+                token : ["punctuation.xml-decl.xml", "keyword.xml-decl.xml"],
+                regex : "(<\\?)(xml)(?=[\\s])", next : "xml_decl", caseInsensitive: true
             },
             {
-                token : ["punctuation.instruction.begin", "keyword.instruction"],
-                regex : "(<\\?)([-_a-zA-Z0-9]+)", next : "instruction"
+                token : ["punctuation.instruction.xml", "keyword.instruction.xml"],
+                regex : "(<\\?)([-_a-zA-Z0-9]+)", next : "processing_instruction",
             },
-            {token : "comment", regex : "<\\!--", next : "comment"},
+            {token : "comment.xml", regex : "<\\!--", next : "comment"},
             {
-                token : ["punctuation.doctype.begin", "meta.tag.doctype"],
-                regex : "(<\\!)(DOCTYPE)(?=[\\s])", next : "doctype"
+                token : ["xml-pe.doctype.xml", "xml-pe.doctype.xml"],
+                regex : "(<\\!)(DOCTYPE)(?=[\\s])", next : "doctype", caseInsensitive: true
             },
             {include : "tag"},
-            {include : "reference"}
+            {token : "text.end-tag-open.xml", regex: "</"},
+            {token : "text.tag-open.xml", regex: "<"},
+            {include : "reference"},
+            {defaultToken : "text.xml"}
         ],
 
-        xml_declaration : [
-            {include : "attributes"},
-            {include : "instruction"}
-        ],
+        xml_decl : [{
+            token : "entity.other.attribute-name.decl-attribute-name.xml",
+            regex : "(?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+"
+        }, {
+            token : "keyword.operator.decl-attribute-equals.xml",
+            regex : "="
+        }, {
+            include: "whitespace"
+        }, {
+            include: "string"
+        }, {
+            token : "punctuation.xml-decl.xml",
+            regex : "\\?>",
+            next : "start"
+        }],
 
-        instruction : [
-            {token : "punctuation.instruction.end", regex : "\\?>", next : "start"}
+        processing_instruction : [
+            {token : "punctuation.instruction.xml", regex : "\\?>", next : "start"},
+            {defaultToken : "instruction.xml"}
         ],
 
         doctype : [
-            {include : "space"},
+            {include : "whitespace"},
             {include : "string"},
-            {token : "punctuation.doctype.end", regex : ">", next : "start"},
-            {token : "xml-pe", regex : "[-_a-zA-Z0-9:]+"},
-            {token : "punctuation.begin", regex : "\\[", push : "declarations"}
+            {token : "xml-pe.doctype.xml", regex : ">", next : "start"},
+            {token : "xml-pe.xml", regex : "[-_a-zA-Z0-9:]+"},
+            {token : "punctuation.int-subset", regex : "\\[", push : "int_subset"}
         ],
 
-        declarations : [{
-            token : "text",
+        int_subset : [{
+            token : "text.xml",
             regex : "\\s+"
         }, {
-            token: "punctuation.end",
+            token: "punctuation.int-subset.xml",
             regex: "]",
             next: "pop"
         }, {
-            token : ["punctuation.begin", "keyword"],
+            token : ["punctuation.markup-decl.xml", "keyword.markup-decl.xml"],
             regex : "(<\\!)([-_a-zA-Z0-9]+)",
             push : [{
                 token : "text",
                 regex : "\\s+"
             },
             {
-                token : "punctuation.end",
+                token : "punctuation.markup-decl.xml",
                 regex : ">",
                 next : "pop"
             },
@@ -832,75 +580,85 @@ var XmlHighlightRules = function(normalize) {
         }],
 
         cdata : [
-            {token : "string.end", regex : "\\]\\]>", next : "start"},
-            {token : "text", regex : "\\s+"},
-            {token : "text", regex : "(?:[^\\]]|\\](?!\\]>))+"}
+            {token : "string.cdata.xml", regex : "\\]\\]>", next : "start"},
+            {token : "text.xml", regex : "\\s+"},
+            {token : "text.xml", regex : "(?:[^\\]]|\\](?!\\]>))+"}
         ],
 
         comment : [
-            {token : "comment", regex : "-->", next : "start"},
-            {defaultToken : "comment"}
-        ],
-
-        tag : [{
-            token : ["meta.tag.punctuation.begin", "meta.tag.name"],
-            regex : "(<)((?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+)",
-            next: [
-                {include : "attributes"},
-                {token : "meta.tag.punctuation.end", regex : "/?>", next : "start"}
-            ]
-        }, {
-            token : ["meta.tag.punctuation.begin", "meta.tag.name"],
-            regex : "(</)((?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+)",
-            next: [
-                {include : "space"},
-                {token : "meta.tag.punctuation.end", regex : ">", next : "start"}
-            ]
-        }],
-
-        space : [
-            {token : "text", regex : "\\s+"}
+            {token : "comment.xml", regex : "-->", next : "start"},
+            {defaultToken : "comment.xml"}
         ],
 
         reference : [{
-            token : "constant.language.escape",
+            token : "constant.language.escape.reference.xml",
             regex : "(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)"
-        }, {
-            token : "invalid.illegal", regex : "&"
         }],
 
+        attr_reference : [{
+            token : "constant.language.escape.reference.attribute-value.xml",
+            regex : "(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)"
+        }],
+
+        tag : [{
+            token : ["meta.tag.punctuation.tag-open.xml", "meta.tag.punctuation.end-tag-open.xml", "meta.tag.tag-name.xml"],
+            regex : "(?:(<)|(</))((?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+)",
+            next: [
+                {include : "attributes"},
+                {token : "meta.tag.punctuation.tag-close.xml", regex : "/?>", next : "start"}
+            ]
+        }],
+
+        tag_whitespace : [
+            {token : "text.tag-whitespace.xml", regex : "\\s+"}
+        ],
+        whitespace : [
+            {token : "text.whitespace.xml", regex : "\\s+"}
+        ],
         string: [{
-            token : "string",
+            token : "string.xml",
             regex : "'",
-            push : "qstring_inner"
+            push : [
+                {token : "string.xml", regex: "'", next: "pop"},
+                {defaultToken : "string.xml"}
+            ]
         }, {
-            token : "string",
+            token : "string.xml",
             regex : '"',
-            push : "qqstring_inner"
+            push : [
+                {token : "string.xml", regex: '"', next: "pop"},
+                {defaultToken : "string.xml"}
+            ]
         }],
-
-        qstring_inner: [
-            {token : "string", regex: "'", next: "pop"},
-            {include : "reference"},
-            {defaultToken : "string"}
-        ],
-
-        qqstring_inner: [
-            {token : "string", regex: '"', next: "pop"},
-            {include : "reference"},
-            {defaultToken : "string"}
-        ],
 
         attributes: [{
-            token : "entity.other.attribute-name",
+            token : "entity.other.attribute-name.xml",
             regex : "(?:[-_a-zA-Z0-9]+:)?[-_a-zA-Z0-9]+"
         }, {
-            token : "keyword.operator.separator",
+            token : "keyword.operator.attribute-equals.xml",
             regex : "="
         }, {
-            include : "space"
+            include: "tag_whitespace"
         }, {
-            include : "string"
+            include: "attribute_value"
+        }],
+
+        attribute_value: [{
+            token : "string.attribute-value.xml",
+            regex : "'",
+            push : [
+                {token : "string.attribute-value.xml", regex: "'", next: "pop"},
+                {include : "attr_reference"},
+                {defaultToken : "string.attribute-value.xml"}
+            ]
+        }, {
+            token : "string.attribute-value.xml",
+            regex : '"',
+            push : [
+                {token : "string.attribute-value.xml", regex: '"', next: "pop"},
+                {include : "attr_reference"},
+                {defaultToken : "string.attribute-value.xml"}
+            ]
         }]
     };
 
@@ -913,18 +671,17 @@ var XmlHighlightRules = function(normalize) {
 
     this.embedTagRules = function(HighlightRules, prefix, tag){
         this.$rules.tag.unshift({
-            token : ["meta.tag.punctuation.begin", "meta.tag.name." + tag],
-            regex : "(<)(" + tag + ")",
+            token : ["meta.tag.punctuation.tag-open.xml", "meta.tag." + tag + ".tag-name.xml"],
+            regex : "(<)(" + tag + "(?=\\s|>|$))",
             next: [
-                {include : "space"},
                 {include : "attributes"},
-                {token : "meta.tag.punctuation.end", regex : "/?>", next : prefix + "start"}
+                {token : "meta.tag.punctuation.tag-close.xml", regex : "/?>", next : prefix + "start"}
             ]
         });
 
         this.$rules[tag + "-end"] = [
-            {include : "space"},
-            {token : "meta.tag.punctuation.end", regex : ">",  next: "start",
+            {include : "attributes"},
+            {token : "meta.tag.punctuation.tag-close.xml", regex : "/?>",  next: "start",
                 onMatch : function(value, currentState, stack) {
                     stack.splice(0);
                     return this.token;
@@ -932,14 +689,14 @@ var XmlHighlightRules = function(normalize) {
         ]
 
         this.embedRules(HighlightRules, prefix, [{
-            token: ["meta.tag.punctuation.begin", "meta.tag.name." + tag],
-            regex : "(</)(" + tag + ")",
+            token: ["meta.tag.punctuation.end-tag-open.xml", "meta.tag." + tag + ".tag-name.xml"],
+            regex : "(</)(" + tag + "(?=\\s|>|$))",
             next: tag + "-end"
         }, {
-            token: "string.begin",
+            token: "string.cdata.xml",
             regex : "<\\!\\[CDATA\\["
         }, {
-            token: "string.end",
+            token: "string.cdata.xml",
             regex : "\\]\\]>"
         }]);
     };
@@ -951,78 +708,182 @@ oop.inherits(XmlHighlightRules, TextHighlightRules);
 exports.XmlHighlightRules = XmlHighlightRules;
 });
 
-ace.define('ace/mode/xml_util', ["require", 'exports', 'module' ], function(acequire, exports, module) {
+ace.define("ace/mode/html_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/css_highlight_rules","ace/mode/javascript_highlight_rules","ace/mode/xml_highlight_rules"], function(acequire, exports, module) {
+"use strict";
 
+var oop = acequire("../lib/oop");
+var lang = acequire("../lib/lang");
+var CssHighlightRules = acequire("./css_highlight_rules").CssHighlightRules;
+var JavaScriptHighlightRules = acequire("./javascript_highlight_rules").JavaScriptHighlightRules;
+var XmlHighlightRules = acequire("./xml_highlight_rules").XmlHighlightRules;
 
-function string(state) {
-    return [{
-        token : "string",
-        regex : '"',
-        next : state + "_qqstring"
-    }, {
-        token : "string",
-        regex : "'",
-        next : state + "_qstring"
-    }];
-}
-
-function multiLineString(quote, state) {
-    return [
-        {token : "string", regex : quote, next : state},
-        {
-            token : "constant.language.escape",
-            regex : "(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)" 
-        },
-        {defaultToken : "string"}
-    ];
-}
-
-exports.tag = function(states, name, nextState, tagMap) {
-    states[name] = [{
-        token : "text",
-        regex : "\\s+"
-    }, {
-        
-    token : !tagMap ? "meta.tag.tag-name" : function(value) {
-            if (tagMap[value])
-                return "meta.tag.tag-name." + tagMap[value];
-            else
-                return "meta.tag.tag-name";
-        },
-        regex : "[-_a-zA-Z0-9:]+",
-        next : name + "_embed_attribute_list" 
-    }, {
-        token: "empty",
-        regex: "",
-        next : name + "_embed_attribute_list"
-    }];
-
-    states[name + "_qstring"] = multiLineString("'", name + "_embed_attribute_list");
-    states[name + "_qqstring"] = multiLineString("\"", name + "_embed_attribute_list");
-    
-    states[name + "_embed_attribute_list"] = [{
-        token : "meta.tag.r",
-        regex : "/?>",
-        next : nextState
-    }, {
-        token : "keyword.operator",
-        regex : "="
-    }, {
-        token : "entity.other.attribute-name",
-        regex : "[-_a-zA-Z0-9:]+"
-    }, {
-        token : "constant.numeric", // float
-        regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
-    }, {
-        token : "text",
-        regex : "\\s+"
-    }].concat(string(name));
-};
-
+var tagMap = lang.createMap({
+    a           : 'anchor',
+    button 	    : 'form',
+    form        : 'form',
+    img         : 'image',
+    input       : 'form',
+    label       : 'form',
+    option      : 'form',
+    script      : 'script',
+    select      : 'form',
+    textarea    : 'form',
+    style       : 'style',
+    table       : 'table',
+    tbody       : 'table',
+    td          : 'table',
+    tfoot       : 'table',
+    th          : 'table',
+    tr          : 'table'
 });
 
-ace.define('ace/mode/matching_brace_outdent', ["require", 'exports', 'module' , 'ace/range'], function(acequire, exports, module) {
+var HtmlHighlightRules = function() {
+    XmlHighlightRules.call(this);
 
+    this.addRules({
+        attributes: [{
+            include : "tag_whitespace"
+        }, {
+            token : "entity.other.attribute-name.xml",
+            regex : "[-_a-zA-Z0-9:]+"
+        }, {
+            token : "keyword.operator.attribute-equals.xml",
+            regex : "=",
+            push : [{
+                include: "tag_whitespace"
+            }, {
+                token : "string.unquoted.attribute-value.html",
+                regex : "[^<>='\"`\\s]+",
+                next : "pop"
+            }, {
+                token : "empty",
+                regex : "",
+                next : "pop"
+            }]
+        }, {
+            include : "attribute_value"
+        }],
+        tag: [{
+            token : function(start, tag) {
+                var group = tagMap[tag];
+                return ["meta.tag.punctuation." + (start == "<" ? "" : "end-") + "tag-open.xml",
+                    "meta.tag" + (group ? "." + group : "") + ".tag-name.xml"];
+            },
+            regex : "(</?)([-_a-zA-Z0-9:]+)",
+            next: "tag_stuff"
+        }],
+        tag_stuff: [
+            {include : "attributes"},
+            {token : "meta.tag.punctuation.tag-close.xml", regex : "/?>", next : "start"}
+        ],
+    });
+
+    this.embedTagRules(CssHighlightRules, "css-", "style");
+    this.embedTagRules(JavaScriptHighlightRules, "js-", "script");
+
+    if (this.constructor === HtmlHighlightRules)
+        this.normalizeRules();
+};
+
+oop.inherits(HtmlHighlightRules, XmlHighlightRules);
+
+exports.HtmlHighlightRules = HtmlHighlightRules;
+});
+
+ace.define("ace/mode/liquid_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules","ace/mode/html_highlight_rules"], function(acequire, exports, module) {
+"use strict";
+
+var oop = acequire("../lib/oop");
+var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
+var HtmlHighlightRules = acequire("./html_highlight_rules").HtmlHighlightRules;
+
+var LiquidHighlightRules = function() {
+    HtmlHighlightRules.call(this);
+    var functions = (
+        "date|capitalize|downcase|upcase|first|last|join|sort|map|size|escape|" +
+         "escape_once|strip_html|strip_newlines|newline_to_br|replace|replace_first|" +
+         "truncate|truncatewords|prepend|append|minus|plus|times|divided_by|split"
+    );
+
+    var keywords = (
+        "capture|endcapture|case|endcase|when|comment|endcomment|" +
+        "cycle|for|endfor|in|reversed|if|endif|else|elsif|include|endinclude|unless|endunless|" +
+        "style|text|image|widget|plugin|marker|endmarker|tablerow|endtablerow"
+    );
+
+    var builtinVariables = 'forloop|tablerowloop';
+
+    var definitions = ("assign");
+
+    var keywordMapper = this.createKeywordMapper({
+        "variable.language": builtinVariables,
+        "keyword": keywords,
+        "support.function": functions,
+        "keyword.definition": definitions
+    }, "identifier");
+    for (var rule in this.$rules) {
+        this.$rules[rule].unshift({
+            token : "variable",
+            regex : "{%",
+            push : "liquid-start"
+        }, {
+            token : "variable",
+            regex : "{{",
+            push : "liquid-start"
+        });
+    }
+
+    this.addRules({
+        "liquid-start" : [{
+            token: "variable",
+            regex: "}}",
+            next: "pop"
+        }, {
+            token: "variable",
+            regex: "%}",
+            next: "pop"
+        }, {
+            token : "string", // single line
+            regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
+        }, {
+            token : "string", // single line
+            regex : "['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"
+        }, {
+            token : "constant.numeric", // hex
+            regex : "0[xX][0-9a-fA-F]+\\b"
+        }, {
+            token : "constant.numeric", // float
+            regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
+        }, {
+            token : "constant.language.boolean",
+            regex : "(?:true|false)\\b"
+        }, {
+            token : keywordMapper,
+            regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+        }, {
+            token : "keyword.operator",
+            regex : "\/|\\*|\\-|\\+|=|!=|\\?\\:"
+        }, {
+            token : "paren.lparen",
+            regex : /[\[\({]/
+        }, {
+            token : "paren.rparen",
+            regex : /[\])}]/
+        }, {
+            token : "text",
+            regex : "\\s+"
+        }]
+    });
+
+    this.normalizeRules();
+};
+oop.inherits(LiquidHighlightRules, TextHighlightRules);
+
+exports.LiquidHighlightRules = LiquidHighlightRules;
+});
+
+ace.define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"], function(acequire, exports, module) {
+"use strict";
 
 var Range = acequire("../range").Range;
 
@@ -1059,4 +920,57 @@ var MatchingBraceOutdent = function() {};
 }).call(MatchingBraceOutdent.prototype);
 
 exports.MatchingBraceOutdent = MatchingBraceOutdent;
+});
+
+ace.define("ace/mode/liquid",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/liquid_highlight_rules","ace/mode/matching_brace_outdent","ace/range"], function(acequire, exports, module) {
+
+var oop = acequire("../lib/oop");
+var TextMode = acequire("./text").Mode;
+var LiquidHighlightRules = acequire("./liquid_highlight_rules").LiquidHighlightRules;
+var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
+var Range = acequire("../range").Range;
+
+var Mode = function() {
+    this.HighlightRules = LiquidHighlightRules;
+    this.$outdent = new MatchingBraceOutdent();
+};
+oop.inherits(Mode, TextMode);
+
+(function() {
+
+    this.blockComment = {start: "<!--", end: "-->"};
+
+    this.getNextLineIndent = function(state, line, tab) {
+        var indent = this.$getIndent(line);
+
+        var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
+        var tokens = tokenizedLine.tokens;
+        var endState = tokenizedLine.state;
+
+        if (tokens.length && tokens[tokens.length-1].type == "comment") {
+            return indent;
+        }
+
+        if (state == "start") {
+            var match = line.match(/^.*[\{\(\[]\s*$/);
+            if (match) {
+                indent += tab;
+            }
+        }
+
+        return indent;
+    };
+
+    this.checkOutdent = function(state, line, input) {
+        return this.$outdent.checkOutdent(line, input);
+    };
+
+    this.autoOutdent = function(state, doc, row) {
+        this.$outdent.autoOutdent(doc, row);
+    };
+
+    this.$id = "ace/mode/liquid";
+}).call(Mode.prototype);
+
+exports.Mode = Mode;
 });

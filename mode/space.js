@@ -1,24 +1,5 @@
-ace.define('ace/mode/space', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/folding/coffee', 'ace/mode/space_highlight_rules'], function(acequire, exports, module) {
-
-var oop = acequire("../lib/oop");
-var TextMode = acequire("./text").Mode;
-var Tokenizer = acequire("../tokenizer").Tokenizer;
-var FoldMode = acequire("./folding/coffee").FoldMode;
-var SpaceHighlightRules = acequire("./space_highlight_rules").SpaceHighlightRules;
-var Mode = function() {
-    var highlighter = new SpaceHighlightRules();
-    this.$tokenizer = new Tokenizer(highlighter.getRules());
-    this.foldingRules = new FoldMode();
-};
-oop.inherits(Mode, TextMode);
-(function() {
-    
-}).call(Mode.prototype);
-exports.Mode = Mode;
-});
-
-ace.define('ace/mode/folding/coffee', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function(acequire, exports, module) {
-
+ace.define("ace/mode/folding/coffee",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode","ace/range"], function(acequire, exports, module) {
+"use strict";
 
 var oop = acequire("../../lib/oop");
 var BaseFoldMode = acequire("./fold_mode").FoldMode;
@@ -103,8 +84,9 @@ oop.inherits(FoldMode, BaseFoldMode);
 }).call(FoldMode.prototype);
 
 });
-ace.define('ace/mode/space_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
 
+ace.define("ace/mode/space_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+"use strict";
 
 var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
@@ -156,4 +138,22 @@ var SpaceHighlightRules = function() {
 oop.inherits(SpaceHighlightRules, TextHighlightRules);
 
 exports.SpaceHighlightRules = SpaceHighlightRules;
+});
+
+ace.define("ace/mode/space",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/folding/coffee","ace/mode/space_highlight_rules"], function(acequire, exports, module) {
+"use strict";
+var oop = acequire("../lib/oop");
+var TextMode = acequire("./text").Mode;
+var FoldMode = acequire("./folding/coffee").FoldMode;
+var SpaceHighlightRules = acequire("./space_highlight_rules").SpaceHighlightRules;
+var Mode = function() {
+    this.HighlightRules = SpaceHighlightRules;
+    this.foldingRules = new FoldMode();
+};
+oop.inherits(Mode, TextMode);
+(function() {
+    
+    this.$id = "ace/mode/space";
+}).call(Mode.prototype);
+exports.Mode = Mode;
 });

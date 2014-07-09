@@ -1,5 +1,5 @@
-ace.define('ace/ext/spellcheck', ["require", 'exports', 'module' , 'ace/lib/event', 'ace/editor', 'ace/config'], function(acequire, exports, module) {
-
+ace.define("ace/ext/spellcheck",["require","exports","module","ace/lib/event","ace/editor","ace/config"], function(acequire, exports, module) {
+"use strict";
 var event = acequire("../lib/event");
 
 exports.contextMenuHandler = function(e){
@@ -65,4 +65,8 @@ acequire("../config").defineOptions(Editor.prototype, "editor", {
 });
 
 });
-
+;
+                (function() {
+                    ace.acequire(["ace/ext/spellcheck"], function() {});
+                })();
+            

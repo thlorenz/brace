@@ -1,4 +1,5 @@
-ace.define('ace/ext/statusbar', ["require", 'exports', 'module' , 'ace/lib/dom', 'ace/lib/lang'], function(acequire, exports, module) {
+ace.define("ace/ext/statusbar",["require","exports","module","ace/lib/dom","ace/lib/lang"], function(acequire, exports, module) {
+"use strict";
 var dom = acequire("ace/lib/dom");
 var lang = acequire("ace/lib/lang");
 
@@ -45,3 +46,8 @@ var StatusBar = function(editor, parentNode) {
 exports.StatusBar = StatusBar;
 
 });
+;
+                (function() {
+                    ace.acequire(["ace/ext/statusbar"], function() {});
+                })();
+            

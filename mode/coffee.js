@@ -1,120 +1,5 @@
-/* ***** BEGIN LICENSE BLOCK *****
- * Distributed under the BSD license:
- *
- * Copyright (c) 2010, Ajax.org B.V.
- * All rights reserved.
- * 
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of Ajax.org B.V. nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL AJAX.ORG B.V. BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * ***** END LICENSE BLOCK ***** */
-
-ace.define('ace/mode/coffee', ["require", 'exports', 'module' , 'ace/tokenizer', 'ace/mode/coffee_highlight_rules', 'ace/mode/matching_brace_outdent', 'ace/mode/folding/coffee', 'ace/range', 'ace/mode/text', 'ace/worker/worker_client', 'ace/lib/oop'], function(acequire, exports, module) {
-
-
-var Tokenizer = acequire("../tokenizer").Tokenizer;
-var Rules = acequire("./coffee_highlight_rules").CoffeeHighlightRules;
-var Outdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
-var FoldMode = acequire("./folding/coffee").FoldMode;
-var Range = acequire("../range").Range;
-var TextMode = acequire("./text").Mode;
-var WorkerClient = acequire("../worker/worker_client").WorkerClient;
-var oop = acequire("../lib/oop");
-
-function Mode() {
-    this.HighlightRules = Rules;
-    this.$outdent = new Outdent();
-    this.foldingRules = new FoldMode();
-}
-
-oop.inherits(Mode, TextMode);
-
-(function() {
-    
-    var indenter = /(?:[({[=:]|[-=]>|\b(?:else|switch|try|catch(?:\s*[$A-Za-z_\x7f-\uffff][$\w\x7f-\uffff]*)?|finally))\s*$/;
-    var commentLine = /^(\s*)#/;
-    var hereComment = /^\s*###(?!#)/;
-    var indentation = /^\s*/;
-    
-    this.getNextLineIndent = function(state, line, tab) {
-        var indent = this.$getIndent(line);
-        var tokens = this.getTokenizer().getLineTokens(line, state).tokens;
-    
-        if (!(tokens.length && tokens[tokens.length - 1].type === 'comment') &&
-            state === 'start' && indenter.test(line))
-            indent += tab;
-        return indent;
-    };
-    
-    this.toggleCommentLines = function(state, doc, startRow, endRow){
-        console.log("toggle");
-        var range = new Range(0, 0, 0, 0);
-        for (var i = startRow; i <= endRow; ++i) {
-            var line = doc.getLine(i);
-            if (hereComment.test(line))
-                continue;
-                
-            if (commentLine.test(line))
-                line = line.replace(commentLine, '$1');
-            else
-                line = line.replace(indentation, '$&#');
-    
-            range.end.row = range.start.row = i;
-            range.end.column = line.length + 1;
-            doc.replace(range, line);
-        }
-    };
-    
-    this.checkOutdent = function(state, line, input) {
-        return this.$outdent.checkOutdent(line, input);
-    };
-    
-    this.autoOutdent = function(state, doc, row) {
-        this.$outdent.autoOutdent(doc, row);
-    };
-    
-    this.createWorker = function(session) {
-        var worker = new WorkerClient(["ace"], require("../worker/coffee"), "Worker");
-        worker.attachToDocument(session.getDocument());
-        
-        worker.on("error", function(e) {
-            session.setAnnotations([e.data]);
-        });
-        
-        worker.on("ok", function(e) {
-            session.clearAnnotations();
-        });
-        
-        return worker;
-    };
-
-}).call(Mode.prototype);
-
-exports.Mode = Mode;
-
-});
-
-ace.define('ace/mode/coffee_highlight_rules', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(acequire, exports, module) {
-
+ace.define("ace/mode/coffee_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+"use strict";
 
     var oop = acequire("../lib/oop");
     var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
@@ -315,8 +200,8 @@ ace.define('ace/mode/coffee_highlight_rules', ["require", 'exports', 'module' , 
     exports.CoffeeHighlightRules = CoffeeHighlightRules;
 });
 
-ace.define('ace/mode/matching_brace_outdent', ["require", 'exports', 'module' , 'ace/range'], function(acequire, exports, module) {
-
+ace.define("ace/mode/matching_brace_outdent",["require","exports","module","ace/range"], function(acequire, exports, module) {
+"use strict";
 
 var Range = acequire("../range").Range;
 
@@ -355,8 +240,8 @@ var MatchingBraceOutdent = function() {};
 exports.MatchingBraceOutdent = MatchingBraceOutdent;
 });
 
-ace.define('ace/mode/folding/coffee', ["require", 'exports', 'module' , 'ace/lib/oop', 'ace/mode/folding/fold_mode', 'ace/range'], function(acequire, exports, module) {
-
+ace.define("ace/mode/folding/coffee",["require","exports","module","ace/lib/oop","ace/mode/folding/fold_mode","ace/range"], function(acequire, exports, module) {
+"use strict";
 
 var oop = acequire("../../lib/oop");
 var BaseFoldMode = acequire("./fold_mode").FoldMode;
@@ -439,5 +324,89 @@ oop.inherits(FoldMode, BaseFoldMode);
     };
 
 }).call(FoldMode.prototype);
+
+});
+
+ace.define("ace/mode/coffee",["require","exports","module","ace/mode/coffee_highlight_rules","ace/mode/matching_brace_outdent","ace/mode/folding/coffee","ace/range","ace/mode/text","ace/worker/worker_client","ace/lib/oop"], function(acequire, exports, module) {
+"use strict";
+
+var Rules = acequire("./coffee_highlight_rules").CoffeeHighlightRules;
+var Outdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
+var FoldMode = acequire("./folding/coffee").FoldMode;
+var Range = acequire("../range").Range;
+var TextMode = acequire("./text").Mode;
+var WorkerClient = acequire("../worker/worker_client").WorkerClient;
+var oop = acequire("../lib/oop");
+
+function Mode() {
+    this.HighlightRules = Rules;
+    this.$outdent = new Outdent();
+    this.foldingRules = new FoldMode();
+}
+
+oop.inherits(Mode, TextMode);
+
+(function() {
+    var indenter = /(?:[({[=:]|[-=]>|\b(?:else|try|(?:swi|ca)tch(?:\s+[$A-Za-z_\x7f-\uffff][$\w\x7f-\uffff]*)?|finally))\s*$|^\s*(else\b\s*)?(?:if|for|while|loop)\b(?!.*\bthen\b)/;
+    var commentLine = /^(\s*)#/;
+    var hereComment = /^\s*###(?!#)/;
+    var indentation = /^\s*/;
+    
+    this.getNextLineIndent = function(state, line, tab) {
+        var indent = this.$getIndent(line);
+        var tokens = this.getTokenizer().getLineTokens(line, state).tokens;
+    
+        if (!(tokens.length && tokens[tokens.length - 1].type === 'comment') &&
+            state === 'start' && indenter.test(line))
+            indent += tab;
+        return indent;
+    };
+    
+    this.toggleCommentLines = function(state, doc, startRow, endRow){
+        console.log("toggle");
+        var range = new Range(0, 0, 0, 0);
+        for (var i = startRow; i <= endRow; ++i) {
+            var line = doc.getLine(i);
+            if (hereComment.test(line))
+                continue;
+                
+            if (commentLine.test(line))
+                line = line.replace(commentLine, '$1');
+            else
+                line = line.replace(indentation, '$&#');
+    
+            range.end.row = range.start.row = i;
+            range.end.column = line.length + 1;
+            doc.replace(range, line);
+        }
+    };
+    
+    this.checkOutdent = function(state, line, input) {
+        return this.$outdent.checkOutdent(line, input);
+    };
+    
+    this.autoOutdent = function(state, doc, row) {
+        this.$outdent.autoOutdent(doc, row);
+    };
+    
+    this.createWorker = function(session) {
+        var worker = new WorkerClient(["ace"], require("../worker/coffee"), "Worker");
+        worker.attachToDocument(session.getDocument());
+        
+        worker.on("error", function(e) {
+            session.setAnnotations([e.data]);
+        });
+        
+        worker.on("ok", function(e) {
+            session.clearAnnotations();
+        });
+        
+        return worker;
+    };
+
+    this.$id = "ace/mode/coffee";
+}).call(Mode.prototype);
+
+exports.Mode = Mode;
 
 });
