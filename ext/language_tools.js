@@ -454,6 +454,10 @@ var SnippetManager = function() {
         var snippetMap = this.snippetMap;
         var snippetNameMap = this.snippetNameMap;
         var self = this;
+        
+        if (!snippets) 
+            snippets = [];
+        
         function wrapRegexp(src) {
             if (src && !/^\^?\(.*\)\$?$|^\\b$/.test(src))
                 src = "(?:" + src + ")";
@@ -506,7 +510,7 @@ var SnippetManager = function() {
             s.endTriggerRe = new RegExp(s.endTrigger, "", true);
         }
 
-        if (snippets.content)
+        if (snippets && snippets.content)
             addSnippet(snippets);
         else if (Array.isArray(snippets))
             snippets.forEach(addSnippet);
@@ -921,6 +925,7 @@ var $singleLineEditor = function(el) {
     editor.renderer.setHighlightGutterLine(false);
 
     editor.$mouseHandler.$focusWaitTimout = 0;
+    editor.$highlightTagPending = true;
 
     return editor;
 };
@@ -936,6 +941,7 @@ var AcePopup = function(parentNode) {
     popup.renderer.setStyle("ace_autocomplete");
 
     popup.setOption("displayIndentGuides", false);
+    popup.setOption("dragDelay", 150);
 
     var noop = function(){};
 
@@ -970,7 +976,7 @@ var AcePopup = function(parentNode) {
             popup.session.removeMarker(hoverMarker.id);
             hoverMarker.id = null;
         }
-    }
+    };
     popup.setSelectOnHover(false);
     popup.on("mousemove", function(e) {
         if (!lastMouseEvent) {
@@ -1038,15 +1044,15 @@ var AcePopup = function(parentNode) {
     };
 
     var bgTokenizer = popup.session.bgTokenizer;
-    bgTokenizer.$tokenizeRow = function(i) {
-        var data = popup.data[i];
+    bgTokenizer.$tokenizeRow = function(row) {
+        var data = popup.data[row];
         var tokens = [];
         if (!data)
             return tokens;
         if (typeof data == "string")
             data = {value: data};
         if (!data.caption)
-            data.caption = data.value;
+            data.caption = data.value || data.name;
 
         var last = -1;
         var flag, c;
@@ -1073,7 +1079,7 @@ var AcePopup = function(parentNode) {
 
     popup.session.$computeWidth = function() {
         return this.screenWidth = 0;
-    }
+    };
     popup.isOpen = false;
     popup.isTopdown = false;
 
@@ -1306,6 +1312,8 @@ var Autocomplete = function() {
             pos.left += renderer.$gutterLayer.gutterWidth;
 
             this.popup.show(pos, lineHeight);
+        } else if (keepPopupPosition && !prefix) {
+            this.detach();
         }
     };
 
@@ -1318,12 +1326,12 @@ var Autocomplete = function() {
         this.changeTimer.cancel();
 
         if (this.popup && this.popup.isOpen) {
-            this.gatherCompletionsId = this.gatherCompletionsId + 1;
-        }
-
-        if (this.popup)
+            this.gatherCompletionsId += 1;
             this.popup.hide();
-
+        }
+        
+        if (this.base)
+            this.base.detach();
         this.activated = false;
         this.completions = this.base = null;
     };
@@ -1420,9 +1428,9 @@ var Autocomplete = function() {
         var line = session.getLine(pos.row);
         var prefix = util.retrievePrecedingIdentifier(line, pos.column);
 
-        this.base = editor.getCursorPosition();
-        this.base.column -= prefix.length;
-
+        this.base = session.doc.createAnchor(pos.row, pos.column - prefix.length);
+        this.base.$insertRight = true;
+        
         var matches = [];
         var total = editor.completers.length;
         editor.completers.forEach(function(completer, i) {
@@ -1501,7 +1509,7 @@ var Autocomplete = function() {
                 return detachIfFinished();
             if (filtered.length == 1 && filtered[0].value == prefix && !filtered[0].snippet)
                 return detachIfFinished();
-            if (this.autoInsert && filtered.length == 1)
+            if (this.autoInsert && filtered.length == 1 && results.finished)
                 return this.insertMatch(filtered[0]);
 
             this.openPopup(this.editor, prefix, keepPopupPosition);
@@ -1546,7 +1554,7 @@ var FilteredList = function(array, filterText, mutateData) {
         });
         var prev = null;
         matches = matches.filter(function(item){
-            var caption = item.value || item.caption || item.snippet;
+            var caption = item.snippet || item.caption || item.value;
             if (caption === prev) return false;
             prev = caption;
             return true;
@@ -1629,7 +1637,7 @@ ace.define("ace/autocomplete/text_completer",["require","exports","module","ace/
         var wordList = Object.keys(wordScore);
         callback(null, wordList.map(function(word) {
             return {
-                name: word,
+                caption: word,
                 value: word,
                 score: wordScore[word],
                 meta: "local"
@@ -1761,8 +1769,6 @@ var doLiveAutocomplete = function(e) {
             editor.completer.autoSelect = false;
             editor.completer.autoInsert = false;
             editor.completer.showPopup(editor);
-        } else if (!prefix && hasCompleter) {
-            editor.completer.detach();
         }
     }
 };
