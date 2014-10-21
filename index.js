@@ -3730,11 +3730,11 @@ var MouseHandler = function(editor) {
         if (_self.state || _self.$dragDelay || !_self.$dragEnabled)
             return;
         
-        var char = editor.renderer.screenToTextCoordinates(e.x, e.y);
+        var character = editor.renderer.screenToTextCoordinates(e.x, e.y);
         var range = editor.session.selection.getRange();
         var renderer = editor.renderer;
 
-        if (!range.isEmpty() && range.insideStart(char.row, char.column)) {
+        if (!range.isEmpty() && range.insideStart(character.row, character.column)) {
             renderer.setCursorStyle("default");
         } else {
             renderer.setCursorStyle("");
