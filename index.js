@@ -12950,6 +12950,7 @@ var Gutter = function(parentEl) {
         var firstRow = config.firstRow;
         var lastRow = Math.min(config.lastRow + config.gutterOffset,  // needed to compensate for hor scollbar
             session.getLength() - 1);
+        if (isNaN(lastRow)) { return; }
         var fold = session.getNextFoldLine(firstRow);
         var foldStart = fold ? fold.start.row : Infinity;
         var foldWidgets = this.$showFoldWidgets && session.foldWidgets;
