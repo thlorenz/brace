@@ -10,13 +10,14 @@ var fixRequires      =  require('./fix-requires');
 
 require('shelljs/global');
 
-var braceroot    =  path.join(__dirname, '..');
-var themedir     =  path.join(braceroot, 'theme');
-var modedir      =  path.join(braceroot, 'mode');
-var extdir      =  path.join(braceroot, 'ext');
-var workersrcdir =  path.join(braceroot, 'workersrc');
-var workerdir    =  path.join(braceroot, 'worker');
-var buildroot    =  path.join(__dirname, 'ace-build');
+var braceroot     =  path.join(__dirname, '..');
+var themedir      =  path.join(braceroot, 'theme');
+var modedir       =  path.join(braceroot, 'mode');
+var extdir        =  path.join(braceroot, 'ext');
+var keybindingdir =  path.join(braceroot, 'keybinding');
+var workersrcdir  =  path.join(braceroot, 'workersrc');
+var workerdir     =  path.join(braceroot, 'worker');
+var buildroot     =  path.join(__dirname, 'ace-build');
 
 var aceTag = 'v1.1.8';
 
@@ -71,6 +72,17 @@ var aceTag = 'v1.1.8';
       });
   }()
     
+  +function keybindings() {
+    rm('-rf', keybindingdir);
+    mkdir(keybindingdir);
+
+    ls(path.join(buildroot, 'keybinding-*.js'))
+      .forEach(function (file) {
+        var filename = path.basename(file).slice('keybinding-'.length);
+        mv(file, path.join(keybindingdir, filename));
+      });
+  }()
+    
   +function workers() {
     rm('-rf', workersrcdir);
     mkdir(workersrcdir);
@@ -97,6 +109,7 @@ var aceTag = 'v1.1.8';
   fixAllRequires(themedir);
   fixAllRequires(modedir);
   fixAllRequires(extdir);
+  fixAllRequires(keybindingdir);
   fixAllRequires(workersrcdir);
   fixAllRequires(buildroot);
 }()
