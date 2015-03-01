@@ -2392,7 +2392,7 @@ oop.inherits(Mode, TextMode);
     this.createWorker = function(session) {
         if (this.constructor != Mode)
             return;
-        var worker = new WorkerClient(["ace"], "ace/mode/html_worker", "Worker");
+        var worker = new WorkerClient(["ace"], require("../worker/html"), "Worker");
         worker.attachToDocument(session.getDocument());
 
         if (this.fragmentContext)
