@@ -6,3 +6,4 @@ Please investigate the following to understand how to use brace:
  - the browserify build script: **build.js**
  - the editor initialization scripts: **coffee-editor.js**, **javascript-editor.js**, **json-editor.js**,
    **lua-editor.js** and **css-editor.js** (currently not used)
+ - **coffee-editor.js** and **javascript-editor.js** also demonstrate Ace's Vim keybinding feature
