@@ -1,6 +1,6 @@
 {
   "name": "brace",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "browserify compatible version of the ace editor.",
   "main": "index.js",
   "scripts": {
