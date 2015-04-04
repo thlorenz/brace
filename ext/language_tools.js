@@ -1069,8 +1069,11 @@ var AcePopup = function(parentNode) {
 
         if (data.meta) {
             var maxW = popup.renderer.$size.scrollerWidth / popup.renderer.layerConfig.characterWidth;
-            if (data.meta.length + data.caption.length < maxW - 2)
-                tokens.push({type: "rightAlignedText", value: data.meta});
+            var metaData = data.meta;
+            if (metaData.length + data.caption.length > maxW - 2) {
+                metaData = metaData.substr(0, maxW - data.caption.length - 3) + "\u2026"
+            }
+            tokens.push({type: "rightAlignedText", value: metaData});
         }
         return tokens;
     };
@@ -1080,6 +1083,8 @@ var AcePopup = function(parentNode) {
     popup.session.$computeWidth = function() {
         return this.screenWidth = 0;
     };
+
+    popup.$blockScrolling = Infinity;
     popup.isOpen = false;
     popup.isTopdown = false;
 
@@ -1111,6 +1116,7 @@ var AcePopup = function(parentNode) {
     popup.on("changeSelection", function() {
         if (popup.isOpen)
             popup.setRow(popup.selection.lead.row);
+        popup.renderer.scrollCursorIntoView();
     });
 
     popup.hide = function() {
@@ -1263,8 +1269,10 @@ var dom = acequire("./lib/dom");
 var snippetManager = acequire("./snippets").snippetManager;
 
 var Autocomplete = function() {
-    this.autoInsert = true;
+    this.autoInsert = false;
     this.autoSelect = true;
+    this.exactMatch = false;
+    this.gatherCompletionsId = 0;
     this.keyboardHandler = new HashHandler();
     this.keyboardHandler.bindKeys(this.commands);
 
@@ -1281,7 +1289,6 @@ var Autocomplete = function() {
 };
 
 (function() {
-    this.gatherCompletionsId = 0;
 
     this.$init = function() {
         this.popup = new AcePopup(document.body || document.documentElement);
@@ -1305,6 +1312,8 @@ var Autocomplete = function() {
             this.$init();
 
         this.popup.setData(this.completions.filtered);
+
+        editor.keyBinding.addKeyboardHandler(this.keyboardHandler);
 
         var renderer = editor.renderer;
         this.popup.setRow(this.autoSelect ? 0 : -1);
@@ -1337,11 +1346,10 @@ var Autocomplete = function() {
         this.changeTimer.cancel();
         this.hideDocTooltip();
 
-        if (this.popup && this.popup.isOpen) {
-            this.gatherCompletionsId += 1;
+        this.gatherCompletionsId += 1;
+        if (this.popup && this.popup.isOpen)
             this.popup.hide();
-        }
-        
+
         if (this.base)
             this.base.detach();
         this.activated = false;
@@ -1362,7 +1370,7 @@ var Autocomplete = function() {
     this.blurListener = function(e) {
         var el = document.activeElement;
         var text = this.editor.textInput.getElement()
-        if (el != text && el.parentNode != this.popup.container
+        if (el != text && ( !this.popup || el.parentNode != this.popup.container )
             && el != this.tooltipNode && e.relatedTarget != this.tooltipNode
             && e.relatedTarget != text
         ) {
@@ -1424,7 +1432,6 @@ var Autocomplete = function() {
         "Ctrl-Down|Ctrl-End": function(editor) { editor.completer.goTo("end"); },
 
         "Esc": function(editor) { editor.completer.detach(); },
-        "Space": function(editor) { editor.completer.detach(); editor.insert(" ");},
         "Return": function(editor) { return editor.completer.insertMatch(); },
         "Shift-Return": function(editor) { editor.completer.insertMatch(true); },
         "Tab": function(editor) {
@@ -1448,7 +1455,7 @@ var Autocomplete = function() {
 
         this.base = session.doc.createAnchor(pos.row, pos.column - prefix.length);
         this.base.$insertRight = true;
-        
+
         var matches = [];
         var total = editor.completers.length;
         editor.completers.forEach(function(completer, i) {
@@ -1480,7 +1487,6 @@ var Autocomplete = function() {
             editor.completer = this;
         }
 
-        editor.keyBinding.addKeyboardHandler(this.keyboardHandler);
         editor.on("changeSelection", this.changeListener);
         editor.on("blur", this.blurListener);
         editor.on("mousedown", this.mousedownListener);
@@ -1514,13 +1520,17 @@ var Autocomplete = function() {
 
             var prefix = results.prefix;
             var matches = results && results.matches;
-            
+
             if (!matches || !matches.length)
                 return detachIfFinished();
             if (prefix.indexOf(results.prefix) !== 0 || _id != this.gatherCompletionsId)
                 return;
 
             this.completions = new FilteredList(matches);
+
+            if (this.exactMatch)
+                this.completions.exactMatch = true;
+
             this.completions.setFilter(prefix);
             var filtered = this.completions.filtered;
             if (!filtered.length)
@@ -1612,7 +1622,7 @@ Autocomplete.startCommand = {
     exec: function(editor) {
         if (!editor.completer)
             editor.completer = new Autocomplete();
-        editor.completer.autoInsert = 
+        editor.completer.autoInsert = false;
         editor.completer.autoSelect = true;
         editor.completer.showPopup(editor);
         editor.completer.cancelContextMenu();
@@ -1624,6 +1634,7 @@ var FilteredList = function(array, filterText, mutateData) {
     this.all = array;
     this.filtered = array;
     this.filterText = filterText || "";
+    this.exactMatch = false;
 };
 (function(){
     this.setFilter = function(str) {
@@ -1658,20 +1669,26 @@ var FilteredList = function(array, filterText, mutateData) {
             var matchMask = 0;
             var penalty = 0;
             var index, distance;
-            for (var j = 0; j < needle.length; j++) {
-                var i1 = caption.indexOf(lower[j], lastIndex + 1);
-                var i2 = caption.indexOf(upper[j], lastIndex + 1);
-                index = (i1 >= 0) ? ((i2 < 0 || i1 < i2) ? i1 : i2) : i2;
-                if (index < 0)
+
+            if (this.exactMatch) {
+                if (needle !== caption.substr(0, needle.length))
                     continue loop;
-                distance = index - lastIndex - 1;
-                if (distance > 0) {
-                    if (lastIndex === -1)
-                        penalty += 10;
-                    penalty += distance;
+            }else{
+                for (var j = 0; j < needle.length; j++) {
+                    var i1 = caption.indexOf(lower[j], lastIndex + 1);
+                    var i2 = caption.indexOf(upper[j], lastIndex + 1);
+                    index = (i1 >= 0) ? ((i2 < 0 || i1 < i2) ? i1 : i2) : i2;
+                    if (index < 0)
+                        continue loop;
+                    distance = index - lastIndex - 1;
+                    if (distance > 0) {
+                        if (lastIndex === -1)
+                            penalty += 10;
+                        penalty += distance;
+                    }
+                    matchMask = matchMask | (1 << index);
+                    lastIndex = index;
                 }
-                matchMask = matchMask | (1 << index);
-                lastIndex = index;
             }
             item.matchMask = matchMask;
             item.exactMatch = penalty ? 0 : 1;
@@ -1839,7 +1856,7 @@ var loadSnippetFile = function(id) {
 function getCompletionPrefix(editor) {
     var pos = editor.getCursorPosition();
     var line = editor.session.getLine(pos.row);
-    var prefix = util.retrievePrecedingIdentifier(line, pos.column);
+    var prefix;
     editor.completers.forEach(function(completer) {
         if (completer.identifierRegexps) {
             completer.identifierRegexps.forEach(function(identifierRegex) {
@@ -1848,7 +1865,7 @@ function getCompletionPrefix(editor) {
             });
         }
     });
-    return prefix;
+    return prefix || util.retrievePrecedingIdentifier(line, pos.column);
 }
 
 var doLiveAutocomplete = function(e) {
@@ -1865,7 +1882,6 @@ var doLiveAutocomplete = function(e) {
             if (!editor.completer) {
                 editor.completer = new Autocomplete();
             }
-            editor.completer.autoSelect = false;
             editor.completer.autoInsert = false;
             editor.completer.showPopup(editor);
         }

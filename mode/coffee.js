@@ -393,11 +393,11 @@ oop.inherits(Mode, TextMode);
         var worker = new WorkerClient(["ace"], require("../worker/coffee"), "Worker");
         worker.attachToDocument(session.getDocument());
         
-        worker.on("error", function(e) {
-            session.setAnnotations([e.data]);
+        worker.on("annotate", function(e) {
+            session.setAnnotations(e.data);
         });
         
-        worker.on("ok", function(e) {
+        worker.on("terminate", function() {
             session.clearAnnotations();
         });
         

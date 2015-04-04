@@ -1,61 +1,101 @@
-ace.define("ace/mode/batchfile_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
-"use strict";
+ace.define("ace/mode/abc_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function (acequire, exports, module) {
+    "use strict";
 
-var oop = acequire("../lib/oop");
-var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
+    var oop = acequire("../lib/oop");
+    var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
-var BatchFileHighlightRules = function() {
+    var ABCHighlightRules = function () {
 
-    this.$rules = { start: 
-       [ { token: 'keyword.command.dosbatch',
-           regex: '\\b(?:append|assoc|at|attrib|break|cacls|cd|chcp|chdir|chkdsk|chkntfs|cls|cmd|color|comp|compact|convert|copy|date|del|dir|diskcomp|diskcopy|doskey|echo|endlocal|erase|fc|find|findstr|format|ftype|graftabl|help|keyb|label|md|mkdir|mode|more|move|path|pause|popd|print|prompt|pushd|rd|recover|ren|rename|replace|restore|rmdir|set|setlocal|shift|sort|start|subst|time|title|tree|type|ver|verify|vol|xcopy)\\b',
-           caseInsensitive: true },
-         { token: 'keyword.control.statement.dosbatch',
-           regex: '\\b(?:goto|call|exit)\\b',
-           caseInsensitive: true },
-         { token: 'keyword.control.conditional.if.dosbatch',
-           regex: '\\bif\\s+not\\s+(?:exist|defined|errorlevel|cmdextversion)\\b',
-           caseInsensitive: true },
-         { token: 'keyword.control.conditional.dosbatch',
-           regex: '\\b(?:if|else)\\b',
-           caseInsensitive: true },
-         { token: 'keyword.control.repeat.dosbatch',
-           regex: '\\bfor\\b',
-           caseInsensitive: true },
-         { token: 'keyword.operator.dosbatch',
-           regex: '\\b(?:EQU|NEQ|LSS|LEQ|GTR|GEQ)\\b' },
-         { token: ['doc.comment', 'comment'],
-           regex: '(?:^|\\b)(rem)($|\\s.*$)',
-           caseInsensitive: true },
-         { token: 'comment.line.colons.dosbatch',
-           regex: '::.*$' },
-         { include: 'variable' },
-         { token: 'punctuation.definition.string.begin.shell',
-           regex: '"',
-           push: [ 
-              { token: 'punctuation.definition.string.end.shell', regex: '"', next: 'pop' },
-              { include: 'variable' },
-              { defaultToken: 'string.quoted.double.dosbatch' } ] },
-         { token: 'keyword.operator.pipe.dosbatch', regex: '[|]' },
-         { token: 'keyword.operator.redirect.shell',
-           regex: '&>|\\d*>&\\d*|\\d*(?:>>|>|<)|\\d*<&|\\d*<>' } ],
-        variable: [
-         { token: 'constant.numeric', regex: '%%\\w+|%[*\\d]|%\\w+%'},
-         { token: 'constant.numeric', regex: '%~\\d+'},
-         { token: ['markup.list', 'constant.other', 'markup.list'],
-            regex: '(%)(\\w+)(%?)' }]}
-    
-    this.normalizeRules();
-};
+        this.$rules = {
+            start: [
+                {
+                    token: ['zupfnoter.information.comment.line.percentage', 'information.keyword', 'in formation.keyword.embedded'],
+                    regex: '(%%%%)(hn\\.[a-z]*)(.*)',
+                    comment: 'Instruction Comment'
+                },
+                {
+                    token: ['information.comment.line.percentage', 'information.keyword.embedded'],
+                    regex: '(%%)(.*)',
+                    comment: 'Instruction Comment'
+                },
 
-BatchFileHighlightRules.metaData = { name: 'Batch File',
-      scopeName: 'source.dosbatch',
-      fileTypes: [ 'bat' ] }
+                {
+                    token: 'comment.line.percentage',
+                    regex: '%.*',
+                    comment: 'Comments'
+                },
+
+                {
+                    token: 'barline.keyword.operator',
+                    regex: '[\\[:]*[|:][|\\]:]*(?:\\[?[0-9]+)?|\\[[0-9]+',
+                    comment: 'Bar lines'
+                },
+                {
+                    token: ['information.keyword.embedded', 'information.argument.string.unquoted'],
+                    regex: '(\\[[A-Za-z]:)([^\\]]*\\])',
+                    comment: 'embedded Header lines'
+                },
+                {
+                    token: ['information.keyword', 'information.argument.string.unquoted'],
+                    regex: '^([A-Za-z]:)([^%\\\\]*)',
+                    comment: 'Header lines'
+                },
+                {
+                    token: ['text', 'entity.name.function', 'string.unquoted', 'text'],
+                    regex: '(\\[)([A-Z]:)(.*?)(\\])',
+                    comment: 'Inline fields'
+                },
+                {
+                    token: ['accent.constant.language', 'pitch.constant.numeric', 'duration.constant.numeric'],
+                    regex: '([\\^=_]*)([A-Ga-gz][,\']*)([0-9]*/*[><0-9]*)',
+                    comment: 'Notes'
+                },
+                {
+                    token: 'zupfnoter.jumptarget.string.quoted',
+                    regex: '[\\"!]\\^\\:.*?[\\"!]',
+                    comment: 'Zupfnoter jumptarget'
+                }, {
+                    token: 'zupfnoter.goto.string.quoted',
+                    regex: '[\\"!]\\^\\@.*?[\\"!]',
+                    comment: 'Zupfnoter goto'
+                },
+                {
+                    token: 'zupfnoter.annotation.string.quoted',
+                    regex: '[\\"!]\\^\\!.*?[\\"!]',
+                    comment: 'Zupfnoter annoation'
+                },
+                {
+                    token: 'zupfnoter.annotationref.string.quoted',
+                    regex: '[\\"!]\\^\\#.*?[\\"!]',
+                    comment: 'Zupfnoter annotation reference'
+                },
+                {
+                    token: 'chordname.string.quoted',
+                    regex: '[\\"!]\\^.*?[\\"!]',
+                    comment: 'abc chord'
+                },
+                {
+                    token: 'string.quoted',
+                    regex: '[\\"!].*?[\\"!]',
+                    comment: 'abc annotation'
+                }
+
+            ]
+        };
+
+        this.normalizeRules();
+    };
+
+    ABCHighlightRules.metaData = {
+        fileTypes: ['abc'],
+        name: 'ABC',
+        scopeName: 'text.abcnotation'
+    };
 
 
-oop.inherits(BatchFileHighlightRules, TextHighlightRules);
+    oop.inherits(ABCHighlightRules, TextHighlightRules);
 
-exports.BatchFileHighlightRules = BatchFileHighlightRules;
+    exports.ABCHighlightRules = ABCHighlightRules;
 });
 
 ace.define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"], function(acequire, exports, module) {
@@ -113,16 +153,16 @@ oop.inherits(FoldMode, BaseFoldMode);
 
             if (match[1])
                 return this.openingBracketBlock(session, match[1], row, i);
-                
+
             var range = session.getCommentFoldRange(row, i + match[0].length, 1);
-            
+
             if (range && !range.isMultiLine()) {
                 if (forceMultiline) {
                     range = this.getSectionRange(session, row);
                 } else if (foldStyle != "all")
                     range = null;
             }
-            
+
             return range;
         }
 
@@ -139,7 +179,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             return session.getCommentFoldRange(row, i, -1);
         }
     };
-    
+
     this.getSectionRange = function(session, row) {
         var line = session.getLine(row);
         var startIndent = line.search(/\S/);
@@ -156,7 +196,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             if  (startIndent > indent)
                 break;
             var subRange = this.getFoldWidgetRange(session, "all", row);
-            
+
             if (subRange) {
                 if (subRange.start.row <= startRow) {
                     break;
@@ -168,7 +208,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             }
             endRow = row;
         }
-        
+
         return new Range(startRow, startColumn, endRow, session.getLine(endRow).length);
     };
 
@@ -199,25 +239,23 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/batchfile",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/batchfile_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
-"use strict";
+ace.define("ace/mode/abc",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/abc_highlight_rules","ace/mode/folding/cstyle"], function (acequire, exports, module) {
+    "use strict";
 
-var oop = acequire("../lib/oop");
-var TextMode = acequire("./text").Mode;
-var BatchFileHighlightRules = acequire("./batchfile_highlight_rules").BatchFileHighlightRules;
-var FoldMode = acequire("./folding/cstyle").FoldMode;
+    var oop = acequire("../lib/oop");
+    var TextMode = acequire("./text").Mode;
+    var ABCHighlightRules = acequire("./abc_highlight_rules").ABCHighlightRules;
+    var FoldMode = acequire("./folding/cstyle").FoldMode;
 
-var Mode = function() {
-    this.HighlightRules = BatchFileHighlightRules;
-    this.foldingRules = new FoldMode();
-};
-oop.inherits(Mode, TextMode);
+    var Mode = function () {
+        this.HighlightRules = ABCHighlightRules;
+        this.foldingRules = new FoldMode();
+    };
+    oop.inherits(Mode, TextMode);
 
-(function() {
-    this.lineCommentStart = "::";
-    this.blockComment = "";
-    this.$id = "ace/mode/batchfile";
-}).call(Mode.prototype);
+    (function () {
+        this.$id = "ace/mode/abc"
+    }).call(Mode.prototype);
 
-exports.Mode = Mode;
+    exports.Mode = Mode;
 });
