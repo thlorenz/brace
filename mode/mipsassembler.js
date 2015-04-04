@@ -1,109 +1,36 @@
-ace.define("ace/mode/applescript_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+ace.define("ace/mode/mipsassembler_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
-var AppleScriptHighlightRules = function() {
-    var keywords = (
-        "about|above|after|against|and|around|as|at|back|before|beginning|" +
-        "behind|below|beneath|beside|between|but|by|considering|" +
-        "contain|contains|continue|copy|div|does|eighth|else|end|equal|" +
-        "equals|error|every|exit|fifth|first|for|fourth|from|front|" +
-        "get|given|global|if|ignoring|in|into|is|it|its|last|local|me|" +
-        "middle|mod|my|ninth|not|of|on|onto|or|over|prop|property|put|ref|" +
-        "reference|repeat|returning|script|second|set|seventh|since|" +
-        "sixth|some|tell|tenth|that|the|then|third|through|thru|" +
-        "timeout|times|to|transaction|try|until|where|while|whose|with|without"
-    );
-
-    var builtinConstants = (
-        "AppleScript|false|linefeed|return|pi|quote|result|space|tab|true"
-    );
-
-    var builtinFunctions = (
-        "activate|beep|count|delay|launch|log|offset|read|round|run|say|" +
-        "summarize|write"
-    );
-
-    var builtinTypes = (
-        "alias|application|boolean|class|constant|date|file|integer|list|" +
-        "number|real|record|string|text|character|characters|contents|day|" +
-        "frontmost|id|item|length|month|name|paragraph|paragraphs|rest|" +
-        "reverse|running|time|version|weekday|word|words|year"
-    );
-
-    var keywordMapper = this.createKeywordMapper({
-        "support.function": builtinFunctions,
-        "constant.language": builtinConstants,
-        "support.type": builtinTypes,
-        "keyword": keywords
-    }, "identifier");
+var mipsassemblerHighlightRules = function() {
 
     this.$rules = {
-        "start": [
-            {
-                token: "comment",
-                regex: "--.*$"
-            },
-            {
-                token : "comment", // multi line comment
-                regex : "\\(\\*",
-                next : "comment"
-            },
-            {
-                token: "string",           // " string
-                regex: '".*?"'
-            },
-            {
-                token: "support.type",
-                regex: '\\b(POSIX file|POSIX path|(date|time) string|quoted form)\\b'
-            },
-            {
-                token: "support.function",
-                regex: '\\b(clipboard info|the clipboard|info for|list (disks|folder)|' +
-          'mount volume|path to|(close|open for) access|(get|set) eof|' +
-          'current date|do shell script|get volume settings|random number|' +
-          'set volume|system attribute|system info|time to GMT|' +
-          '(load|run|store) script|scripting components|' +
-          'ASCII (character|number)|localized string|' +
-          'choose (application|color|file|file name|' +
-          'folder|from list|remote application|URL)|' +
-          'display (alert|dialog))\\b|^\\s*return\\b'
-            },
-            {
-                token: "constant.language",
-                regex: '\\b(text item delimiters|current application|missing value)\\b'
-            },
-            {
-                token: "keyword",
-                regex: '\\b(apart from|aside from|instead of|out of|greater than|' +
-          "isn't|(doesn't|does not) (equal|come before|come after|contain)|" +
-          '(greater|less) than( or equal)?|(starts?|ends|begins?) with|' +
-          'contained by|comes (before|after)|a (ref|reference))\\b'
-            },
-            {
-                token: keywordMapper,
-                regex: "[a-zA-Z][a-zA-Z0-9_]*\\b"
-            }
-        ],
-        "comment": [
-            {
-                token: "comment", // closing comment
-                regex: "\\*\\)",
-                next: "start"
+            start: [{
+                token: "string.start",
+                regex: '"',
+                next: "qstring"
+            }],
+            qstring: [{
+                token: "escape",
+                regex: /\\./,
             }, {
-                defaultToken: "comment"
-            }
-        ]
-    }
-
+                token: "string.end",
+                regex: '"',
+                next: "start"
+            }],
+        }
+    
     this.normalizeRules();
 };
 
-oop.inherits(AppleScriptHighlightRules, TextHighlightRules);
+mipsassemblerHighlightRules.metaData = 
 
-exports.AppleScriptHighlightRules = AppleScriptHighlightRules;
+
+oop.inherits(mipsassemblerHighlightRules, TextHighlightRules);
+
+exports.mipsassemblerHighlightRules = mipsassemblerHighlightRules;
 });
 
 ace.define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"], function(acequire, exports, module) {
@@ -247,25 +174,22 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/applescript",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/applescript_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
+ace.define("ace/mode/mipsassembler",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/mipsassembler_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
-var Tokenizer = acequire("../tokenizer").Tokenizer;
-var AppleScriptHighlightRules = acequire("./applescript_highlight_rules").AppleScriptHighlightRules;
+var HighlightRules = acequire("./mipsassembler_highlight_rules").HighlightRules;
 var FoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
-    this.HighlightRules = AppleScriptHighlightRules;
+    this.HighlightRules = HighlightRules;
     this.foldingRules = new FoldMode();
 };
 oop.inherits(Mode, TextMode);
 
 (function() {
-    this.lineCommentStart = "--";
-    this.blockComment = {start: "(*", end: "*)"};
-    this.$id = "ace/mode/applescript";
+    this.$id = "ace/mode/mipsassembler"
 }).call(Mode.prototype);
 
 exports.Mode = Mode;

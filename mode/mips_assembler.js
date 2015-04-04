@@ -1,109 +1,75 @@
-ace.define("ace/mode/applescript_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+ace.define("ace/mode/mips_assembler_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
-var AppleScriptHighlightRules = function() {
-    var keywords = (
-        "about|above|after|against|and|around|as|at|back|before|beginning|" +
-        "behind|below|beneath|beside|between|but|by|considering|" +
-        "contain|contains|continue|copy|div|does|eighth|else|end|equal|" +
-        "equals|error|every|exit|fifth|first|for|fourth|from|front|" +
-        "get|given|global|if|ignoring|in|into|is|it|its|last|local|me|" +
-        "middle|mod|my|ninth|not|of|on|onto|or|over|prop|property|put|ref|" +
-        "reference|repeat|returning|script|second|set|seventh|since|" +
-        "sixth|some|tell|tenth|that|the|then|third|through|thru|" +
-        "timeout|times|to|transaction|try|until|where|while|whose|with|without"
-    );
+var MIPSAssemblerHighlightRules = function() {
 
-    var builtinConstants = (
-        "AppleScript|false|linefeed|return|pi|quote|result|space|tab|true"
-    );
-
-    var builtinFunctions = (
-        "activate|beep|count|delay|launch|log|offset|read|round|run|say|" +
-        "summarize|write"
-    );
-
-    var builtinTypes = (
-        "alias|application|boolean|class|constant|date|file|integer|list|" +
-        "number|real|record|string|text|character|characters|contents|day|" +
-        "frontmost|id|item|length|month|name|paragraph|paragraphs|rest|" +
-        "reverse|running|time|version|weekday|word|words|year"
-    );
-
-    var keywordMapper = this.createKeywordMapper({
-        "support.function": builtinFunctions,
-        "constant.language": builtinConstants,
-        "support.type": builtinTypes,
-        "keyword": keywords
-    }, "identifier");
-
-    this.$rules = {
-        "start": [
-            {
-                token: "comment",
-                regex: "--.*$"
-            },
-            {
-                token : "comment", // multi line comment
-                regex : "\\(\\*",
-                next : "comment"
-            },
-            {
-                token: "string",           // " string
-                regex: '".*?"'
-            },
-            {
-                token: "support.type",
-                regex: '\\b(POSIX file|POSIX path|(date|time) string|quoted form)\\b'
-            },
-            {
-                token: "support.function",
-                regex: '\\b(clipboard info|the clipboard|info for|list (disks|folder)|' +
-          'mount volume|path to|(close|open for) access|(get|set) eof|' +
-          'current date|do shell script|get volume settings|random number|' +
-          'set volume|system attribute|system info|time to GMT|' +
-          '(load|run|store) script|scripting components|' +
-          'ASCII (character|number)|localized string|' +
-          'choose (application|color|file|file name|' +
-          'folder|from list|remote application|URL)|' +
-          'display (alert|dialog))\\b|^\\s*return\\b'
-            },
-            {
-                token: "constant.language",
-                regex: '\\b(text item delimiters|current application|missing value)\\b'
-            },
-            {
-                token: "keyword",
-                regex: '\\b(apart from|aside from|instead of|out of|greater than|' +
-          "isn't|(doesn't|does not) (equal|come before|come after|contain)|" +
-          '(greater|less) than( or equal)?|(starts?|ends|begins?) with|' +
-          'contained by|comes (before|after)|a (ref|reference))\\b'
-            },
-            {
-                token: keywordMapper,
-                regex: "[a-zA-Z][a-zA-Z0-9_]*\\b"
-            }
-        ],
-        "comment": [
-            {
-                token: "comment", // closing comment
-                regex: "\\*\\)",
-                next: "start"
-            }, {
-                defaultToken: "comment"
-            }
-        ]
-    }
-
+    this.$rules = { start: 
+       [ { token: 'support.function.pseudo.mips',
+           regex: '\\b(?:mul|abs|div|divu|mulo|mulou|neg|negu|not|rem|remu|rol|ror|li|seq|sge|sgeu|sgt|sgtu|sle|sleu|sne|b|beqz|bge|bgeu|bgt|bgtu|ble|bleu|blt|bltu|bnez|la|ld|ulh|ulhu|ulw|sd|ush|usw|move|mfc1\\.d|l\\.d|l\\.s|s\\.d|s\\.s)\\b',
+           comment: 'ok actually this are instructions, but one also could call them funtions…' },
+         { token: 'support.function.mips',
+           regex: '\\b(?:abs\\.d|abs\\.s|add|add\\.d|add\\.s|addi|addiu|addu|and|andi|bc1f|bc1t|beq|bgez|bgezal|bgtz|blez|bltz|bltzal|bne|break|c\\.eq\\.d|c\\.eq\\.s|c\\.le\\.d|c\\.le\\.s|c\\.lt\\.d|c\\.lt\\.s|ceil\\.w\\.d|ceil\\.w\\.s|clo|clz|cvt\\.d\\.s|cvt\\.d\\.w|cvt\\.s\\.d|cvt\\.s\\.w|cvt\\.w\\.d|cvt\\.w\\.s|div|div\\.d|div\\.s|divu|eret|floor\\.w\\.d|floor\\.w\\.s|j|jal|jalr|jr|lb|lbu|lh|lhu|ll|lui|lw|lwc1|lwl|lwr|madd|maddu|mfc0|mfc1|mfhi|mflo|mov\\.d|mov\\.s|movf|movf\\.d|movf\\.s|movn|movn\\.d|movn\\.s|movt|movt\\.d|movt\\.s|movz|movz\\.d|movz\\.s|msub|mtc0|mtc1|mthi|mtlo|mul|mul\\.d|mul\\.s|mult|multu|neg\\.d|neg\\.s|nop|nor|or|ori|round\\.w\\.d|round\\.w\\.s|sb|sc|sdc1|sh|sll|sllv|slt|slti|sltiu|sltu|sqrt\\.d|sqrt\\.s|sra|srav|srl|srlv|sub|sub\\.d|sub\\.s|subu|sw|swc1|swl|swr|syscall|teq|teqi|tge|tgei|tgeiu|tgeu|tlt|tlti|tltiu|tltu|trunc\\.w\\.d|trunc\\.w\\.s|xor|xori)\\b' },
+         { token: 'storage.type.mips',
+           regex: '\\.(?:ascii|asciiz|byte|data|double|float|half|kdata|ktext|space|text|word|set\\s*(?:noat|at))\\b' },
+         { token: 'storage.modifier.mips',
+           regex: '\\.(?:align|extern||globl)\\b' },
+         { token: 
+            [ 'entity.name.function.label.mips',
+              'meta.function.label.mips' ],
+           regex: '\\b([A-Za-z0-9_]+)(:)' },
+         { token: 
+            [ 'punctuation.definition.variable.mips',
+              'variable.other.register.usable.by-number.mips' ],
+           regex: '(\\$)(0|[2-9]|1[0-9]|2[0-5]|2[89]|3[0-1])\\b' },
+         { token: 
+            [ 'punctuation.definition.variable.mips',
+              'variable.other.register.usable.by-name.mips' ],
+           regex: '(\\$)(zero|v[01]|a[0-3]|t[0-9]|s[0-7]|gp|sp|fp|ra)\\b' },
+         { token: 
+            [ 'punctuation.definition.variable.mips',
+              'variable.other.register.reserved.mips' ],
+           regex: '(\\$)(at|k[01]|1|2[67])\\b' },
+         { token: 
+            [ 'punctuation.definition.variable.mips',
+              'variable.other.register.usable.floating-point.mips',
+              'variable.other.register.usable.floating-point.mips' ],
+           regex: '(\\$)(f)([0-9]|1[0-9]|2[0-9]|3[0-1])\\b' },
+         { token: 'constant.numeric.float.mips',
+           regex: '\\b\\d+\\.\\d+\\b' },
+         { token: 'constant.numeric.integer.mips',
+           regex: '\\b(?:\\d+|0(?:x|X)[a-fA-F0-9]+)\\b' },
+         { token: 'punctuation.definition.string.begin.mips',
+           regex: '"',
+           push: 
+            [ { token: 'punctuation.definition.string.end.mips',
+                regex: '"',
+                next: 'pop' },
+              { token: 'constant.character.escape.mips',
+                regex: '\\\\[rnt\\\\"]' },
+              { defaultToken: 'string.quoted.double.mips' } ] },
+         { token: 'punctuation.definition.comment.mips',
+           regex: '#',
+           push: 
+            [ { token: 'comment.line.number-sign.mips',
+                regex: '$',
+                next: 'pop' },
+              { defaultToken: 'comment.line.number-sign.mips' } ] } ] }
+    
     this.normalizeRules();
 };
 
-oop.inherits(AppleScriptHighlightRules, TextHighlightRules);
+MIPSAssemblerHighlightRules.metaData = { fileTypes: [ 's', 'mips', 'spim', 'asm' ],
+      keyEquivalent: '^~M',
+      name: 'MIPS Assembler',
+      scopeName: 'source.mips' }
 
-exports.AppleScriptHighlightRules = AppleScriptHighlightRules;
+
+oop.inherits(MIPSAssemblerHighlightRules, TextHighlightRules);
+
+exports.MIPSAssemblerHighlightRules = MIPSAssemblerHighlightRules;
 });
 
 ace.define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"], function(acequire, exports, module) {
@@ -247,25 +213,22 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/applescript",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/applescript_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
+ace.define("ace/mode/mips_assembler",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/mips_assembler_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
-var Tokenizer = acequire("../tokenizer").Tokenizer;
-var AppleScriptHighlightRules = acequire("./applescript_highlight_rules").AppleScriptHighlightRules;
+var MIPSAssemblerHighlightRules = acequire("./mips_assembler_highlight_rules").MIPSAssemblerHighlightRules;
 var FoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
-    this.HighlightRules = AppleScriptHighlightRules;
+    this.HighlightRules = MIPSAssemblerHighlightRules;
     this.foldingRules = new FoldMode();
 };
 oop.inherits(Mode, TextMode);
 
 (function() {
-    this.lineCommentStart = "--";
-    this.blockComment = {start: "(*", end: "*)"};
-    this.$id = "ace/mode/applescript";
+    this.$id = "ace/mode/mips_assembler"
 }).call(Mode.prototype);
 
 exports.Mode = Mode;

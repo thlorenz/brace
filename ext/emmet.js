@@ -1106,18 +1106,18 @@ exports.runEmmetCommand = function(editor) {
             if (!editor.selection.isEmpty())
                 return false;
         }
-
+        
         if (this.action == "wrap_with_abbreviation") {
             return setTimeout(function() {
                 actions.run("wrap_with_abbreviation", editorProxy);
             }, 0);
         }
-
+        
         var pos = editor.selection.lead;
         var token = editor.session.getTokenAt(pos.row, pos.column);
         if (token && /\btag\b/.test(token.type))
             return false;
-
+        
         var result = actions.run(this.action, editorProxy);
     } catch(e) {
         editor._signal("changeStatus", typeof e == "string" ? e : e.message);
