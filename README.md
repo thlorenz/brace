@@ -6,8 +6,8 @@
 
 ***This badge shows which browsers support annotations, however the editor itself works in pretty much every browser.***
 
-[Try it in your browser](http://thlorenz.github.io/brace/).
-
+[![screenshot](assets/brace.png)](http://thlorenz.github.io/brace/)
+*[Try it in your browser](http://thlorenz.github.io/brace/)*
 
 ## Installation
 
