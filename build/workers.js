@@ -9,7 +9,7 @@ var workers = module.exports =  {
   , lua        :  [ 'lua', 'luapage' ]
   , php        :  [ 'php' ]
   , xquery     :  [ 'xquery' ]
-  , xml        :  [ 'xml' ]
+  , xml        :  [ 'xml', 'svg', 'markdown' ]
 };
 
 module.exports.supported = Object.keys(workers)
