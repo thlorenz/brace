@@ -27,13 +27,14 @@ var test = require('tape');
     head.appendChild(style);
   }
 
-  ['javascript', 'coffee', 'json', 'lua'].forEach(createEditorElem);
+  ['javascript', 'coffee', 'json', 'lua', 'xml'].forEach(createEditorElem);
   loadStyle();
 
   require('./fixtures/javascript-editor');
   require('./fixtures/coffee-editor');
   require('./fixtures/json-editor');
   require('./fixtures/lua-editor');
+  require('./fixtures/xml-editor');
 }()
 
 test('error annotations provided by inlined worker', function (t) {
@@ -47,7 +48,8 @@ test('error annotations provided by inlined worker', function (t) {
   var jsCount     =  0
     , coffeeCount =  0
     , jsonCount   =  0
-    , luaCount    =  0;
+    , luaCount    =  0
+    , xmlCount   =  0;
 
   var max = 10; // give it a max of 10 seconds
 
@@ -83,5 +85,12 @@ test('error annotations provided by inlined worker', function (t) {
     t.equal(err.line, '6', 'on line 6')
 
     t.end()
+  }()
+  +function xml() {
+    var err = getError('xml')
+    if (!err.length && ++xmlCount < max) return setTimeout(xml, 1000)
+
+    t.equal(err.length, 1, 'xml editor shows one error')
+    t.equal(err.line, '5', 'on line 5')
   }()
 })
