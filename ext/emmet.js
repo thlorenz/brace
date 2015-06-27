@@ -916,7 +916,7 @@ AceEmmetEditor.prototype = {
         this.indentation = editor.session.getTabString();
         if (!emmet)
             emmet = window.emmet;
-        emmet.acequire("resources").setVariable("indentation", this.indentation);
+        emmet.require("resources").setVariable("indentation", this.indentation);
         this.$syntax = null;
         this.$syntax = this.getSyntax();
     },
@@ -1002,7 +1002,7 @@ AceEmmetEditor.prototype = {
           case "xsl":
             return "xml";
           case "html":
-            var profile = emmet.acequire("resources").getVariable("profile");
+            var profile = emmet.require("resources").getVariable("profile");
             if (!profile)
                 profile = this.ace.session.getLines(0,2).join("").search(/<!DOCTYPE[^>]+XHTML/i) != -1 ? "xhtml": "html";
             return profile;
@@ -1022,9 +1022,9 @@ AceEmmetEditor.prototype = {
         var base = 1000;
         var zeroBase = 0;
         var lastZero = null;
-        var range = emmet.acequire('range');
-        var ts = emmet.acequire('tabStops');
-        var settings = emmet.acequire('resources').getVocabulary("user");
+        var range = emmet.require('range');
+        var ts = emmet.require('tabStops');
+        var settings = emmet.require('resources').getVocabulary("user");
         var tabstopOptions = {
             tabstop: function(data) {
                 var group = parseInt(data.group, 10);
@@ -1059,7 +1059,7 @@ AceEmmetEditor.prototype = {
         if (settings.variables['insert_final_tabstop'] && !/\$\{0\}$/.test(value)) {
             value += '${0}';
         } else if (lastZero) {
-            value = emmet.acequire('utils').replaceSubstring(value, '${0}', lastZero);
+            value = emmet.require('utils').replaceSubstring(value, '${0}', lastZero);
         }
         
         return value;
@@ -1100,7 +1100,7 @@ exports.runEmmetCommand = function(editor) {
         editorProxy.setupContext(editor);
         if (editorProxy.getSyntax() == "php")
             return false;
-        var actions = emmet.acequire("actions");
+        var actions = emmet.require("actions");
     
         if (this.action == "expand_abbreviation_with_tab") {
             if (!editor.selection.isEmpty())

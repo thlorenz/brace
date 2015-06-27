@@ -9,5 +9,8 @@ module.exports = function (src) {
     
     // unreplace the ones we shouldn't have replaced
     .replace(/['"]acequire['"]/g, '"require"')
+
+    // unreplace Emmet's require method
+    .replace(/emmet\.acequire/g, 'emmet.require')
   ;
 };
