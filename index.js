@@ -3639,7 +3639,7 @@ init(true);function init(packaged) {
 
     options.packaged = packaged || acequire.packaged || module.packaged || (global.define && define.packaged);
 
-    if (!global.document)
+    if (!global || !global.document)
         return "";
 
     var scriptOptions = {};
