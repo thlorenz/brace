@@ -9,7 +9,7 @@ var DocCommentHighlightRules = function() {
         "start" : [ {
             token : "comment.doc.tag",
             regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        },
+        }, 
         DocCommentHighlightRules.getTagRule(),
         {
             defaultToken : "comment.doc",
@@ -65,7 +65,7 @@ ace.define("ace/mode/golang_highlight_rules",["require","exports","module","ace/
             "float64|complex64|complex128|byte|rune|uint|int|uintptr|bool|error"
         );
         var builtinFunctions = (
-            "make|close|new|panic|recover"
+            "new|close|cap|copy|panic|panicln|print|println|len|make|delete|real|recover|imag|append"
         );
         var builtinConstants = ("nil|true|false|iota");
 
@@ -74,7 +74,9 @@ ace.define("ace/mode/golang_highlight_rules",["require","exports","module","ace/
             "constant.language": builtinConstants,
             "support.function": builtinFunctions,
             "support.type": builtinTypes
-        }, "identifier");
+        }, "");
+        
+        var stringEscapeRe = "\\\\(?:[0-7]{3}|x\\h{2}|u{4}|U\\h{6}|[abfnrtv'\"\\\\])".replace(/\\h/g, "[a-fA-F\\d]");
 
         this.$rules = {
             "start" : [
@@ -84,32 +86,43 @@ ace.define("ace/mode/golang_highlight_rules",["require","exports","module","ace/
                 },
                 DocCommentHighlightRules.getStartRule("doc-start"),
                 {
-                    token : "comment", // multi line comment
+                    token : "comment.start", // multi line comment
                     regex : "\\/\\*",
                     next : "comment"
                 }, {
                     token : "string", // single line
-                    regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
+                    regex : /"(?:[^"\\]|\\.)*?"/
                 }, {
-                    token : "string", // single line
-                    regex : '[`](?:[^`]*)[`]'
-                }, {
-                    token : "string", // multi line string start
-                    merge : true,
+                    token : "string", // raw
                     regex : '[`](?:[^`]*)$',
                     next : "bqstring"
                 }, {
                     token : "constant.numeric", // rune
-                    regex : "['](?:(?:\\\\.)|(?:[^'\\\\]))[']"
+                    regex : "'(?:[^\\'\uD800-\uDBFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|" + stringEscapeRe.replace('"', '')  + ")'"
                 }, {
                     token : "constant.numeric", // hex
-                    regex : "0[xX][0-9a-fA-F]+\\b"
+                    regex : "0[xX][0-9a-fA-F]+\\b" 
                 }, {
                     token : "constant.numeric", // float
                     regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
                 }, {
-                    token : keywordMapper,
-                    regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+                    token : ["keyword", "text", "entity.name.function"],
+                    regex : "(func)(\\s+)([a-zA-Z_$][a-zA-Z0-9_$]*)\\b"
+                }, {
+                    token : function(val) {
+                        if (val[val.length - 1] == "(") {
+                            return [{
+                                type: keywordMapper(val.slice(0, -1)) || "support.function",
+                                value: val.slice(0, -1)
+                            }, {
+                                type: "paren.lparen",
+                                value: val.slice(-1)
+                            }];
+                        }
+                        
+                        return keywordMapper(val) || "identifier";
+                    },
+                    regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b\\(?"
                 }, {
                     token : "keyword.operator",
                     regex : "!|\\$|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|==|=|!=|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|%=|\\+=|\\-=|&=|\\^="
@@ -129,22 +142,20 @@ ace.define("ace/mode/golang_highlight_rules",["require","exports","module","ace/
             ],
             "comment" : [
                 {
-                    token : "comment", // closing comment
-                    regex : ".*?\\*\\/",
+                    token : "comment.end",
+                    regex : "\\*\\/",
                     next : "start"
                 }, {
-                    token : "comment", // comment spanning whole line
-                    regex : ".+"
+                    defaultToken : "comment",
                 }
             ],
             "bqstring" : [
                 {
                     token : "string",
-                    regex : '(?:[^`]*)`',
+                    regex : '`',
                     next : "start"
                 }, {
-                    token : "string",
-                    regex : '.+'
+                    defaultToken : "string"
                 }
             ]
         };
@@ -431,15 +442,15 @@ var CstyleBehaviour = function() {
                 var line = session.doc.getLine(cursor.row);
                 var leftChar = line.substring(cursor.column-1, cursor.column);
                 var rightChar = line.substring(cursor.column, cursor.column + 1);
-
+                
                 var token = session.getTokenAt(cursor.row, cursor.column);
                 var rightToken = session.getTokenAt(cursor.row, cursor.column + 1);
                 if (leftChar == "\\" && token && /escape/.test(token.type))
                     return null;
-
-                var stringBefore = token && /string/.test(token.type);
-                var stringAfter = !rightToken || /string/.test(rightToken.type);
-
+                
+                var stringBefore = token && /string|escape/.test(token.type);
+                var stringAfter = !rightToken || /string|escape/.test(rightToken.type);
+                
                 var pair;
                 if (rightChar == quote) {
                     pair = stringBefore !== stringAfter;
@@ -574,35 +585,35 @@ var FoldMode = exports.FoldMode = function(commentRegex) {
 oop.inherits(FoldMode, BaseFoldMode);
 
 (function() {
-
+    
     this.foldingStartMarker = /(\{|\[)[^\}\]]*$|^\s*(\/\*)/;
     this.foldingStopMarker = /^[^\[\{]*(\}|\])|^[\s\*]*(\*\/)/;
     this.singleLineBlockCommentRe= /^\s*(\/\*).*\*\/\s*$/;
     this.tripleStarBlockCommentRe = /^\s*(\/\*\*\*).*\*\/\s*$/;
-    this.startRegionRe = /^\s*(\/\*|\/\/)#region\b/;
+    this.startRegionRe = /^\s*(\/\*|\/\/)#?region\b/;
     this._getFoldWidgetBase = this.getFoldWidget;
     this.getFoldWidget = function(session, foldStyle, row) {
         var line = session.getLine(row);
-
+    
         if (this.singleLineBlockCommentRe.test(line)) {
             if (!this.startRegionRe.test(line) && !this.tripleStarBlockCommentRe.test(line))
                 return "";
         }
-
+    
         var fw = this._getFoldWidgetBase(session, foldStyle, row);
-
+    
         if (!fw && this.startRegionRe.test(line))
             return "start"; // lineCommentRegionStart
-
+    
         return fw;
     };
 
     this.getFoldWidgetRange = function(session, foldStyle, row, forceMultiline) {
         var line = session.getLine(row);
-
+        
         if (this.startRegionRe.test(line))
             return this.getCommentRegionBlock(session, line, row);
-
+        
         var match = line.match(this.foldingStartMarker);
         if (match) {
             var i = match.index;
@@ -667,13 +678,12 @@ oop.inherits(FoldMode, BaseFoldMode);
         
         return new Range(startRow, startColumn, endRow, session.getLine(endRow).length);
     };
-
     this.getCommentRegionBlock = function(session, line, row) {
         var startColumn = line.search(/\s*$/);
         var maxRow = session.getLength();
         var startRow = row;
-
-        var re = /^\s*(?:\/\*|\/\/)#(end)?region\b/;
+        
+        var re = /^\s*(?:\/\*|\/\/|--)#?(end)?region\b/;
         var depth = 1;
         while (++row < maxRow) {
             line = session.getLine(row);
@@ -708,6 +718,7 @@ var Mode = function() {
     this.HighlightRules = GolangHighlightRules;
     this.$outdent = new MatchingBraceOutdent();
     this.foldingRules = new CStyleFoldMode();
+    this.$behaviour = new CstyleBehaviour();
 };
 oop.inherits(Mode, TextMode);
 

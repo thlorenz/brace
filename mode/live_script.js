@@ -6,21 +6,21 @@ var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var LiveScriptHighlightRules = function() {
 
-    this.$rules = { start:
+    this.$rules = { start: 
        [ { token: 'punctuation.definition.comment.livescript',
            regex: '\\/\\*',
-           push:
+           push: 
             [ { token: 'punctuation.definition.comment.livescript',
                 regex: '\\*\\/',
                 next: 'pop' },
               { token: 'storage.type.annotation.livescriptscript',
                 regex: '@\\w*' },
               { defaultToken: 'comment.block.livescript' } ] },
-         { token:
+         { token: 
             [ 'punctuation.definition.comment.livescript',
               'comment.line.number-sign.livescript' ],
            regex: '(#)(?!\\{)(.*$)' },
-         { token:
+         { token: 
             [ 'variable.parameter.function.livescript',
               'meta.inline.function.livescript',
               'storage.type.function.livescript',
@@ -30,7 +30,7 @@ var LiveScriptHighlightRules = function() {
               'storage.type.function.livescript' ],
            regex: '(\\s*\\!?\\(\\s*[^()]*?\\))(\\s*)(!?[~-]{1,2}>)|(\\s*\\!?)(\\(?[^()]*?\\)?)(\\s*)(<[~-]{1,2}!?)',
            comment: 'match stuff like: a -> … ' },
-         { token:
+         { token: 
             [ 'keyword.operator.new.livescript',
               'meta.class.instance.constructor',
               'entity.name.type.instance.livescript' ],
@@ -39,14 +39,14 @@ var LiveScriptHighlightRules = function() {
            regex: '\\bp(?:ackage|r(?:ivate|otected)|ublic)|interface|enum|static|yield\\b' },
          { token: 'punctuation.definition.string.begin.livescript',
            regex: '\'\'\'',
-           push:
+           push: 
             [ { token: 'punctuation.definition.string.end.livescript',
                 regex: '\'\'\'',
                 next: 'pop' },
               { defaultToken: 'string.quoted.heredoc.livescript' } ] },
          { token: 'punctuation.definition.string.begin.livescript',
            regex: '"""',
-           push:
+           push: 
             [ { token: 'punctuation.definition.string.end.livescript',
                 regex: '"""',
                 next: 'pop' },
@@ -56,7 +56,7 @@ var LiveScriptHighlightRules = function() {
               { defaultToken: 'string.quoted.double.heredoc.livescript' } ] },
          { token: 'punctuation.definition.string.begin.livescript',
            regex: '``',
-           push:
+           push: 
             [ { token: 'punctuation.definition.string.end.livescript',
                 regex: '``',
                 next: 'pop' },
@@ -65,7 +65,7 @@ var LiveScriptHighlightRules = function() {
               { defaultToken: 'string.quoted.script.livescript' } ] },
          { token: 'string.array-literal.livescript',
            regex: '<\\[',
-           push:
+           push: 
             [ { token: 'string.array-literal.livescript',
                 regex: '\\]>',
                 next: 'pop' },
@@ -74,7 +74,7 @@ var LiveScriptHighlightRules = function() {
            regex: '/{2}(?![\\s=/*+{}?]).*?[^\\\\]/[igmy]{0,4}(?![a-zA-Z0-9])/{2}' },
          { token: 'string.regexp.livescript',
            regex: '/{2}$',
-           push:
+           push: 
             [ { token: 'string.regexp.livescript',
                 regex: '/{2}[imgy]{0,4}',
                 next: 'pop' },
@@ -83,7 +83,7 @@ var LiveScriptHighlightRules = function() {
               { defaultToken: 'string.regexp.livescript' } ] },
          { token: 'string.regexp.livescript',
            regex: '/{2}',
-           push:
+           push: 
             [ { token: 'string.regexp.livescript',
                 regex: '/{2}[imgy]{0,4}',
                 next: 'pop' },
@@ -105,7 +105,7 @@ var LiveScriptHighlightRules = function() {
            regex: 'and=|or=|%|&|\\^|\\*|\\/|(?<![a-zA-Z$_])(?:\\-)?\\-(?!\\-?>)|\\+\\+|\\+|~(?!~?>)|==|=|!=|<=|>=|<<=|>>=|>>>=|<>|<(?!\\[)|(?<!\\])>|(?<!\\w)!(?!(?:[~\\-]+)?>)|&&|\\.\\.(?:\\.)?|\\s\\.\\s|\\?|\\||\\|\\||\\:|\\*=|(?<!\\()/=|%=|\\+=|\\-=|\\.=|&=|\\(\\.|\\.\\)|\\^=',
            TODO: 'FIXME: regexp doesn\'t have js equivalent',
            originalRegex: '(?x)\n\t\t\t\tand=|or=|%|&|\\^|\\*|\\/|(?<![a-zA-Z$_])(\\-)?\\-(?!\\-?>)|\\+\\+|\\+|\n\t\t\t\t~(?!~?>)|==|=|!=|<=|>=|<<=|>>=|\n\t\t\t\t>>>=|<>|<(?!\\[)|(?<!\\])>|(?<!\\w)!(?!([~\\-]+)?>)|&&|\\.\\.(\\.)?|\\s\\.\\s|\\?|\\||\\|\\||\\:|\\*=|(?<!\\()/=|%=|\\+=|\\-=|\\.=|&=|\\(\\.|\\.\\)|\n\t\t\t\t\\^=\n\t\t\t' },
-         { token:
+         { token: 
             [ 'variable.assignment.livescript',
               'variable.assignment.livescript',
               'variable.assignment.livescript',
@@ -117,7 +117,7 @@ var LiveScriptHighlightRules = function() {
            regex: '(?<=\\s|^)[\\[\\{](?=.*?[\\]\\}]\\s+[:=])',
            TODO: 'FIXME: regexp doesn\'t have js equivalent',
            originalRegex: '(?<=\\s|^)([\\[\\{])(?=.*?[\\]\\}]\\s+[:=])',
-           push:
+           push: 
             [ { token: 'keyword.operator.livescript',
                 regex: '[\\]\\}]\\s*[:=]',
                 next: 'pop' },
@@ -127,7 +127,7 @@ var LiveScriptHighlightRules = function() {
               { include: '#double_quoted_string' },
               { include: '#numeric' },
               { defaultToken: 'meta.variable.assignment.destructured.livescript' } ] },
-         { token:
+         { token: 
             [ 'meta.function.livescript',
               'entity.name.function.livescript',
               'entity.name.function.livescript',
@@ -155,7 +155,7 @@ var LiveScriptHighlightRules = function() {
            regex: '\\b(?<!\\.)(?:super|this|extends)(?!\\s*[:=])\\b',
            TODO: 'FIXME: regexp doesn\'t have js equivalent',
            originalRegex: '\\b(?<!\\.)(super|this|extends)(?!\\s*[:=])\\b' },
-         { token:
+         { token: 
             [ 'storage.type.class.livescript',
               'meta.class.livescript',
               'entity.name.type.class.livescript',
@@ -221,18 +221,18 @@ var LiveScriptHighlightRules = function() {
          { include: '#single_quoted_string' },
          { include: '#double_quoted_string' },
          { include: '#numeric' } ],
-      '#backslash_string':
+      '#backslash_string': 
        [ { token: 'string.quoted.single.livescript',
            regex: '\\\\(?:[\\\\)\\s,\\};\\]])?',
-           push:
+           push: 
             [ { token: 'punctuation.definition.string.end.livescript',
                 regex: '[\\\\)\\s,\\};\\]]',
                 next: 'pop' },
               { defaultToken: 'string.quoted.single.livescript' } ] } ],
-      '#double_quoted_string':
+      '#double_quoted_string': 
        [ { token: 'punctuation.definition.string.begin.livescript',
            regex: '"',
-           push:
+           push: 
             [ { token: 'punctuation.definition.string.end.livescript',
                 regex: '"',
                 next: 'pop' },
@@ -240,66 +240,66 @@ var LiveScriptHighlightRules = function() {
                 regex: '\\\\(?:x[\\da-fA-F]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]|37[0-7]?|[4-7][0-7]?|.)' },
               { include: '#interpolated_livescript' },
               { defaultToken: 'string.quoted.double.livescript' } ] } ],
-      '#embedded_comment':
-       [ { token:
+      '#embedded_comment': 
+       [ { token: 
             [ 'punctuation.definition.comment.livescript',
               'comment.line.number-sign.livescript' ],
            regex: '(?<!\\\\)(#)(.*$)',
            TODO: 'FIXME: regexp doesn\'t have js equivalent',
            originalRegex: '(?<!\\\\)(#).*$\\n' } ],
-      '#embedded_spaced_comment':
-       [ { token:
+      '#embedded_spaced_comment': 
+       [ { token: 
             [ 'punctuation.definition.comment.livescript',
               'comment.line.number-sign.livescript' ],
            regex: '(?<!\\\\)(#\\s)(.*$)',
            TODO: 'FIXME: regexp doesn\'t have js equivalent',
            originalRegex: '(?<!\\\\)(#\\s).*$\\n' } ],
-      '#constructor_variable':
+      '#constructor_variable': 
        [ { token: 'variable.other.readwrite.constructor.livescript',
            regex: '[a-zA-Z$_][\\w$-]*@{2}(?:[a-zA-Z$_][\\w$-]*)?' } ],
-      '#instance_variable':
+      '#instance_variable': 
        [ { token: 'variable.other.readwrite.instance.livescript',
            regex: '(?<!\\S)@(?:[a-zA-Z$_][\\w$-]*)?',
            TODO: 'FIXME: regexp doesn\'t have js equivalent',
            originalRegex: '(?<!\\S)(@)([a-zA-Z$_][\\w$-]*)?' } ],
-      '#interpolated_livescript':
-       [ { todo:
+      '#interpolated_livescript': 
+       [ { todo: 
             { token: 'punctuation.section.embedded.livescript',
               regex: '\\#\\{',
-              push:
+              push: 
                [ { token: 'punctuation.section.embedded.livescript',
                    regex: '\\}',
                    next: 'pop' },
                  { include: '$self' },
                  { defaultToken: 'source.livescript.embedded.source' } ] } },
-         { todo:
+         { todo: 
             { token: 'source.livescript.embedded.source.simple',
               regex: '\\#',
-              push:
+              push: 
                [ { token: 'source.livescript.embedded.source.simple',
                    regex: '',
                    next: 'pop' },
                  { include: '$self' },
                  { defaultToken: 'source.livescript.embedded.source.simple' } ] } } ],
-      '#numeric':
+      '#numeric': 
        [ { token: 'constant.numeric.livescript',
            regex: '(?<![\\$@a-zA-Z_])(?:[0-9]+r[0-9_]+|(?:16r|0[xX])[0-9a-fA-F_]+|[0-9]+(?:\\.[0-9_]+)?(?:e[+\\-]?[0-9_]+)?[_a-zA-Z]*)',
            TODO: 'FIXME: regexp doesn\'t have js equivalent',
            originalRegex: '(?<![\\$@a-zA-Z_])(([0-9]+r[0-9_]+)|((16r|0[xX])[0-9a-fA-F_]+)|([0-9]+(\\.[0-9_]+)?(e[+\\-]?[0-9_]+)?)[_a-zA-Z]*)' } ],
-      '#single_quoted_string':
+      '#single_quoted_string': 
        [ { token: 'punctuation.definition.string.begin.livescript',
            regex: '\'',
-           push:
+           push: 
             [ { token: 'punctuation.definition.string.end.livescript',
                 regex: '\'',
                 next: 'pop' },
               { token: 'constant.character.escape.livescript',
                 regex: '\\\\(?:x[\\da-fA-F]{2}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.)' },
               { defaultToken: 'string.quoted.single.livescript' } ] } ],
-      '#variable_name':
+      '#variable_name': 
        [ { token: 'variable.assignment.livescript',
            regex: '[a-zA-Z\\$_][\\w$-]*(?:\\.\\w+)*(?!\\-)' } ] }
-
+    
     this.normalizeRules();
 };
 
@@ -338,7 +338,7 @@ var FoldMode = exports.FoldMode = function(commentRegex) {
 oop.inherits(FoldMode, BaseFoldMode);
 
 (function() {
-
+    
     this.foldingStartMarker = /(\{|\[)[^\}\]]*$|^\s*(\/\*)/;
     this.foldingStopMarker = /^[^\[\{]*(\}|\])|^[\s\*]*(\*\/)/;
     this.singleLineBlockCommentRe= /^\s*(\/\*).*\*\/\s*$/;
@@ -347,42 +347,42 @@ oop.inherits(FoldMode, BaseFoldMode);
     this._getFoldWidgetBase = this.getFoldWidget;
     this.getFoldWidget = function(session, foldStyle, row) {
         var line = session.getLine(row);
-
+    
         if (this.singleLineBlockCommentRe.test(line)) {
             if (!this.startRegionRe.test(line) && !this.tripleStarBlockCommentRe.test(line))
                 return "";
         }
-
+    
         var fw = this._getFoldWidgetBase(session, foldStyle, row);
-
+    
         if (!fw && this.startRegionRe.test(line))
             return "start"; // lineCommentRegionStart
-
+    
         return fw;
     };
 
     this.getFoldWidgetRange = function(session, foldStyle, row, forceMultiline) {
         var line = session.getLine(row);
-
+        
         if (this.startRegionRe.test(line))
             return this.getCommentRegionBlock(session, line, row);
-
+        
         var match = line.match(this.foldingStartMarker);
         if (match) {
             var i = match.index;
 
             if (match[1])
                 return this.openingBracketBlock(session, match[1], row, i);
-
+                
             var range = session.getCommentFoldRange(row, i + match[0].length, 1);
-
+            
             if (range && !range.isMultiLine()) {
                 if (forceMultiline) {
                     range = this.getSectionRange(session, row);
                 } else if (foldStyle != "all")
                     range = null;
             }
-
+            
             return range;
         }
 
@@ -399,7 +399,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             return session.getCommentFoldRange(row, i, -1);
         }
     };
-
+    
     this.getSectionRange = function(session, row) {
         var line = session.getLine(row);
         var startIndent = line.search(/\S/);
@@ -416,7 +416,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             if  (startIndent > indent)
                 break;
             var subRange = this.getFoldWidgetRange(session, "all", row);
-
+            
             if (subRange) {
                 if (subRange.start.row <= startRow) {
                     break;
@@ -428,15 +428,15 @@ oop.inherits(FoldMode, BaseFoldMode);
             }
             endRow = row;
         }
-
+        
         return new Range(startRow, startColumn, endRow, session.getLine(endRow).length);
     };
-
+    
     this.getCommentRegionBlock = function(session, line, row) {
         var startColumn = line.search(/\s*$/);
         var maxRow = session.getLength();
         var startRow = row;
-
+        
         var re = /^\s*(?:\/\*|\/\/)#(end)?region\b/;
         var depth = 1;
         while (++row < maxRow) {

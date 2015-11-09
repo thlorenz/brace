@@ -9,7 +9,7 @@ var DocCommentHighlightRules = function() {
         "start" : [ {
             token : "comment.doc.tag",
             regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        },
+        }, 
         DocCommentHighlightRules.getTagRule(),
         {
             defaultToken : "comment.doc",

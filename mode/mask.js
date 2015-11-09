@@ -9,7 +9,7 @@ var DocCommentHighlightRules = function() {
         "start" : [ {
             token : "comment.doc.tag",
             regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        },
+        }, 
         DocCommentHighlightRules.getTagRule(),
         {
             defaultToken : "comment.doc",
@@ -54,6 +54,7 @@ ace.define("ace/mode/javascript_highlight_rules",["require","exports","module","
 var oop = acequire("../lib/oop");
 var DocCommentHighlightRules = acequire("./doc_comment_highlight_rules").DocCommentHighlightRules;
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
+var identifierRe = "[a-zA-Z\\$_\u00a1-\uffff][a-zA-Z\\d\\$_\u00a1-\uffff]*\\b";
 
 var JavaScriptHighlightRules = function(options) {
     var keywordMapper = this.createKeywordMapper({
@@ -83,7 +84,6 @@ var JavaScriptHighlightRules = function(options) {
         "constant.language.boolean": "true|false"
     }, "identifier");
     var kwBeforeRe = "case|do|else|finally|in|instanceof|return|throw|try|typeof|yield|void";
-    var identifierRe = "[a-zA-Z\\$_\u00a1-\uffff][a-zA-Z\\d\\$_\u00a1-\uffff]*\\b";
 
     var escapedRe = "\\\\(?:x[0-9a-fA-F]{2}|" + // hex
         "u[0-9a-fA-F]{4}|" + // unicode
@@ -172,15 +172,6 @@ var JavaScriptHighlightRules = function(options) {
                 regex : "(?:" + kwBeforeRe + ")\\b",
                 next : "start"
             }, {
-                token : ["punctuation.operator", "support.function"],
-                regex : /(\.)(s(?:h(?:ift|ow(?:Mod(?:elessDialog|alDialog)|Help))|croll(?:X|By(?:Pages|Lines)?|Y|To)?|t(?:op|rike)|i(?:n|zeToContent|debar|gnText)|ort|u(?:p|b(?:str(?:ing)?)?)|pli(?:ce|t)|e(?:nd|t(?:Re(?:sizable|questHeader)|M(?:i(?:nutes|lliseconds)|onth)|Seconds|Ho(?:tKeys|urs)|Year|Cursor|Time(?:out)?|Interval|ZOptions|Date|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Date|FullYear)|FullYear|Active)|arch)|qrt|lice|avePreferences|mall)|h(?:ome|andleEvent)|navigate|c(?:har(?:CodeAt|At)|o(?:s|n(?:cat|textual|firm)|mpile)|eil|lear(?:Timeout|Interval)?|a(?:ptureEvents|ll)|reate(?:StyleSheet|Popup|EventObject))|t(?:o(?:GMTString|S(?:tring|ource)|U(?:TCString|pperCase)|Lo(?:caleString|werCase))|est|a(?:n|int(?:Enabled)?))|i(?:s(?:NaN|Finite)|ndexOf|talics)|d(?:isableExternalCapture|ump|etachEvent)|u(?:n(?:shift|taint|escape|watch)|pdateCommands)|j(?:oin|avaEnabled)|p(?:o(?:p|w)|ush|lugins.refresh|a(?:ddings|rse(?:Int|Float)?)|r(?:int|ompt|eference))|e(?:scape|nableExternalCapture|val|lementFromPoint|x(?:p|ec(?:Script|Command)?))|valueOf|UTC|queryCommand(?:State|Indeterm|Enabled|Value)|f(?:i(?:nd|le(?:ModifiedDate|Size|CreatedDate|UpdatedDate)|xed)|o(?:nt(?:size|color)|rward)|loor|romCharCode)|watch|l(?:ink|o(?:ad|g)|astIndexOf)|a(?:sin|nchor|cos|t(?:tachEvent|ob|an(?:2)?)|pply|lert|b(?:s|ort))|r(?:ou(?:nd|teEvents)|e(?:size(?:By|To)|calc|turnValue|place|verse|l(?:oad|ease(?:Capture|Events)))|andom)|g(?:o|et(?:ResponseHeader|M(?:i(?:nutes|lliseconds)|onth)|Se(?:conds|lection)|Hours|Year|Time(?:zoneOffset)?|Da(?:y|te)|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Da(?:y|te)|FullYear)|FullYear|A(?:ttention|llResponseHeaders)))|m(?:in|ove(?:B(?:y|elow)|To(?:Absolute)?|Above)|ergeAttributes|a(?:tch|rgins|x))|b(?:toa|ig|o(?:ld|rderWidths)|link|ack))\b(?=\()/
-            }, {
-                token : ["punctuation.operator", "support.function.dom"],
-                regex : /(\.)(s(?:ub(?:stringData|mit)|plitText|e(?:t(?:NamedItem|Attribute(?:Node)?)|lect))|has(?:ChildNodes|Feature)|namedItem|c(?:l(?:ick|o(?:se|neNode))|reate(?:C(?:omment|DATASection|aption)|T(?:Head|extNode|Foot)|DocumentFragment|ProcessingInstruction|E(?:ntityReference|lement)|Attribute))|tabIndex|i(?:nsert(?:Row|Before|Cell|Data)|tem)|open|delete(?:Row|C(?:ell|aption)|T(?:Head|Foot)|Data)|focus|write(?:ln)?|a(?:dd|ppend(?:Child|Data))|re(?:set|place(?:Child|Data)|move(?:NamedItem|Child|Attribute(?:Node)?)?)|get(?:NamedItem|Element(?:sBy(?:Name|TagName|ClassName)|ById)|Attribute(?:Node)?)|blur)\b(?=\()/
-            }, {
-                token : ["punctuation.operator", "support.constant"],
-                regex : /(\.)(s(?:ystemLanguage|cr(?:ipts|ollbars|een(?:X|Y|Top|Left))|t(?:yle(?:Sheets)?|atus(?:Text|bar)?)|ibling(?:Below|Above)|ource|uffixes|e(?:curity(?:Policy)?|l(?:ection|f)))|h(?:istory|ost(?:name)?|as(?:h|Focus))|y|X(?:MLDocument|SLDocument)|n(?:ext|ame(?:space(?:s|URI)|Prop))|M(?:IN_VALUE|AX_VALUE)|c(?:haracterSet|o(?:n(?:structor|trollers)|okieEnabled|lorDepth|mp(?:onents|lete))|urrent|puClass|l(?:i(?:p(?:boardData)?|entInformation)|osed|asses)|alle(?:e|r)|rypto)|t(?:o(?:olbar|p)|ext(?:Transform|Indent|Decoration|Align)|ags)|SQRT(?:1_2|2)|i(?:n(?:ner(?:Height|Width)|put)|ds|gnoreCase)|zIndex|o(?:scpu|n(?:readystatechange|Line)|uter(?:Height|Width)|p(?:sProfile|ener)|ffscreenBuffering)|NEGATIVE_INFINITY|d(?:i(?:splay|alog(?:Height|Top|Width|Left|Arguments)|rectories)|e(?:scription|fault(?:Status|Ch(?:ecked|arset)|View)))|u(?:ser(?:Profile|Language|Agent)|n(?:iqueID|defined)|pdateInterval)|_content|p(?:ixelDepth|ort|ersonalbar|kcs11|l(?:ugins|atform)|a(?:thname|dding(?:Right|Bottom|Top|Left)|rent(?:Window|Layer)?|ge(?:X(?:Offset)?|Y(?:Offset)?))|r(?:o(?:to(?:col|type)|duct(?:Sub)?|mpter)|e(?:vious|fix)))|e(?:n(?:coding|abledPlugin)|x(?:ternal|pando)|mbeds)|v(?:isibility|endor(?:Sub)?|Linkcolor)|URLUnencoded|P(?:I|OSITIVE_INFINITY)|f(?:ilename|o(?:nt(?:Size|Family|Weight)|rmName)|rame(?:s|Element)|gColor)|E|whiteSpace|l(?:i(?:stStyleType|n(?:eHeight|kColor))|o(?:ca(?:tion(?:bar)?|lName)|wsrc)|e(?:ngth|ft(?:Context)?)|a(?:st(?:M(?:odified|atch)|Index|Paren)|yer(?:s|X)|nguage))|a(?:pp(?:MinorVersion|Name|Co(?:deName|re)|Version)|vail(?:Height|Top|Width|Left)|ll|r(?:ity|guments)|Linkcolor|bove)|r(?:ight(?:Context)?|e(?:sponse(?:XML|Text)|adyState))|global|x|m(?:imeTypes|ultiline|enubar|argin(?:Right|Bottom|Top|Left))|L(?:N(?:10|2)|OG(?:10E|2E))|b(?:o(?:ttom|rder(?:Width|RightWidth|BottomWidth|Style|Color|TopWidth|LeftWidth))|ufferDepth|elow|ackground(?:Color|Image)))\b/
-            }, {
                 token : ["support.constant"],
                 regex : /that\b/
             }, {
@@ -190,8 +181,12 @@ var JavaScriptHighlightRules = function(options) {
                 token : keywordMapper,
                 regex : identifierRe
             }, {
+                token : "punctuation.operator",
+                regex : /[.](?![.])/,
+                next  : "property"
+            }, {
                 token : "keyword.operator",
-                regex : /--|\+\+|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\|\||\?\:|[!$%&*+\-~\/^]=?/,
+                regex : /--|\+\+|\.{3}|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\|\||\?\:|[!$%&*+\-~\/^]=?/,
                 next  : "start"
             }, {
                 token : "punctuation.operator",
@@ -207,6 +202,38 @@ var JavaScriptHighlightRules = function(options) {
             }, {
                 token: "comment",
                 regex: /^#!.*$/
+            }
+        ],
+        property: [{
+                token : "text",
+                regex : "\\s+"
+            }, {
+                token : [
+                    "storage.type", "punctuation.operator", "entity.name.function", "text",
+                    "keyword.operator", "text",
+                    "storage.type", "text", "entity.name.function", "text", "paren.lparen"
+                ],
+                regex : "(" + identifierRe + ")(\\.)(" + identifierRe +")(\\s*)(=)(\\s*)(function)(?:(\\s+)(\\w+))?(\\s*)(\\()",
+                next: "function_arguments"
+            }, {
+                token : "punctuation.operator",
+                regex : /[.](?![.])/
+            }, {
+                token : "support.function",
+                regex : /(s(?:h(?:ift|ow(?:Mod(?:elessDialog|alDialog)|Help))|croll(?:X|By(?:Pages|Lines)?|Y|To)?|t(?:op|rike)|i(?:n|zeToContent|debar|gnText)|ort|u(?:p|b(?:str(?:ing)?)?)|pli(?:ce|t)|e(?:nd|t(?:Re(?:sizable|questHeader)|M(?:i(?:nutes|lliseconds)|onth)|Seconds|Ho(?:tKeys|urs)|Year|Cursor|Time(?:out)?|Interval|ZOptions|Date|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Date|FullYear)|FullYear|Active)|arch)|qrt|lice|avePreferences|mall)|h(?:ome|andleEvent)|navigate|c(?:har(?:CodeAt|At)|o(?:s|n(?:cat|textual|firm)|mpile)|eil|lear(?:Timeout|Interval)?|a(?:ptureEvents|ll)|reate(?:StyleSheet|Popup|EventObject))|t(?:o(?:GMTString|S(?:tring|ource)|U(?:TCString|pperCase)|Lo(?:caleString|werCase))|est|a(?:n|int(?:Enabled)?))|i(?:s(?:NaN|Finite)|ndexOf|talics)|d(?:isableExternalCapture|ump|etachEvent)|u(?:n(?:shift|taint|escape|watch)|pdateCommands)|j(?:oin|avaEnabled)|p(?:o(?:p|w)|ush|lugins.refresh|a(?:ddings|rse(?:Int|Float)?)|r(?:int|ompt|eference))|e(?:scape|nableExternalCapture|val|lementFromPoint|x(?:p|ec(?:Script|Command)?))|valueOf|UTC|queryCommand(?:State|Indeterm|Enabled|Value)|f(?:i(?:nd|le(?:ModifiedDate|Size|CreatedDate|UpdatedDate)|xed)|o(?:nt(?:size|color)|rward)|loor|romCharCode)|watch|l(?:ink|o(?:ad|g)|astIndexOf)|a(?:sin|nchor|cos|t(?:tachEvent|ob|an(?:2)?)|pply|lert|b(?:s|ort))|r(?:ou(?:nd|teEvents)|e(?:size(?:By|To)|calc|turnValue|place|verse|l(?:oad|ease(?:Capture|Events)))|andom)|g(?:o|et(?:ResponseHeader|M(?:i(?:nutes|lliseconds)|onth)|Se(?:conds|lection)|Hours|Year|Time(?:zoneOffset)?|Da(?:y|te)|UTC(?:M(?:i(?:nutes|lliseconds)|onth)|Seconds|Hours|Da(?:y|te)|FullYear)|FullYear|A(?:ttention|llResponseHeaders)))|m(?:in|ove(?:B(?:y|elow)|To(?:Absolute)?|Above)|ergeAttributes|a(?:tch|rgins|x))|b(?:toa|ig|o(?:ld|rderWidths)|link|ack))\b(?=\()/
+            }, {
+                token : "support.function.dom",
+                regex : /(s(?:ub(?:stringData|mit)|plitText|e(?:t(?:NamedItem|Attribute(?:Node)?)|lect))|has(?:ChildNodes|Feature)|namedItem|c(?:l(?:ick|o(?:se|neNode))|reate(?:C(?:omment|DATASection|aption)|T(?:Head|extNode|Foot)|DocumentFragment|ProcessingInstruction|E(?:ntityReference|lement)|Attribute))|tabIndex|i(?:nsert(?:Row|Before|Cell|Data)|tem)|open|delete(?:Row|C(?:ell|aption)|T(?:Head|Foot)|Data)|focus|write(?:ln)?|a(?:dd|ppend(?:Child|Data))|re(?:set|place(?:Child|Data)|move(?:NamedItem|Child|Attribute(?:Node)?)?)|get(?:NamedItem|Element(?:sBy(?:Name|TagName|ClassName)|ById)|Attribute(?:Node)?)|blur)\b(?=\()/
+            }, {
+                token :  "support.constant",
+                regex : /(s(?:ystemLanguage|cr(?:ipts|ollbars|een(?:X|Y|Top|Left))|t(?:yle(?:Sheets)?|atus(?:Text|bar)?)|ibling(?:Below|Above)|ource|uffixes|e(?:curity(?:Policy)?|l(?:ection|f)))|h(?:istory|ost(?:name)?|as(?:h|Focus))|y|X(?:MLDocument|SLDocument)|n(?:ext|ame(?:space(?:s|URI)|Prop))|M(?:IN_VALUE|AX_VALUE)|c(?:haracterSet|o(?:n(?:structor|trollers)|okieEnabled|lorDepth|mp(?:onents|lete))|urrent|puClass|l(?:i(?:p(?:boardData)?|entInformation)|osed|asses)|alle(?:e|r)|rypto)|t(?:o(?:olbar|p)|ext(?:Transform|Indent|Decoration|Align)|ags)|SQRT(?:1_2|2)|i(?:n(?:ner(?:Height|Width)|put)|ds|gnoreCase)|zIndex|o(?:scpu|n(?:readystatechange|Line)|uter(?:Height|Width)|p(?:sProfile|ener)|ffscreenBuffering)|NEGATIVE_INFINITY|d(?:i(?:splay|alog(?:Height|Top|Width|Left|Arguments)|rectories)|e(?:scription|fault(?:Status|Ch(?:ecked|arset)|View)))|u(?:ser(?:Profile|Language|Agent)|n(?:iqueID|defined)|pdateInterval)|_content|p(?:ixelDepth|ort|ersonalbar|kcs11|l(?:ugins|atform)|a(?:thname|dding(?:Right|Bottom|Top|Left)|rent(?:Window|Layer)?|ge(?:X(?:Offset)?|Y(?:Offset)?))|r(?:o(?:to(?:col|type)|duct(?:Sub)?|mpter)|e(?:vious|fix)))|e(?:n(?:coding|abledPlugin)|x(?:ternal|pando)|mbeds)|v(?:isibility|endor(?:Sub)?|Linkcolor)|URLUnencoded|P(?:I|OSITIVE_INFINITY)|f(?:ilename|o(?:nt(?:Size|Family|Weight)|rmName)|rame(?:s|Element)|gColor)|E|whiteSpace|l(?:i(?:stStyleType|n(?:eHeight|kColor))|o(?:ca(?:tion(?:bar)?|lName)|wsrc)|e(?:ngth|ft(?:Context)?)|a(?:st(?:M(?:odified|atch)|Index|Paren)|yer(?:s|X)|nguage))|a(?:pp(?:MinorVersion|Name|Co(?:deName|re)|Version)|vail(?:Height|Top|Width|Left)|ll|r(?:ity|guments)|Linkcolor|bove)|r(?:ight(?:Context)?|e(?:sponse(?:XML|Text)|adyState))|global|x|m(?:imeTypes|ultiline|enubar|argin(?:Right|Bottom|Top|Left))|L(?:N(?:10|2)|OG(?:10E|2E))|b(?:o(?:ttom|rder(?:Width|RightWidth|BottomWidth|Style|Color|TopWidth|LeftWidth))|ufferDepth|elow|ackground(?:Color|Image)))\b/
+            }, {
+                token : "identifier",
+                regex : identifierRe
+            }, {
+                regex: "",
+                token: "empty",
+                next: "no_regex"
             }
         ],
         "start": [
@@ -350,8 +377,8 @@ var JavaScriptHighlightRules = function(options) {
             }
         ]
     };
-
-
+    
+    
     if (!options || !options.noES6) {
         this.$rules.no_regex.unshift({
             regex: "[{}]", onMatch: function(val, state, stack) {
@@ -363,7 +390,7 @@ var JavaScriptHighlightRules = function(options) {
                 if (val == "}" && stack.length) {
                     stack.shift();
                     this.next = stack.shift();
-                    if (this.next.indexOf("string") != -1)
+                    if (this.next.indexOf("string") != -1 || this.next.indexOf("jsx") != -1)
                         return "paren.quasi.end";
                 }
                 return val == "{" ? "paren.lparen" : "paren.rparen";
@@ -387,15 +414,117 @@ var JavaScriptHighlightRules = function(options) {
                 defaultToken: "string.quasi"
             }]
         });
+        
+        if (!options || !options.noJSX)
+            JSX.call(this);
     }
-
+    
     this.embedRules(DocCommentHighlightRules, "doc-",
         [ DocCommentHighlightRules.getEndRule("no_regex") ]);
-
+    
     this.normalizeRules();
 };
 
 oop.inherits(JavaScriptHighlightRules, TextHighlightRules);
+
+function JSX() {
+    var tagRegex = identifierRe.replace("\\d", "\\d\\-");
+    var jsxTag = {
+        onMatch : function(val, state, stack) {
+            var offset = val.charAt(1) == "/" ? 2 : 1;
+            if (offset == 1) {
+                if (state != this.nextState)
+                    stack.unshift(this.next, this.nextState, 0);
+                else
+                    stack.unshift(this.next);
+                stack[2]++;
+            } else if (offset == 2) {
+                if (state == this.nextState) {
+                    stack[1]--;
+                    if (!stack[1] || stack[1] < 0) {
+                        stack.shift();
+                        stack.shift();
+                    }
+                }
+            }
+            return [{
+                type: "meta.tag.punctuation." + (offset == 1 ? "" : "end-") + "tag-open.xml",
+                value: val.slice(0, offset)
+            }, {
+                type: "meta.tag.tag-name.xml",
+                value: val.substr(offset)
+            }];
+        },
+        regex : "</?" + tagRegex + "",
+        next: "jsxAttributes",
+        nextState: "jsx"
+    };
+    this.$rules.start.unshift(jsxTag);
+    var jsxJsRule = {
+        regex: "{",
+        token: "paren.quasi.start",
+        push: "start"
+    };
+    this.$rules.jsx = [
+        jsxJsRule,
+        jsxTag,
+        {include : "reference"},
+        {defaultToken: "string"}
+    ];
+    this.$rules.jsxAttributes = [{
+        token : "meta.tag.punctuation.tag-close.xml", 
+        regex : "/?>", 
+        onMatch : function(value, currentState, stack) {
+            if (currentState == stack[0])
+                stack.shift();
+            if (value.length == 2) {
+                if (stack[0] == this.nextState)
+                    stack[1]--;
+                if (!stack[1] || stack[1] < 0) {
+                    stack.splice(0, 2);
+                }
+            }
+            this.next = stack[0] || "start";
+            return [{type: this.token, value: value}];
+        },
+        nextState: "jsx"
+    }, 
+    jsxJsRule,
+    {
+        token : "entity.other.attribute-name.xml",
+        regex : tagRegex
+    }, {
+        token : "keyword.operator.attribute-equals.xml",
+        regex : "="
+    }, {
+        token : "text.tag-whitespace.xml",
+        regex : "\\s+"
+    }, {
+        token : "string.attribute-value.xml",
+        regex : "'",
+        stateName : "jsx_attr_q",
+        push : [
+            {token : "string.attribute-value.xml", regex: "'", next: "pop"},
+            jsxJsRule,
+            {include : "reference"},
+            {defaultToken : "string.attribute-value.xml"}
+        ]
+    }, {
+        token : "string.attribute-value.xml",
+        regex : '"',
+        stateName : "jsx_attr_qq",
+        push : [
+            jsxJsRule,
+            {token : "string.attribute-value.xml", regex: '"', next: "pop"},
+            {include : "reference"},
+            {defaultToken : "string.attribute-value.xml"}
+        ]
+    }];
+    this.$rules.reference = [{
+        token : "constant.language.escape.reference.xml",
+        regex : "(?:&#[0-9]+;)|(?:&#x[0-9a-fA-F]+;)|(?:&[a-zA-Z0-9_:\\.-]+;)"
+    }];
+}
 
 exports.JavaScriptHighlightRules = JavaScriptHighlightRules;
 });
@@ -551,8 +680,7 @@ var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var XmlHighlightRules = function(normalize) {
-
-    var tagRegex = "[a-zA-Z][-_a-zA-Z0-9]*";
+    var tagRegex = "[_:a-zA-Z\xc0-\uffff][-_:.a-zA-Z0-9\xc0-\uffff]*";
 
     this.$rules = {
         start : [
@@ -794,7 +922,7 @@ var HtmlHighlightRules = function() {
             include : "tag_whitespace"
         }, {
             token : "entity.other.attribute-name.xml",
-            regex : "[-_a-zA-Z0-9:]+"
+            regex : "[-_a-zA-Z0-9:.]+"
         }, {
             token : "keyword.operator.attribute-equals.xml",
             regex : "=",
@@ -818,7 +946,7 @@ var HtmlHighlightRules = function() {
                 return ["meta.tag.punctuation." + (start == "<" ? "" : "end-") + "tag-open.xml",
                     "meta.tag" + (group ? "." + group : "") + ".tag-name.xml"];
             },
-            regex : "(</?)([-_a-zA-Z0-9:]+)",
+            regex : "(</?)([-_a-zA-Z0-9:.]+)",
             next: "tag_stuff"
         }],
         tag_stuff: [
@@ -828,7 +956,7 @@ var HtmlHighlightRules = function() {
     });
 
     this.embedTagRules(CssHighlightRules, "css-", "style");
-    this.embedTagRules(JavaScriptHighlightRules, "js-", "script");
+    this.embedTagRules(new JavaScriptHighlightRules({noJSX: true}).getRules(), "js-", "script");
 
     if (this.constructor === HtmlHighlightRules)
         this.normalizeRules();
@@ -943,6 +1071,7 @@ var MarkdownHighlightRules = function() {
         }],
         "allowBlock": [
             {token : "support.function", regex : "^ {4}.+", next : "allowBlock"},
+            {token : "empty_line", regex : '^$', next: "allowBlock"},
             {token : "empty", regex : "", next : "start"}
         ],
 
@@ -1074,14 +1203,14 @@ var const_FUNCTIONS,
         ("debugger|define|var|if|each|for|of|else|switch|case|with|visible|+if|+each|+for|+switch|+with|+visible|include|import").split("|")
     );
     const_TAGS = lang.arrayToMap(
-        ("a|abbr|acronym|address|applet|area|article|aside|audio|b|base|basefont|bdo|" +
-         "big|blockquote|body|br|button|canvas|caption|center|cite|code|col|colgroup|" +
-         "command|datalist|dd|del|details|dfn|dir|div|dl|dt|em|embed|fieldset|" +
-         "figcaption|figure|font|footer|form|frame|frameset|h1|h2|h3|h4|h5|h6|head|" +
-         "header|hgroup|hr|html|i|iframe|img|input|ins|keygen|kbd|label|legend|li|" +
-         "link|map|mark|menu|meta|meter|nav|noframes|noscript|object|ol|optgroup|" +
-         "option|output|p|param|pre|progress|q|rp|rt|ruby|s|samp|script|section|select|" +
-         "small|source|span|strike|strong|style|sub|summary|sup|table|tbody|td|" +
+        ("a|abbr|acronym|address|applet|area|article|aside|audio|b|base|basefont|bdo|" + 
+         "big|blockquote|body|br|button|canvas|caption|center|cite|code|col|colgroup|" + 
+         "command|datalist|dd|del|details|dfn|dir|div|dl|dt|em|embed|fieldset|" + 
+         "figcaption|figure|font|footer|form|frame|frameset|h1|h2|h3|h4|h5|h6|head|" + 
+         "header|hgroup|hr|html|i|iframe|img|input|ins|keygen|kbd|label|legend|li|" + 
+         "link|map|mark|menu|meta|meter|nav|noframes|noscript|object|ol|optgroup|" + 
+         "option|output|p|param|pre|progress|q|rp|rt|ruby|s|samp|script|section|select|" + 
+         "small|source|span|strike|strong|style|sub|summary|sup|table|tbody|td|" + 
          "textarea|tfoot|th|thead|time|title|tr|tt|u|ul|var|video|wbr|xmp").split("|")
     );
 }());
@@ -1095,20 +1224,20 @@ function MaskHighlightRules () {
                 Token("comment", ".*?\\*\\/", "start"),
                 Token("comment", ".+")
             ]),
-
+            
             Blocks.string("'''"),
             Blocks.string('"""'),
             Blocks.string('"'),
             Blocks.string("'"),
-
+            
             Blocks.syntax(/(markdown|md)\b/, "md-multiline", "multiline"),
             Blocks.syntax(/html\b/, "html-multiline", "multiline"),
             Blocks.syntax(/(slot|event)\b/, "js-block", "block"),
             Blocks.syntax(/style\b/, "css-block", "block"),
             Blocks.syntax(/var\b/, "js-statement", "attr"),
-
+            
             Blocks.tag(),
-
+            
             Token(token_LPARE, "[[({>]"),
             Token(token_RPARE, "[\\])};]", "start"),
             {
@@ -1117,14 +1246,14 @@ function MaskHighlightRules () {
         ]
     };
     var rules = this;
-
+    
     addJavaScript("interpolation", /\]/, token_RPARE + "." + token_ITALIC);
     addJavaScript("statement", /\)|}|;/);
     addJavaScript("block", /\}/);
     addCss();
     addMarkdown();
     addHtml();
-
+    
     function addJavaScript(name, escape, closeType) {
         var prfx  =  "js-" + name + "-",
             rootTokens = name === "block" ? ["start"] : ["start", "no_regex"];
@@ -1215,7 +1344,7 @@ var Blocks = {
                     return "support.function";
                 if (void 0 !== const_TAGS[value.toLowerCase()])
                     return token_TAG;
-
+                
                 return token_COMPO;
             },
             regex : /([@\w\-_:+]+)|((^|\s)(?=\s*(\.|#)))/,
@@ -1224,7 +1353,7 @@ var Blocks = {
                 Blocks.tagHead(/\#/) ,
                 Blocks.expression(),
                 Blocks.attribute(),
-
+                
                 Token(token_LPARE, /[;>{]/, "pop")
             ]
         };
@@ -1588,15 +1717,15 @@ var CstyleBehaviour = function() {
                 var line = session.doc.getLine(cursor.row);
                 var leftChar = line.substring(cursor.column-1, cursor.column);
                 var rightChar = line.substring(cursor.column, cursor.column + 1);
-
+                
                 var token = session.getTokenAt(cursor.row, cursor.column);
                 var rightToken = session.getTokenAt(cursor.row, cursor.column + 1);
                 if (leftChar == "\\" && token && /escape/.test(token.type))
                     return null;
-
-                var stringBefore = token && /string/.test(token.type);
-                var stringAfter = !rightToken || /string/.test(rightToken.type);
-
+                
+                var stringBefore = token && /string|escape/.test(token.type);
+                var stringAfter = !rightToken || /string|escape/.test(rightToken.type);
+                
                 var pair;
                 if (rightChar == quote) {
                     pair = stringBefore !== stringAfter;
@@ -1639,7 +1768,7 @@ var CstyleBehaviour = function() {
 
 };
 
-
+    
 CstyleBehaviour.isSaneInsertion = function(editor, session) {
     var cursor = editor.getCursorPosition();
     var iterator = new TokenIterator(session, cursor.row, cursor.column);
@@ -1810,51 +1939,51 @@ var FoldMode = exports.FoldMode = function(commentRegex) {
 oop.inherits(FoldMode, BaseFoldMode);
 
 (function() {
-
+    
     this.foldingStartMarker = /(\{|\[)[^\}\]]*$|^\s*(\/\*)/;
     this.foldingStopMarker = /^[^\[\{]*(\}|\])|^[\s\*]*(\*\/)/;
     this.singleLineBlockCommentRe= /^\s*(\/\*).*\*\/\s*$/;
     this.tripleStarBlockCommentRe = /^\s*(\/\*\*\*).*\*\/\s*$/;
-    this.startRegionRe = /^\s*(\/\*|\/\/)#region\b/;
+    this.startRegionRe = /^\s*(\/\*|\/\/)#?region\b/;
     this._getFoldWidgetBase = this.getFoldWidget;
     this.getFoldWidget = function(session, foldStyle, row) {
         var line = session.getLine(row);
-
+    
         if (this.singleLineBlockCommentRe.test(line)) {
             if (!this.startRegionRe.test(line) && !this.tripleStarBlockCommentRe.test(line))
                 return "";
         }
-
+    
         var fw = this._getFoldWidgetBase(session, foldStyle, row);
-
+    
         if (!fw && this.startRegionRe.test(line))
             return "start"; // lineCommentRegionStart
-
+    
         return fw;
     };
 
     this.getFoldWidgetRange = function(session, foldStyle, row, forceMultiline) {
         var line = session.getLine(row);
-
+        
         if (this.startRegionRe.test(line))
             return this.getCommentRegionBlock(session, line, row);
-
+        
         var match = line.match(this.foldingStartMarker);
         if (match) {
             var i = match.index;
 
             if (match[1])
                 return this.openingBracketBlock(session, match[1], row, i);
-
+                
             var range = session.getCommentFoldRange(row, i + match[0].length, 1);
-
+            
             if (range && !range.isMultiLine()) {
                 if (forceMultiline) {
                     range = this.getSectionRange(session, row);
                 } else if (foldStyle != "all")
                     range = null;
             }
-
+            
             return range;
         }
 
@@ -1871,7 +2000,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             return session.getCommentFoldRange(row, i, -1);
         }
     };
-
+    
     this.getSectionRange = function(session, row) {
         var line = session.getLine(row);
         var startIndent = line.search(/\S/);
@@ -1888,7 +2017,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             if  (startIndent > indent)
                 break;
             var subRange = this.getFoldWidgetRange(session, "all", row);
-
+            
             if (subRange) {
                 if (subRange.start.row <= startRow) {
                     break;
@@ -1900,16 +2029,15 @@ oop.inherits(FoldMode, BaseFoldMode);
             }
             endRow = row;
         }
-
+        
         return new Range(startRow, startColumn, endRow, session.getLine(endRow).length);
     };
-
     this.getCommentRegionBlock = function(session, line, row) {
         var startColumn = line.search(/\s*$/);
         var maxRow = session.getLength();
         var startRow = row;
-
-        var re = /^\s*(?:\/\*|\/\/)#(end)?region\b/;
+        
+        var re = /^\s*(?:\/\*|\/\/|--)#?(end)?region\b/;
         var depth = 1;
         while (++row < maxRow) {
             line = session.getLine(row);
@@ -1950,7 +2078,7 @@ var Mode = function() {
 oop.inherits(Mode, TextMode);
 
 (function() {
-
+   
     this.lineCommentStart = "//";
     this.blockComment = {start: "/*", end: "*/"};
 

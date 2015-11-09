@@ -19,12 +19,12 @@ var workersrcdir  =  path.join(braceroot, 'workersrc');
 var workerdir     =  path.join(braceroot, 'worker');
 var buildroot     =  path.join(__dirname, 'ace-build');
 
-var aceTag = 'v1.1.9';
+var aceTag = 'v1.2.2';
 
 +function updateCleanAndPutInOrder() {
 
   +function cloneFreshAndRemoveUnneeded() {
-    rm('-rf', buildroot) 
+    rm('-rf', buildroot)
     exec('git clone git://github.com/ajaxorg/ace-builds.git ' + buildroot);
     exec('(cd ' + buildroot + ' && git pull && git checkout ' + aceTag + ')');
 
@@ -60,7 +60,7 @@ var aceTag = 'v1.1.9';
         mv(file, path.join(modedir, filename));
       });
   }()
-    
+
   +function exts() {
     rm('-rf', extdir);
     mkdir(extdir);
@@ -71,7 +71,7 @@ var aceTag = 'v1.1.9';
         mv(file, path.join(extdir, filename));
       });
   }()
-    
+
   +function keybindings() {
     rm('-rf', keybindingdir);
     mkdir(keybindingdir);
@@ -82,7 +82,7 @@ var aceTag = 'v1.1.9';
         mv(file, path.join(keybindingdir, filename));
       });
   }()
-    
+
   +function workers() {
     rm('-rf', workersrcdir);
     mkdir(workersrcdir);
@@ -139,7 +139,7 @@ var aceTag = 'v1.1.9';
   var newWorkerRx = /this\.\$worker *= *new +Worker\(workerUrl\);/;
   var src = acesrc
     // VERY BRITTLE - may easily break with future ace versions
-    // replace mod with mod.id in the following two lines inside 
+    // replace mod with mod.id in the following two lines inside
     // WorkerClient  function definition
     //  * workerUrl = config.moduleUrl(mod, "worker");
     //  * module: mod,
@@ -152,5 +152,5 @@ var aceTag = 'v1.1.9';
 
   rm('-rf', workerdir);
   mkdir(workerdir);
-  stringifyWorkers(); 
+  stringifyWorkers();
 }();

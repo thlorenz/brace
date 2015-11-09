@@ -121,7 +121,7 @@ module.exports.getEditorKeybordShortcuts = function(editor) {
                 } else {
                     commandMap[command] = {key: key, command: command};
                     keybindings.push(commandMap[command]);
-                }
+                }         
             });
         }
     });
