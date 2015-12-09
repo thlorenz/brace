@@ -1794,7 +1794,7 @@ oop.inherits(Mode, TextMode);
 
     this.blockComment = {start: "<!--", end: "-->"};
 
-     this.createWorker = function(session) {
+    this.createWorker = function(session) {
         var worker = new WorkerClient(["ace"], require("../worker/xml"), "Worker");
         worker.attachToDocument(session.getDocument());
 
