@@ -3,8 +3,9 @@
   "version": "0.8.0",
   "description": "browserify compatible version of the ace editor.",
   "main": "index.js",
+  "typings": "index.d.ts",
   "scripts": {
-    "update": "(cd build && node ./update)",
+    "update": "(cd build && node ./update && node ./update-ts)",
     "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html"
   },
   "repository": {

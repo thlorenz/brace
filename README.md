@@ -26,7 +26,7 @@ editor.setTheme('ace/theme/monokai');
 ```
 
 Include the above as an **entry** in your browserify build, add a `<div id="javascript-editor"></div>` to your html page and
-a JavaScript editor will appear. 
+a JavaScript editor will appear.
 
 This editor will show error/warning annotations if your browser supports WebWorkers
 created via a blob URL (see testling support badge on top).
@@ -69,7 +69,30 @@ down the [ace builds](https://github.com/ajaxorg/ace-builds) and refactors them 
 All workers included with ace are supported, except `php` and `xquery`, mainly because I wasn't able to properly
 stringify their code (any help with that is appreciated).
 
+## Can I use it with TypeScript?
+
+Yes, brace includes modular type definitions so you can do normal import statements and type safety checking
+with TypeScript. The example above becomes:
+
+```ts
+import * as ace from 'brace';
+import 'brace/mode/javascript';
+import 'brace/theme/monokai';
+
+const editor = ace.edit('javascript-editor');
+editor.getSession().setMode('ace/mode/javascript');
+editor.setTheme('ace/theme/monokai');
+```
+
+brace exposes these type definitions in `package.json`, so they are available when you do `npm install brace`.
+You do not need an additional install step or another tool to install these definitions.
+
+These type definitions are kept up to date in the same way as the rest of brace. There is an
+[update script](https://github.com/thlorenz/brace/blob/master/build/update-ts.js) which automatically pulls
+down the [DefinitelyTyped definition](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/ace/ace.d.ts)
+and refactors it to be modular rather than global.
+
 ## Test
 
-    npm explore brace 
+    npm explore brace
     npm test
