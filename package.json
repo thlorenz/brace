@@ -1,5 +1,5 @@
 {
-  "name": "brace",
+  "name": "brace-juejin",
   "version": "0.8.0",
   "description": "browserify compatible version of the ace editor.",
   "main": "index.js",
@@ -9,9 +9,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/thlorenz/brace.git"
+    "url": "git://github.com/mrdream24/brace.git"
   },
-  "homepage": "https://github.com/thlorenz/brace",
+  "homepage": "https://github.com/mrdream24/brace",
   "dependencies": {
     "w3c-blob": "0.0.1"
   },
