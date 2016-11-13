@@ -782,117 +782,103 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-ace.define("ace/mode/wollok_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+ace.define("ace/mode/typescript_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/javascript_highlight_rules"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
-var DocCommentHighlightRules = acequire("./doc_comment_highlight_rules").DocCommentHighlightRules;
-var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
+var JavaScriptHighlightRules = acequire("./javascript_highlight_rules").JavaScriptHighlightRules;
 
-var WollokHighlightRules = function() {
-    var keywords = (
-    "test|package|inherits|false|import|else|or|class|and|not|native|override|program|this|try|val|var|catch|object|super|throw|if|null|return|true|new|method"
-    );
+var TypeScriptHighlightRules = function(options) {
 
-    var buildinConstants = ("null|assert|console");
+    var tsRules =  [
+        {
+            token: ["keyword.operator.ts", "text", "variable.parameter.function.ts", "text"],
+            regex: "\\b(module)(\\s*)([a-zA-Z0-9_?.$][\\w?.$]*)(\\s*\\{)"
+        }, 
+        {
+            token: ["storage.type.variable.ts", "text", "keyword.other.ts", "text"],
+            regex: "(super)(\\s*\\()([a-zA-Z0-9,_?.$\\s]+\\s*)(\\))"
+        },
+        {
+            token: ["entity.name.function.ts","paren.lparen", "paren.rparen"],
+            regex: "([a-zA-Z_?.$][\\w?.$]*)(\\()(\\))"
+        },
+        {
+            token: ["variable.parameter.function.ts", "text", "variable.parameter.function.ts"],
+            regex: "([a-zA-Z0-9_?.$][\\w?.$]*)(\\s*:\\s*)([a-zA-Z0-9_?.$][\\w?.$]*)"
+        },  
+        {
+            token: ["keyword.operator.ts"],
+            regex: "(?:\\b(constructor|declare|interface|as|AS|public|private|class|extends|export|super)\\b)"
+        }, 
+        {
+            token: ["storage.type.variable.ts"],
+            regex: "(?:\\b(this\\.|string\\b|bool\\b|number)\\b)"
+        }, 
+        {
+            token: ["keyword.operator.ts", "storage.type.variable.ts", "keyword.operator.ts", "storage.type.variable.ts"],
+            regex: "(class)(\\s+[a-zA-Z0-9_?.$][\\w?.$]*\\s+)(extends)(\\s+[a-zA-Z0-9_?.$][\\w?.$]*\\s+)?"
+        },
+        {
+            token: "keyword",
+            regex: "(?:super|export|class|extends|import)\\b"
+        }
+    ];
 
-
-    var langClasses = (
-        "Object|Pair|String|Boolean|Number|Integer|Double|Collection|Set|List|Exception|Range" +
-        "|StackTraceElement"
-    );
-
-    var keywordMapper = this.createKeywordMapper({
-        "variable.language": "this",
-        "keyword": keywords,
-        "constant.language": buildinConstants,
-        "support.function": langClasses
-    }, "identifier");
-
-    this.$rules = {
-        "start" : [
-            {
-                token : "comment",
-                regex : "\\/\\/.*$"
-            },
-            DocCommentHighlightRules.getStartRule("doc-start"),
-            {
-                token : "comment", // multi line comment
-                regex : "\\/\\*",
-                next : "comment"
-            }, {
-                token : "string", // single line
-                regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
-            }, {
-                token : "string", // single line
-                regex : "['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"
-            }, {
-                token : "constant.numeric", // hex
-                regex : /0(?:[xX][0-9a-fA-F][0-9a-fA-F_]*|[bB][01][01_]*)[LlSsDdFfYy]?\b/
-            }, {
-                token : "constant.numeric", // float
-                regex : /[+-]?\d[\d_]*(?:(?:\.[\d_]*)?(?:[eE][+-]?[\d_]+)?)?[LlSsDdFfYy]?\b/
-            }, {
-                token : "constant.language.boolean",
-                regex : "(?:true|false)\\b"
-            }, {
-                token : keywordMapper,
-                regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
-            }, {
-                token : "keyword.operator",
-                regex : "===|&&|\\*=|\\.\\.|\\*\\*|#|!|%|\\*|\\?:|\\+|\\/|,|\\+=|\\-|\\.\\.<|!==|:|\\/=|\\?\\.|\\+\\+|>|=|<|>=|=>|==|\\]|\\[|\\-=|\\->|\\||\\-\\-|<>|!=|%=|\\|"
-            }, {
-                token : "lparen",
-                regex : "[[({]"
-            }, {
-                token : "rparen",
-                regex : "[\\])}]"
-            }, {
-                token : "text",
-                regex : "\\s+"
-            }
-        ],
-        "comment" : [
-            {
-                token : "comment", // closing comment
-                regex : ".*?\\*\\/",
-                next : "start"
-            }, {
-                token : "comment", // comment spanning whole line
-                regex : ".+"
-            }
-        ]
-    };
-
-    this.embedRules(DocCommentHighlightRules, "doc-",
-        [ DocCommentHighlightRules.getEndRule("start") ]);
+    var JSRules = new JavaScriptHighlightRules({jsx: (options && options.jsx) == true}).getRules();
+    
+    JSRules.start = tsRules.concat(JSRules.start);
+    this.$rules = JSRules;
 };
 
-oop.inherits(WollokHighlightRules, TextHighlightRules);
+oop.inherits(TypeScriptHighlightRules, JavaScriptHighlightRules);
 
-exports.WollokHighlightRules = WollokHighlightRules;
+exports.TypeScriptHighlightRules = TypeScriptHighlightRules;
 });
 
-ace.define("ace/mode/wollok",["require","exports","module","ace/lib/oop","ace/mode/javascript","ace/mode/wollok_highlight_rules"], function(acequire, exports, module) {
+ace.define("ace/mode/typescript",["require","exports","module","ace/lib/oop","ace/mode/javascript","ace/mode/typescript_highlight_rules","ace/mode/behaviour/cstyle","ace/mode/folding/cstyle","ace/mode/matching_brace_outdent"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
-var JavaScriptMode = acequire("./javascript").Mode;
-var WollokHighlightRules = acequire("./wollok_highlight_rules").WollokHighlightRules;
+var jsMode = acequire("./javascript").Mode;
+var TypeScriptHighlightRules = acequire("./typescript_highlight_rules").TypeScriptHighlightRules;
+var CstyleBehaviour = acequire("./behaviour/cstyle").CstyleBehaviour;
+var CStyleFoldMode = acequire("./folding/cstyle").FoldMode;
+var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
 
 var Mode = function() {
-    JavaScriptMode.call(this);
-    this.HighlightRules = WollokHighlightRules;
+    this.HighlightRules = TypeScriptHighlightRules;
+    
+    this.$outdent = new MatchingBraceOutdent();
+    this.$behaviour = new CstyleBehaviour();
+    this.foldingRules = new CStyleFoldMode();
 };
-oop.inherits(Mode, JavaScriptMode);
+oop.inherits(Mode, jsMode);
 
 (function() {
-    
     this.createWorker = function(session) {
         return null;
     };
+    this.$id = "ace/mode/typescript";
+}).call(Mode.prototype);
 
-    this.$id = "ace/mode/wollok";
+exports.Mode = Mode;
+});
+
+ace.define("ace/mode/tsx",["require","exports","module","ace/lib/oop","ace/mode/typescript"], function(acequire, exports, module) {
+"use strict";
+
+var oop = acequire("../lib/oop");
+var tsMode = acequire("./typescript").Mode;
+
+var Mode = function() {    
+    tsMode.call(this);
+    this.$highlightRuleConfig = {jsx: true};
+};
+oop.inherits(Mode, tsMode);
+
+(function() {
+    this.$id = "ace/mode/tsx";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
