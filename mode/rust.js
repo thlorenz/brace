@@ -4,7 +4,7 @@ ace.define("ace/mode/rust_highlight_rules",["require","exports","module","ace/li
 var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
-var stringEscape = /\\(?:[nrt0'"]|x[\da-fA-F]{2}|u\{[\da-fA-F]{6}\})/.source;
+var stringEscape = /\\(?:[nrt0'"\\]|x[\da-fA-F]{2}|u\{[\da-fA-F]{6}\})/.source;
 var RustHighlightRules = function() {
 
     this.$rules = { start:
