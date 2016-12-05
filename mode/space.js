@@ -149,6 +149,7 @@ var SpaceHighlightRules = acequire("./space_highlight_rules").SpaceHighlightRule
 var Mode = function() {
     this.HighlightRules = SpaceHighlightRules;
     this.foldingRules = new FoldMode();
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 (function() {

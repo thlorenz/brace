@@ -57,6 +57,7 @@ var LuceneHighlightRules = acequire("./lucene_highlight_rules").LuceneHighlightR
 
 var Mode = function() {
     this.HighlightRules = LuceneHighlightRules;
+    this.$behaviour = this.$defaultBehaviour;
 };
 
 oop.inherits(Mode, TextMode);

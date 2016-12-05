@@ -39,6 +39,7 @@ var GitignoreHighlightRules = acequire("./gitignore_highlight_rules").GitignoreH
 
 var Mode = function() {
     this.HighlightRules = GitignoreHighlightRules;
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 
