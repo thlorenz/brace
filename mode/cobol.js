@@ -69,16 +69,16 @@ oop.inherits(CobolHighlightRules, TextHighlightRules);
 exports.CobolHighlightRules = CobolHighlightRules;
 });
 
-ace.define("ace/mode/cobol",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/cobol_highlight_rules","ace/range"], function(acequire, exports, module) {
+ace.define("ace/mode/cobol",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/cobol_highlight_rules"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
 var CobolHighlightRules = acequire("./cobol_highlight_rules").CobolHighlightRules;
-var Range = acequire("../range").Range;
 
 var Mode = function() {
     this.HighlightRules = CobolHighlightRules;
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 

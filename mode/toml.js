@@ -133,6 +133,7 @@ var FoldMode = acequire("./folding/ini").FoldMode;
 var Mode = function() {
     this.HighlightRules = TomlHighlightRules;
     this.foldingRules = new FoldMode();
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 

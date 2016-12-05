@@ -105,16 +105,16 @@ oop.inherits(EiffelHighlightRules, TextHighlightRules);
 exports.EiffelHighlightRules = EiffelHighlightRules;
 });
 
-ace.define("ace/mode/eiffel",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/eiffel_highlight_rules","ace/range"], function(acequire, exports, module) {
+ace.define("ace/mode/eiffel",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/eiffel_highlight_rules"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
 var EiffelHighlightRules = acequire("./eiffel_highlight_rules").EiffelHighlightRules;
-var Range = acequire("../range").Range;
 
 var Mode = function() {
     this.HighlightRules = EiffelHighlightRules;
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 

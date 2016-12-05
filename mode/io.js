@@ -221,25 +221,25 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/io",["require","exports","module","ace/lib/oop","ace/mode/text","ace/tokenizer","ace/mode/io_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
+ace.define("ace/mode/io",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/io_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
-var Tokenizer = acequire("../tokenizer").Tokenizer;
 var IoHighlightRules = acequire("./io_highlight_rules").IoHighlightRules;
 var FoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
     this.HighlightRules = IoHighlightRules;
     this.foldingRules = new FoldMode();
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 
 (function() {
     this.lineCommentStart = "//";
     this.blockComment = {start: "/*", end: "*/"};
-    this.$id = "ace/mode/io"
+    this.$id = "ace/mode/io";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
