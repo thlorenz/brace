@@ -311,14 +311,13 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/perl",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/perl_highlight_rules","ace/mode/matching_brace_outdent","ace/range","ace/mode/folding/cstyle"], function(acequire, exports, module) {
+ace.define("ace/mode/perl",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/perl_highlight_rules","ace/mode/matching_brace_outdent","ace/mode/folding/cstyle"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
 var PerlHighlightRules = acequire("./perl_highlight_rules").PerlHighlightRules;
 var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOutdent;
-var Range = acequire("../range").Range;
 var CStyleFoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
@@ -326,6 +325,7 @@ var Mode = function() {
     
     this.$outdent = new MatchingBraceOutdent();
     this.foldingRules = new CStyleFoldMode({start: "^=(begin|item)\\b", end: "^=(cut)\\b"});
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 
@@ -349,7 +349,7 @@ oop.inherits(Mode, TextMode);
         }
 
         if (state == "start") {
-            var match = line.match(/^.*[\{\(\[\:]\s*$/);
+            var match = line.match(/^.*[\{\(\[:]\s*$/);
             if (match) {
                 indent += tab;
             }

@@ -137,15 +137,15 @@ oop.inherits(MysqlHighlightRules, TextHighlightRules);
 exports.MysqlHighlightRules = MysqlHighlightRules;
 });
 
-ace.define("ace/mode/mysql",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/mysql_highlight_rules","ace/range"], function(acequire, exports, module) {
+ace.define("ace/mode/mysql",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/mysql_highlight_rules"], function(acequire, exports, module) {
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("../mode/text").Mode;
 var MysqlHighlightRules = acequire("./mysql_highlight_rules").MysqlHighlightRules;
-var Range = acequire("../range").Range;
 
 var Mode = function() {
     this.HighlightRules = MysqlHighlightRules;
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 

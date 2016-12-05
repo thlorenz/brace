@@ -61,6 +61,7 @@ var PropertiesHighlightRules = acequire("./properties_highlight_rules").Properti
 
 var Mode = function() {
     this.HighlightRules = PropertiesHighlightRules;
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 
