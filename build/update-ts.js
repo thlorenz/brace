@@ -24,14 +24,14 @@ var buildroot     =  path.join(__dirname, 'DefinitelyTyped');
 }()
 
 +function requires() {
-  var file = path.join(buildroot, 'ace.d.ts')
+  var file = path.join(buildroot, 'index.d.ts')
   var src = fs.readFileSync(file, 'utf-8');
   var fixed = fixRequires(src);
   fs.writeFileSync(file, fixed, 'utf-8');
 }()
 
 +function modularize() {
-  var tssrc = fs.readFileSync(path.join(buildroot, 'ace.d.ts'), 'utf-8');
+  var tssrc = fs.readFileSync(path.join(buildroot, 'index.d.ts'), 'utf-8');
 
   // Make these definitions a module by exporting the namespace
   var src = tssrc.replace('declare var ace: AceAjax.Ace;', 'export = AceAjax;');
