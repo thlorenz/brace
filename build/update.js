@@ -14,6 +14,7 @@ var braceroot     =  path.join(__dirname, '..');
 var themedir      =  path.join(braceroot, 'theme');
 var modedir       =  path.join(braceroot, 'mode');
 var extdir        =  path.join(braceroot, 'ext');
+var snippetsdir   =  path.join(braceroot, 'snippets');
 var keybindingdir =  path.join(braceroot, 'keybinding');
 var workersrcdir  =  path.join(braceroot, 'workersrc');
 var workerdir     =  path.join(braceroot, 'worker');
@@ -28,13 +29,16 @@ var aceTag = 'v1.2.6';
     exec('git clone git://github.com/ajaxorg/ace-builds.git ' + buildroot);
     exec('(cd ' + buildroot + ' && git pull && git checkout ' + aceTag + ')');
 
-    [ 'demo', 'kitchen-sink', 'src-min-noconflict', 'src-min', 'src', 'textarea' ]
+    [ 'demo', 'kitchen-sink', 'src-min', 'src', 'textarea' ]
       .forEach(function (dir) { rm('-rf', path.join(buildroot, dir)) })
 
     rm(path.join(buildroot, '*'));
 
     // move src-noconflict files to root after we cleaned it since that is all we need
-    mv(path.join(buildroot, 'src-noconflict/*'), buildroot)
+    mv(path.join(buildroot, 'src-min-noconflict/snippets'), buildroot);
+    mv(path.join(buildroot, 'src-noconflict/*'), buildroot);
+
+    rm('-rf', path.join(buildroot, 'src-min-noconflict'));
     rm('-rf', path.join(buildroot, 'src-noconflict'));
   }()
 
@@ -112,6 +116,16 @@ var aceTag = 'v1.2.6';
   fixAllRequires(keybindingdir);
   fixAllRequires(workersrcdir);
   fixAllRequires(buildroot);
+}()
+
++function snippets() {
+  rm('-rf', snippetsdir);
+  mkdir(snippetsdir);
+
+  ls(path.join(buildroot, 'snippets/*.js'))
+    .forEach(function (file) {
+      mv(file, path.join(snippetsdir, path.basename(file)));
+    });
 }()
 
 +function injectWorkersIntoModes() {
