@@ -234,14 +234,14 @@ var TextMode = acequire("./text").Mode;
 var RSTHighlightRules = acequire("./rst_highlight_rules").RSTHighlightRules;
 
 var Mode = function() {
-  this.HighlightRules = RSTHighlightRules;
+    this.HighlightRules = RSTHighlightRules;
 };
 oop.inherits(Mode, TextMode);
 
 (function() {
-  this.type = "text";
+    this.type = "text";
 
-  this.$id = "ace/mode/rst";
+    this.$id = "ace/mode/rst";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;

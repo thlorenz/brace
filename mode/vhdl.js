@@ -85,16 +85,16 @@ oop.inherits(VHDLHighlightRules, TextHighlightRules);
 exports.VHDLHighlightRules = VHDLHighlightRules;
 });
 
-ace.define("ace/mode/vhdl",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/vhdl_highlight_rules","ace/range"], function(acequire, exports, module) {
+ace.define("ace/mode/vhdl",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/vhdl_highlight_rules"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
 var VHDLHighlightRules = acequire("./vhdl_highlight_rules").VHDLHighlightRules;
-var Range = acequire("../range").Range;
 
 var Mode = function() {
     this.HighlightRules = VHDLHighlightRules;
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 

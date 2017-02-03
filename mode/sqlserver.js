@@ -407,18 +407,18 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/sqlserver",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/sqlserver_highlight_rules","ace/range","ace/mode/folding/sqlserver"], function(acequire, exports, module) {
+ace.define("ace/mode/sqlserver",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/sqlserver_highlight_rules","ace/mode/folding/sqlserver"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
 var SqlServerHighlightRules = acequire("./sqlserver_highlight_rules").SqlHighlightRules;
-var Range = acequire("../range").Range;
 var SqlServerFoldMode = acequire("./folding/sqlserver").FoldMode;
 
 var Mode = function() {
     this.HighlightRules = SqlServerHighlightRules;
     this.foldingRules = new SqlServerFoldMode();
+    this.$behaviour = this.$defaultBehaviour;
 };
 oop.inherits(Mode, TextMode);
 
