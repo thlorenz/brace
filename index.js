@@ -13703,6 +13703,7 @@ var Gutter = function(parentEl) {
         var firstRow = config.firstRow;
         var lastRow = Math.min(config.lastRow + config.gutterOffset,  // needed to compensate for hor scollbar
             session.getLength() - 1);
+        if (isNaN(lastRow)) { return; }
         var fold = session.getNextFoldLine(firstRow);
         var foldStart = fold ? fold.start.row : Infinity;
         var foldWidgets = this.$showFoldWidgets && session.foldWidgets;
@@ -14375,7 +14376,7 @@ var Text = function(parentEl) {
             var classes = "ace_" + token.type.replace(/\./g, " ace_");
             var style = "";
             if (token.type == "fold")
-                style = " style='width:" + (token.value.length * this.config.characterWidth) + "px;' ";
+                style = " style='width:" + Math.ceil(token.value.length * this.config.characterWidth) + "px;' ";
             stringBuilder.push("<span class='", classes, "'", style, ">", output, "</span>");
         }
         else {
@@ -16283,7 +16284,7 @@ var VirtualRenderer = function(container, theme) {
         if (this.showInvisibles && !this.session.$useWrapMode)
             charCount += 1;
 
-        return Math.max(this.$size.scrollerWidth - 2 * this.$padding, Math.round(charCount * this.characterWidth));
+        return Math.max(this.$size.scrollerWidth - 2 * this.$padding, Math.ceil(charCount * this.characterWidth));
     };
     this.updateFrontMarkers = function() {
         this.$markerFront.setMarkers(this.session.getMarkers(true));
