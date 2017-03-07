@@ -138,6 +138,9 @@ background-color: #ddd;\
 border-color: #3399ff;\
 opacity:1;\
 }\
+.aceResultCount {\
+float: left;\
+}\
 .ace_search_options{\
 margin-bottom: 3px;\
 text-align: right;\
@@ -166,6 +169,7 @@ var html = '<div class="ace_search right">\
         <button type="button" action="replaceAll" class="ace_replacebtn">All</button>\
     </div>\
     <div class="ace_search_options">\
+        <span class="aceResultCount"></span>\
         <span action="toggleRegexpMode" class="ace_button" title="RegExp Search">.*</span>\
         <span action="toggleCaseSensitive" class="ace_button" title="CaseSensitive Search">Aa</span>\
         <span action="toggleWholeWords" class="ace_button" title="Whole Word Search">\\b</span>\
@@ -197,6 +201,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
         this.wholeWordOption = sb.querySelector("[action=toggleWholeWords]");
         this.searchInput = this.searchBox.querySelector(".ace_search_field");
         this.replaceInput = this.replaceBox.querySelector(".ace_search_field");
+        this.countResults = e.querySelector(".aceResultCount");
     };
     
     this.$init = function() {
@@ -341,6 +346,18 @@ var SearchBox = function(editor, range, showReplaceForm) {
         dom.setCssClass(this.searchBox, "ace_nomatch", noMatch);
         this.editor._emit("findSearchBox", { match: !noMatch });
         this.highlight();
+
+        setTimeout(function() {
+            var allText = this.editor.session.doc.getValue(),
+                regExp = new RegExp(this.searchInput.value, "g"),
+                totalCount = (allText.match(regExp) || []).length;
+
+            if(this.searchInput.value === "") {
+                totalCount = 0;
+            }
+            var results = (totalCount==1)?"result":"results";
+            this.countResults.innerHTML = (totalCount!=0)? (totalCount + " "+results):"";
+        }.bind(this), 100);
     };
     this.findNext = function() {
         this.find(true, false);
