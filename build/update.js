@@ -19,15 +19,27 @@ var keybindingdir =  path.join(braceroot, 'keybinding');
 var workersrcdir  =  path.join(braceroot, 'workersrc');
 var workerdir     =  path.join(braceroot, 'worker');
 var buildroot     =  path.join(__dirname, 'ace-build');
+var acesrcdir     =  path.join(braceroot, 'node_modules/ace');
 
 var aceTag = 'v1.2.6';
 
 +function updateCleanAndPutInOrder() {
-
-  +function cloneFreshAndRemoveUnneeded() {
+  +function buildAce() {
+    if (!fs.existsSync(acesrcdir)) return;
+    console.log("Building from Ace source");
     rm('-rf', buildroot)
+    exec('mkdir ' + buildroot);
+    exec('(cd ' + acesrcdir + ' && node ./Makefile.dryice.js full --target ' + buildroot + ')');
+  }()
+  +function cloneFresh() {
+    if (fs.existsSync(acesrcdir)) return;
+    console.log("Building from Ace Build repository");
+    rm('-rf', buildroot);
     exec('git clone git://github.com/ajaxorg/ace-builds.git ' + buildroot);
     exec('(cd ' + buildroot + ' && git pull && git checkout ' + aceTag + ')');
+  }()
+  +function removeUnneeded() {
+    exec('(cd ' + buildroot + ')');
 
     [ 'demo', 'kitchen-sink', 'src-min', 'src', 'textarea' ]
       .forEach(function (dir) { rm('-rf', path.join(buildroot, dir)) })
