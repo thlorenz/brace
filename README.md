@@ -89,7 +89,7 @@ You do not need an additional install step or another tool to install these defi
 
 These type definitions are kept up to date in the same way as the rest of brace. There is an
 [update script](https://github.com/thlorenz/brace/blob/master/build/update-ts.js) which automatically pulls
-down the [DefinitelyTyped definition](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/ace/ace.d.ts)
+down the [DefinitelyTyped definition](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/ace/index.d.ts)
 and refactors it to be modular rather than global.
 
 ## Test
