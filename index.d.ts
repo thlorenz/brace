@@ -2643,7 +2643,9 @@ export function         createEditSession(text: string, mode: TextMode): IEditSe
         characterWidth: number;
 
         lineHeight: number;
-
+        
+        setScrollMargin(top:number, bottom:number, left: number, right: number): void;
+        
         screenToTextCoordinates(left: number, top: number): void;
 
         /**
