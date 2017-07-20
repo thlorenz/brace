@@ -1,168 +1,142 @@
-ace.define("ace/mode/bro_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+ace.define("ace/mode/pig_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
-var BroHighlightRules = function() {
+var PigHighlightRules = function() {
 
     this.$rules = {
         start: [{
-            token: "punctuation.definition.comment.bro",
-            regex: /#/,
+            token: "comment.block.pig",
+            regex: /\/\*/,
             push: [{
-                token: "comment.line.number-sign.bro",
-                regex: /$/,
+                token: "comment.block.pig",
+                regex: /\*\//,
                 next: "pop"
             }, {
-                defaultToken: "comment.line.number-sign.bro"
+                defaultToken: "comment.block.pig"
             }]
         }, {
-            token: "keyword.control.bro",
-            regex: /\b(?:break|case|continue|else|for|if|return|switch|next|when|timeout|schedule)\b/
+            token: "comment.line.double-dash.asciidoc",
+            regex: /--.*$/
         }, {
-            token: [
-                "meta.function.bro",
-                "meta.function.bro",
-                "storage.type.bro",
-                "meta.function.bro",
-                "entity.name.function.bro",
-                "meta.function.bro"
-            ],
-            regex: /^(\s*)(?:function|hook|event)(\s*)(.*)(\s*\()(.*)(\).*$)/
+            token: "keyword.control.pig",
+            regex: /\b(?:ASSERT|LOAD|STORE|DUMP|FILTER|DISTINCT|FOREACH|GENERATE|STREAM|JOIN|COGROUP|GROUP|CROSS|ORDER|LIMIT|UNION|SPLIT|DESCRIBE|EXPLAIN|ILLUSTRATE|AS|BY|INTO|USING|LIMIT|PARALLEL|OUTER|INNER|DEFAULT|LEFT|SAMPLE|RANK|CUBE|ALL|KILL|QUIT|MAPREDUCE|ASC|DESC|THROUGH|SHIP|CACHE|DECLARE|CASE|WHEN|THEN|END|IN|PARTITION|FULL|IMPORT|IF|ONSCHEMA|INPUT|OUTPUT)\b/,
+            caseInsensitive: true
         }, {
-            token: "storage.type.bro",
-            regex: /\b(?:bool|enum|double|int|count|port|addr|subnet|any|file|interval|time|string|table|vector|set|record|pattern|hook)\b/
+            token: "storage.datatypes.pig",
+            regex: /\b(?:int|long|float|double|chararray|bytearray|boolean|datetime|biginteger|bigdecimal|tuple|bag|map)\b/,
+            caseInsensitive: true
         }, {
-            token: "storage.modifier.bro",
-            regex: /\b(?:global|const|redef|local|&(?:optional|rotate_interval|rotate_size|add_func|del_func|expire_func|expire_create|expire_read|expire_write|persistent|synchronized|encrypt|mergeable|priority|group|type_column|log|error_handler))\b/
+            token: "support.function.storage.pig",
+            regex: /\b(?:PigStorage|BinStorage|BinaryStorage|PigDump|HBaseStorage|JsonLoader|JsonStorage|AvroStorage|TextLoader|PigStreaming|TrevniStorage|AccumuloStorage)\b/
         }, {
-            token: "keyword.operator.bro",
-            regex: /\s*(?:\||&&|(?:>|<|!)=?|==)\s*|\b!?in\b/
+            token: "support.function.udf.pig",
+            regex: /\b(?:DIFF|TOBAG|TOMAP|TOP|TOTUPLE|RANDOM|FLATTEN|flatten|CUBE|ROLLUP|IsEmpty|ARITY|PluckTuple|SUBTRACT|BagToString)\b/
         }, {
-            token: "constant.language.bro",
-            regex: /\b(?:T|F)\b/
+            token: "support.function.udf.math.pig",
+            regex: /\b(?:ABS|ACOS|ASIN|ATAN|CBRT|CEIL|COS|COSH|EXP|FLOOR|LOG|LOG10|ROUND|ROUND_TO|SIN|SINH|SQRT|TAN|TANH|AVG|COUNT|COUNT_STAR|MAX|MIN|SUM|COR|COV)\b/
         }, {
-            token: "constant.numeric.bro",
-            regex: /\b(?:0(?:x|X)[0-9a-fA-F]*|(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:(?:e|E)(?:\+|-)?[0-9]+)?)(?:\/(?:tcp|udp|icmp)|\s*(?:u?sec|min|hr|day)s?)?\b/
+            token: "support.function.udf.string.pig",
+            regex: /\b(?:CONCAT|INDEXOF|LAST_INDEX_OF|LCFIRST|LOWER|REGEX_EXTRACT|REGEX_EXTRACT_ALL|REPLACE|SIZE|STRSPLIT|SUBSTRING|TOKENIZE|TRIM|UCFIRST|UPPER|LTRIM|RTRIM|ENDSWITH|STARTSWITH|TRIM)\b/
         }, {
-            token: "punctuation.definition.string.begin.bro",
+            token: "support.function.udf.datetime.pig",
+            regex: /\b(?:AddDuration|CurrentTime|DaysBetween|GetDay|GetHour|GetMilliSecond|GetMinute|GetMonth|GetSecond|GetWeek|GetWeekYear|GetYear|HoursBetween|MilliSecondsBetween|MinutesBetween|MonthsBetween|SecondsBetween|SubtractDuration|ToDate|WeeksBetween|YearsBetween|ToMilliSeconds|ToString|ToUnixTime)\b/
+        }, {
+            token: "support.function.command.pig",
+            regex: /\b(?:cat|cd|copyFromLocal|copyToLocal|cp|ls|mkdir|mv|pwd|rm)\b/
+        }, {
+            token: "variable.pig",
+            regex: /\$[a_zA-Z0-9_]+/
+        }, {
+            token: "constant.language.pig",
+            regex: /\b(?:NULL|true|false|stdin|stdout|stderr)\b/,
+            caseInsensitive: true
+        }, {
+            token: "constant.numeric.pig",
+            regex: /\b\d+(?:\.\d+)?\b/
+        }, {
+            token: "keyword.operator.comparison.pig",
+            regex: /!=|==|<|>|<=|>=|\b(?:MATCHES|IS|OR|AND|NOT)\b/,
+            caseInsensitive: true
+        }, {
+            token: "keyword.operator.arithmetic.pig",
+            regex: /\+|\-|\*|\/|\%|\?|:|::|\.\.|#/
+        }, {
+            token: "string.quoted.double.pig",
             regex: /"/,
             push: [{
-                token: "punctuation.definition.string.end.bro",
+                token: "string.quoted.double.pig",
                 regex: /"/,
                 next: "pop"
             }, {
-                include: "#string_escaped_char"
+                token: "constant.character.escape.pig",
+                regex: /\\./
             }, {
-                include: "#string_placeholder"
-            }, {
-                defaultToken: "string.quoted.double.bro"
+                defaultToken: "string.quoted.double.pig"
             }]
         }, {
-            token: "punctuation.definition.string.begin.bro",
-            regex: /\//,
+            token: "string.quoted.single.pig",
+            regex: /'/,
             push: [{
-                token: "punctuation.definition.string.end.bro",
-                regex: /\//,
+                token: "string.quoted.single.pig",
+                regex: /'/,
                 next: "pop"
             }, {
-                include: "#string_escaped_char"
+                token: "constant.character.escape.pig",
+                regex: /\\./
             }, {
-                include: "#string_placeholder"
-            }, {
-                defaultToken: "string.quoted.regex.bro"
+                defaultToken: "string.quoted.single.pig"
             }]
         }, {
-            token: [
-                "meta.preprocessor.bro.load",
-                "keyword.other.special-method.bro"
-            ],
-            regex: /^(\s*)(\@load(?:-sigs)?)\b/,
-            push: [{
-                token: [],
-                regex: /(?=\#)|$/,
-                next: "pop"
-            }, {
-                defaultToken: "meta.preprocessor.bro.load"
-            }]
+            todo: {
+                token: [
+                    "text",
+                    "keyword.parameter.pig",
+                    "text",
+                    "storage.type.parameter.pig"
+                ],
+                regex: /^(\s*)(set)(\s+)(\S+)/,
+                caseInsensitive: true,
+                push: [{
+                    token: "text",
+                    regex: /$/,
+                    next: "pop"
+                }, {
+                    include: "$self"
+                }]
+            }
         }, {
-            token: [
-                "meta.preprocessor.bro.if",
-                "keyword.other.special-method.bro",
-                "meta.preprocessor.bro.if"
-            ],
-            regex: /^(\s*)(\@endif|\@if(?:n?def)?)(.*$)/,
-            push: [{
-                token: [],
-                regex: /$/,
-                next: "pop"
-            }, {
-                defaultToken: "meta.preprocessor.bro.if"
-            }]
-        }],
-        "#disabled": [{
-            token: "text",
-            regex: /^\s*\@if(?:n?def)?\b.*$/,
-            push: [{
-                token: "text",
-                regex: /^\s*\@endif\b.*$/,
-                next: "pop"
-            }, {
-                include: "#disabled"
-            }, {
-                include: "#pragma-mark"
-            }],
-            comment: "eat nested preprocessor ifdefs"
-        }],
-        "#preprocessor-rule-other": [{
             token: [
                 "text",
-                "meta.preprocessor.bro",
-                "meta.preprocessor.bro",
-                "text"
+                "keyword.alias.pig",
+                "text",
+                "storage.type.alias.pig"
             ],
-            regex: /^(\s*)(@if)((?:n?def)?)\b(.*?)(?:(?=)|$)/,
+            regex: /(\s*)(DEFINE|DECLARE|REGISTER)(\s+)(\S+)/,
+            caseInsensitive: true,
             push: [{
-                token: ["text", "meta.preprocessor.bro", "text"],
-                regex: /^(\s*)(@endif)\b(.*$)/,
+                token: "text",
+                regex: /;?$/,
                 next: "pop"
-            }, {
-                include: "$base"
             }]
-        }],
-        "#string_escaped_char": [{
-            token: "constant.character.escape.bro",
-            regex: /\\(?:\\|[abefnprtv'"?]|[0-3]\d{,2}|[4-7]\d?|x[a-fA-F0-9]{,2})/
-        }, {
-            token: "invalid.illegal.unknown-escape.bro",
-            regex: /\\./
-        }],
-        "#string_placeholder": [{
-            token: "constant.other.placeholder.bro",
-            regex: /%(?:\d+\$)?[#0\- +']*[,;:_]?(?:-?\d+|\*(?:-?\d+\$)?)?(?:\.(?:-?\d+|\*(?:-?\d+\$)?)?)?(?:hh|h|ll|l|j|t|z|q|L|vh|vl|v|hv|hl)?[diouxXDOUeEfFgGaACcSspn%]/
-        }, {
-            token: "invalid.illegal.placeholder.bro",
-            regex: /%/
         }]
     }
     
     this.normalizeRules();
 };
 
-BroHighlightRules.metaData = {
-    fileTypes: ["bro"],
-    foldingStartMarker: "^(\\@if(n?def)?)",
-    foldingStopMarker: "^\\@endif",
-    keyEquivalent: "@B",
-    name: "Bro",
-    scopeName: "source.bro"
+PigHighlightRules.metaData = {
+    fileTypes: ["pig"],
+    name: "Pig",
+    scopeName: "source.pig"
 }
 
 
-oop.inherits(BroHighlightRules, TextHighlightRules);
+oop.inherits(PigHighlightRules, TextHighlightRules);
 
-exports.BroHighlightRules = BroHighlightRules;
+exports.PigHighlightRules = PigHighlightRules;
 });
 
 ace.define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"], function(acequire, exports, module) {
@@ -305,22 +279,24 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/bro",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/bro_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
+ace.define("ace/mode/pig",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/pig_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
-var BroHighlightRules = acequire("./bro_highlight_rules").BroHighlightRules;
+var PigHighlightRules = acequire("./pig_highlight_rules").PigHighlightRules;
 var FoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
-    this.HighlightRules = BroHighlightRules;
+    this.HighlightRules = PigHighlightRules;
     this.foldingRules = new FoldMode();
 };
 oop.inherits(Mode, TextMode);
 
 (function() {
-    this.$id = "ace/mode/bro"
+    this.lineCommentStart = "--";
+    this.blockComment = {start: "/*", end: "*/"};
+    this.$id = "ace/mode/pig"
 }).call(Mode.prototype);
 
 exports.Mode = Mode;

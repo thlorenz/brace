@@ -15,12 +15,12 @@ var buildroot     =  path.join(__dirname, 'DefinitelyTyped');
   rm('-rf', buildroot)
   exec('git clone git://github.com/DefinitelyTyped/DefinitelyTyped.git ' + buildroot);
 
-  ls(buildroot).filter(function (name) { return name !== 'ace'; })
+  ls(path.join(buildroot, 'types')).filter(function (name) { return name !== 'ace'; })
     .forEach(function (name) { rm('-rf', path.join(buildroot, name)) })
 
   // move ace files to root after we cleaned it since that is all we need
-  mv(path.join(buildroot, 'ace/*'), buildroot)
-  rm('-rf', path.join(buildroot, 'ace'));
+  mv(path.join(buildroot, 'types', 'ace/*'), buildroot)
+  rm('-rf', path.join(buildroot, 'types', 'ace'));
 }()
 
 +function requires() {

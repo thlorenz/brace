@@ -1,168 +1,130 @@
-ace.define("ace/mode/bro_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+ace.define("ace/mode/turtle_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
-var BroHighlightRules = function() {
+var TurtleHighlightRules = function() {
 
     this.$rules = {
         start: [{
-            token: "punctuation.definition.comment.bro",
-            regex: /#/,
+            include: "#comments"
+        }, {
+            include: "#strings"
+        }, {
+            include: "#base-prefix-declarations"
+        }, {
+            include: "#string-language-suffixes"
+        }, {
+            include: "#string-datatype-suffixes"
+        }, {
+            include: "#relative-urls"
+        }, {
+            include: "#xml-schema-types"
+        }, {
+            include: "#rdf-schema-types"
+        }, {
+            include: "#owl-types"
+        }, {
+            include: "#qnames"
+        }, {
+            include: "#punctuation-operators"
+        }],
+        "#base-prefix-declarations": [{
+            token: "keyword.other.prefix.turtle",
+            regex: /@(?:base|prefix)/
+        }],
+        "#comments": [{
+            token: [
+                "punctuation.definition.comment.turtle",
+                "comment.line.hash.turtle"
+            ],
+            regex: /(#)(.*$)/
+        }],
+        "#owl-types": [{
+            token: "support.type.datatype.owl.turtle",
+            regex: /owl:[a-zA-Z]+/
+        }],
+        "#punctuation-operators": [{
+            token: "keyword.operator.punctuation.turtle",
+            regex: /;|,|\.|\(|\)|\[|\]/
+        }],
+        "#qnames": [{
+            token: "entity.name.other.qname.turtle",
+            regex: /(?:[a-zA-Z][-_a-zA-Z0-9]*)?:(?:[_a-zA-Z][-_a-zA-Z0-9]*)?/
+        }],
+        "#rdf-schema-types": [{
+            token: "support.type.datatype.rdf.schema.turtle",
+            regex: /rdfs?:[a-zA-Z]+|(?:^|\s)a(?:\s|$)/
+        }],
+        "#relative-urls": [{
+            token: "string.quoted.other.relative.url.turtle",
+            regex: /</,
             push: [{
-                token: "comment.line.number-sign.bro",
-                regex: /$/,
+                token: "string.quoted.other.relative.url.turtle",
+                regex: />/,
                 next: "pop"
             }, {
-                defaultToken: "comment.line.number-sign.bro"
+                defaultToken: "string.quoted.other.relative.url.turtle"
+            }]
+        }],
+        "#string-datatype-suffixes": [{
+            token: "keyword.operator.datatype.suffix.turtle",
+            regex: /\^\^/
+        }],
+        "#string-language-suffixes": [{
+            token: [
+                "keyword.operator.language.suffix.turtle",
+                "constant.language.suffix.turtle"
+            ],
+            regex: /(?!")(@)([a-z]+(?:\-[a-z0-9]+)*)/
+        }],
+        "#strings": [{
+            token: "string.quoted.triple.turtle",
+            regex: /"""/,
+            push: [{
+                token: "string.quoted.triple.turtle",
+                regex: /"""/,
+                next: "pop"
+            }, {
+                defaultToken: "string.quoted.triple.turtle"
             }]
         }, {
-            token: "keyword.control.bro",
-            regex: /\b(?:break|case|continue|else|for|if|return|switch|next|when|timeout|schedule)\b/
-        }, {
-            token: [
-                "meta.function.bro",
-                "meta.function.bro",
-                "storage.type.bro",
-                "meta.function.bro",
-                "entity.name.function.bro",
-                "meta.function.bro"
-            ],
-            regex: /^(\s*)(?:function|hook|event)(\s*)(.*)(\s*\()(.*)(\).*$)/
-        }, {
-            token: "storage.type.bro",
-            regex: /\b(?:bool|enum|double|int|count|port|addr|subnet|any|file|interval|time|string|table|vector|set|record|pattern|hook)\b/
-        }, {
-            token: "storage.modifier.bro",
-            regex: /\b(?:global|const|redef|local|&(?:optional|rotate_interval|rotate_size|add_func|del_func|expire_func|expire_create|expire_read|expire_write|persistent|synchronized|encrypt|mergeable|priority|group|type_column|log|error_handler))\b/
-        }, {
-            token: "keyword.operator.bro",
-            regex: /\s*(?:\||&&|(?:>|<|!)=?|==)\s*|\b!?in\b/
-        }, {
-            token: "constant.language.bro",
-            regex: /\b(?:T|F)\b/
-        }, {
-            token: "constant.numeric.bro",
-            regex: /\b(?:0(?:x|X)[0-9a-fA-F]*|(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:(?:e|E)(?:\+|-)?[0-9]+)?)(?:\/(?:tcp|udp|icmp)|\s*(?:u?sec|min|hr|day)s?)?\b/
-        }, {
-            token: "punctuation.definition.string.begin.bro",
+            token: "string.quoted.double.turtle",
             regex: /"/,
             push: [{
-                token: "punctuation.definition.string.end.bro",
+                token: "string.quoted.double.turtle",
                 regex: /"/,
                 next: "pop"
             }, {
-                include: "#string_escaped_char"
+                token: "invalid.string.newline",
+                regex: /$/
             }, {
-                include: "#string_placeholder"
+                token: "constant.character.escape.turtle",
+                regex: /\\./
             }, {
-                defaultToken: "string.quoted.double.bro"
-            }]
-        }, {
-            token: "punctuation.definition.string.begin.bro",
-            regex: /\//,
-            push: [{
-                token: "punctuation.definition.string.end.bro",
-                regex: /\//,
-                next: "pop"
-            }, {
-                include: "#string_escaped_char"
-            }, {
-                include: "#string_placeholder"
-            }, {
-                defaultToken: "string.quoted.regex.bro"
-            }]
-        }, {
-            token: [
-                "meta.preprocessor.bro.load",
-                "keyword.other.special-method.bro"
-            ],
-            regex: /^(\s*)(\@load(?:-sigs)?)\b/,
-            push: [{
-                token: [],
-                regex: /(?=\#)|$/,
-                next: "pop"
-            }, {
-                defaultToken: "meta.preprocessor.bro.load"
-            }]
-        }, {
-            token: [
-                "meta.preprocessor.bro.if",
-                "keyword.other.special-method.bro",
-                "meta.preprocessor.bro.if"
-            ],
-            regex: /^(\s*)(\@endif|\@if(?:n?def)?)(.*$)/,
-            push: [{
-                token: [],
-                regex: /$/,
-                next: "pop"
-            }, {
-                defaultToken: "meta.preprocessor.bro.if"
+                defaultToken: "string.quoted.double.turtle"
             }]
         }],
-        "#disabled": [{
-            token: "text",
-            regex: /^\s*\@if(?:n?def)?\b.*$/,
-            push: [{
-                token: "text",
-                regex: /^\s*\@endif\b.*$/,
-                next: "pop"
-            }, {
-                include: "#disabled"
-            }, {
-                include: "#pragma-mark"
-            }],
-            comment: "eat nested preprocessor ifdefs"
-        }],
-        "#preprocessor-rule-other": [{
-            token: [
-                "text",
-                "meta.preprocessor.bro",
-                "meta.preprocessor.bro",
-                "text"
-            ],
-            regex: /^(\s*)(@if)((?:n?def)?)\b(.*?)(?:(?=)|$)/,
-            push: [{
-                token: ["text", "meta.preprocessor.bro", "text"],
-                regex: /^(\s*)(@endif)\b(.*$)/,
-                next: "pop"
-            }, {
-                include: "$base"
-            }]
-        }],
-        "#string_escaped_char": [{
-            token: "constant.character.escape.bro",
-            regex: /\\(?:\\|[abefnprtv'"?]|[0-3]\d{,2}|[4-7]\d?|x[a-fA-F0-9]{,2})/
-        }, {
-            token: "invalid.illegal.unknown-escape.bro",
-            regex: /\\./
-        }],
-        "#string_placeholder": [{
-            token: "constant.other.placeholder.bro",
-            regex: /%(?:\d+\$)?[#0\- +']*[,;:_]?(?:-?\d+|\*(?:-?\d+\$)?)?(?:\.(?:-?\d+|\*(?:-?\d+\$)?)?)?(?:hh|h|ll|l|j|t|z|q|L|vh|vl|v|hv|hl)?[diouxXDOUeEfFgGaACcSspn%]/
-        }, {
-            token: "invalid.illegal.placeholder.bro",
-            regex: /%/
+        "#xml-schema-types": [{
+            token: "support.type.datatype.xml.schema.turtle",
+            regex: /xsd?:[a-z][a-zA-Z]+/
         }]
     }
     
     this.normalizeRules();
 };
 
-BroHighlightRules.metaData = {
-    fileTypes: ["bro"],
-    foldingStartMarker: "^(\\@if(n?def)?)",
-    foldingStopMarker: "^\\@endif",
-    keyEquivalent: "@B",
-    name: "Bro",
-    scopeName: "source.bro"
+TurtleHighlightRules.metaData = {
+    fileTypes: ["ttl", "nt"],
+    name: "Turtle",
+    scopeName: "source.turtle"
 }
 
 
-oop.inherits(BroHighlightRules, TextHighlightRules);
+oop.inherits(TurtleHighlightRules, TextHighlightRules);
 
-exports.BroHighlightRules = BroHighlightRules;
+exports.TurtleHighlightRules = TurtleHighlightRules;
 });
 
 ace.define("ace/mode/folding/cstyle",["require","exports","module","ace/lib/oop","ace/range","ace/mode/folding/fold_mode"], function(acequire, exports, module) {
@@ -305,22 +267,22 @@ oop.inherits(FoldMode, BaseFoldMode);
 
 });
 
-ace.define("ace/mode/bro",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/bro_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
+ace.define("ace/mode/turtle",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/turtle_highlight_rules","ace/mode/folding/cstyle"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("./text").Mode;
-var BroHighlightRules = acequire("./bro_highlight_rules").BroHighlightRules;
+var TurtleHighlightRules = acequire("./turtle_highlight_rules").TurtleHighlightRules;
 var FoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
-    this.HighlightRules = BroHighlightRules;
+    this.HighlightRules = TurtleHighlightRules;
     this.foldingRules = new FoldMode();
 };
 oop.inherits(Mode, TextMode);
 
 (function() {
-    this.$id = "ace/mode/bro"
+    this.$id = "ace/mode/turtle"
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
