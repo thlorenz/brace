@@ -138,6 +138,13 @@ export function         createEditSession(text: Document, mode: TextMode): IEdit
         **/
 export function         createEditSession(text: string, mode: TextMode): IEditSession;
 
+        /**
+         * Defines a new module in packed noconflict mode
+         * @param name 
+         * @param dependencies 
+         * @param module 
+         */
+export function         define(name: string, dependencies: string[], module: any): void;
 
     ////////////////
     /// Anchor
