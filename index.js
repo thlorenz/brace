@@ -13749,6 +13749,7 @@ var Gutter = function(parentEl) {
                 className += this.$annotations[row].className;
             if (cell.element.className != className)
                 cell.element.className = className;
+            cell.element.dataset.line = row;
 
             var height = session.getRowLength(row) * config.lineHeight + "px";
             if (height != cell.element.style.height)
