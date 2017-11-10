@@ -148,18 +148,36 @@ var aceTag = 'v1.2.9';
 
 +function workers() {
   var acesrc = fs.readFileSync(path.join(buildroot, 'ace.js'), 'utf-8');
-  var workerBlob = fs.readFileSync(path.join(__dirname, 'worker-blob.js'), 'utf-8');
 
-  var newWorkerRx = /this\.\$worker *= *new +Worker\(workerUrl\);/;
+  var pattern1Count = 2;
+  var pattern2Count = 2;
+  var pattern3Count = 2;
+  var pattern4Count = 1;
   var src = acesrc
     // VERY BRITTLE - may easily break with future ace versions
     // replace mod with mod.id in the following two lines inside
     // WorkerClient  function definition
     //  * workerUrl = config.moduleUrl(mod, "worker");
     //  * module: mod,
-    .replace('workerUrl = workerUrl || config.moduleUrl(mod, "worker");', 'workerUrl = workerUrl || config.moduleUrl(mod.id, "worker")')
-    .replace('module : mod,', 'module : mod.id,')
-    .replace(newWorkerRx, workerBlob);
+    .replace(/(:|\()\s*mod\b/g, function(m) {
+       pattern1Count--;
+       return m + ".id";
+    })
+    .replace(/createWorker\(workerUrl\)/g, function() {
+      pattern2Count--;
+      return "createWorker(workerUrl, mod)" ;
+    })
+    .replace(/\$workerBlob\(workerUrl\)/g, function() {
+      pattern3Count--;
+      return "$workerBlob(workerUrl, mod)";
+    })
+    .replace(/(var script = )("importScripts\()/g, function(_, m1, m2) {
+       pattern4Count--;
+       return m1 + "mod.src;" + m2;
+    });
+
+  if (pattern1Count || pattern2Count || pattern3Count || pattern4Count)
+    throw new Error("Worker initalization code requires manual change!");
 
   src += '\nmodule.exports = window.ace.acequire("ace/ace");';
   fs.writeFileSync(path.join(braceroot, 'index.js'), src, 'utf-8');
