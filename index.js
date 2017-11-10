@@ -17973,8 +17973,8 @@ var net = acequire("../lib/net");
 var EventEmitter = acequire("../lib/event_emitter").EventEmitter;
 var config = acequire("../config");
 
-function $workerBlob(workerUrl) {
-    var script = "importScripts('" + net.qualifyURL(workerUrl) + "');";
+function $workerBlob(workerUrl, mod) {
+    var script = mod.src;"importScripts('" + net.qualifyURL(workerUrl) + "');";
     try {
         return new Blob([script], {"type": "application/javascript"});
     } catch (e) { // Backwards-compatibility
@@ -17985,8 +17985,8 @@ function $workerBlob(workerUrl) {
     }
 }
 
-function createWorker(workerUrl) {
-    var blob = $workerBlob(workerUrl);
+function createWorker(workerUrl, mod) {
+    var blob = $workerBlob(workerUrl, mod);
     var URL = window.URL || window.webkitURL;
     var blobURL = URL.createObjectURL(blob);
     return new Worker(blobURL);
@@ -18000,7 +18000,7 @@ var WorkerClient = function(topLevelNamespaces, mod, classname, workerUrl, impor
         acequire.toUrl = acequire.nameToUrl;
     
     if (config.get("packaged") || !acequire.toUrl) {
-        workerUrl = workerUrl || config.moduleUrl(mod.id, "worker")
+        workerUrl = workerUrl || config.moduleUrl(mod.id, "worker");
     } else {
         var normalizePath = this.$normalizePath;
         workerUrl = workerUrl || normalizePath(acequire.toUrl("ace/worker/worker.js", null, "_"));
@@ -18011,7 +18011,7 @@ var WorkerClient = function(topLevelNamespaces, mod, classname, workerUrl, impor
         });
     }
 
-    this.$worker = createWorker(workerUrl);
+    this.$worker = createWorker(workerUrl, mod);
     if (importScripts) {
         this.send("importScripts", importScripts);
     }
