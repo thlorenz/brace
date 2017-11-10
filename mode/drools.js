@@ -9,7 +9,7 @@ var DocCommentHighlightRules = function() {
         "start" : [ {
             token : "comment.doc.tag",
             regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        },
+        }, 
         DocCommentHighlightRules.getTagRule(),
         {
             defaultToken : "comment.doc",
@@ -25,7 +25,7 @@ DocCommentHighlightRules.getTagRule = function(start) {
         token : "comment.doc.tag.storage.type",
         regex : "\\b(?:TODO|FIXME|XXX|HACK)\\b"
     };
-}
+};
 
 DocCommentHighlightRules.getStartRule = function(start) {
     return {
@@ -152,11 +152,10 @@ var JavaHighlightRules = function() {
         "comment" : [
             {
                 token : "comment", // closing comment
-                regex : ".*?\\*\\/",
+                regex : "\\*\\/",
                 next : "start"
             }, {
-                token : "comment", // comment spanning whole line
-                regex : ".+"
+                defaultToken : "comment"
             }
         ]
     };
@@ -267,14 +266,13 @@ var DroolsHighlightRules = function() {
         return [
             {
                 token : "comment.block", // closing comment
-                regex : ".*?\\*\\/",
+                regex : "\\*\\/",
                 next : returnRule
             }, {
-                token : "comment.block", // comment spanning whole line
-                regex : ".+"
+                defaultToken : "comment.block"
             }
         ];
-      }
+      };
 
       var basicPostRules = function() {
         return [{
@@ -398,7 +396,7 @@ var FoldMode = exports.FoldMode = function() {};
 oop.inherits(FoldMode, BaseFoldMode);
 
 (function() {
-    this.foldingStartMarker = /\b(rule|declare|query|when|then)\b/;
+    this.foldingStartMarker = /\b(rule|declare|query|when|then)\b/; 
     this.foldingStopMarker = /\bend\b/;
 
     this.getFoldWidgetRange = function(session, foldStyle, row) {
@@ -416,7 +414,7 @@ oop.inherits(FoldMode, BaseFoldMode);
                     seek = "then";
                 }
                 while (token) {
-                    if (token.value == seek) {
+                    if (token.value == seek) { 
                         return Range.fromPoints(position ,{
                             row: iterator.getCurrentTokenRow(),
                             column: iterator.getCurrentTokenColumn()
@@ -427,7 +425,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             }
 
         }
-    }
+    };
 
 }).call(FoldMode.prototype);
 
