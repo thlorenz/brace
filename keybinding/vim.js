@@ -4989,7 +4989,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
       cm.setCursor(cm.getCursor().line, cm.getCursor().ch-1);
       cm.setOption('keyMap', 'vim');
       cm.setOption('disableInput', true);
-
+      
       lastChange.overwrite = cm.state.overwrite;
       cm.toggleOverwrite(false); // exit replace mode if we were in it.
       insertModeChangeRegister.setText(lastChange.changes.join(''));
