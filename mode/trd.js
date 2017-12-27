@@ -70,7 +70,7 @@ ace.define('ace/mode/trd_highlight_rules', function (require, exports, module) {
         this.normalizeRules();
     };
     var oop = require('../lib/oop');
-    const TextHighlightRules = require('ace/mode/text_highlight_rules').TextHighlightRules;
+    var TextHighlightRules = require('ace/mode/text_highlight_rules').TextHighlightRules;
     oop.inherits(TrdHighLightRules, TextHighlightRules);
     exports.TrdHighLightRules = TrdHighLightRules;
 });
@@ -110,7 +110,7 @@ ace.define('ace/mode/trd',
         'use strict';
         const oop = require('../lib/oop');
         var TextMode = require('./text').Mode;
-        const TrdHighLightRules = require('./trd_highlight_rules').TrdHighLightRules;
+        var TrdHighLightRules = require('./trd_highlight_rules').TrdHighLightRules;
         var MatchingBraceOutdent = require('./matching_brace_outdent').MatchingBraceOutdent;
         var WorkerClient = require('../worker/worker_client').WorkerClient;
         var CstyleBehaviour = require('./behaviour/cstyle').CstyleBehaviour;

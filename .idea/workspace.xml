@@ -2,59 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eb163b75-b3bf-4564-8c06-1918edbddcfe" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/mode/trd.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ext/emmet.js" afterPath="$PROJECT_DIR$/ext/emmet.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ext/language_tools.js" afterPath="$PROJECT_DIR$/ext/language_tools.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ext/searchbox.js" afterPath="$PROJECT_DIR$/ext/searchbox.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.d.ts" afterPath="$PROJECT_DIR$/index.d.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.js" afterPath="$PROJECT_DIR$/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keybinding/emacs.js" afterPath="$PROJECT_DIR$/keybinding/emacs.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/keybinding/vim.js" afterPath="$PROJECT_DIR$/keybinding/vim.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/bro.js" afterPath="$PROJECT_DIR$/mode/bro.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/coldfusion.js" afterPath="$PROJECT_DIR$/mode/coldfusion.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/csound_document.js" afterPath="$PROJECT_DIR$/mode/csound_document.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/csound_orchestra.js" afterPath="$PROJECT_DIR$/mode/csound_orchestra.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/css.js" afterPath="$PROJECT_DIR$/mode/css.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/curly.js" afterPath="$PROJECT_DIR$/mode/curly.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/django.js" afterPath="$PROJECT_DIR$/mode/django.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/drools.js" afterPath="$PROJECT_DIR$/mode/drools.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/ejs.js" afterPath="$PROJECT_DIR$/mode/ejs.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/fortran.js" afterPath="$PROJECT_DIR$/mode/fortran.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/ftl.js" afterPath="$PROJECT_DIR$/mode/ftl.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/graphqlschema.js" afterPath="$PROJECT_DIR$/mode/graphqlschema.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/haml.js" afterPath="$PROJECT_DIR$/mode/haml.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/handlebars.js" afterPath="$PROJECT_DIR$/mode/handlebars.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/hjson.js" afterPath="$PROJECT_DIR$/mode/hjson.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/html.js" afterPath="$PROJECT_DIR$/mode/html.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/html_elixir.js" afterPath="$PROJECT_DIR$/mode/html_elixir.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/html_ruby.js" afterPath="$PROJECT_DIR$/mode/html_ruby.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/jade.js" afterPath="$PROJECT_DIR$/mode/jade.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/jsp.js" afterPath="$PROJECT_DIR$/mode/jsp.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/jssm.js" afterPath="$PROJECT_DIR$/mode/jssm.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/kotlin.js" afterPath="$PROJECT_DIR$/mode/kotlin.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/latex.js" afterPath="$PROJECT_DIR$/mode/latex.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/less.js" afterPath="$PROJECT_DIR$/mode/less.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/liquid.js" afterPath="$PROJECT_DIR$/mode/liquid.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/luapage.js" afterPath="$PROJECT_DIR$/mode/luapage.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/markdown.js" afterPath="$PROJECT_DIR$/mode/markdown.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/mask.js" afterPath="$PROJECT_DIR$/mode/mask.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/php.js" afterPath="$PROJECT_DIR$/mode/php.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/pig.js" afterPath="$PROJECT_DIR$/mode/pig.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/razor.js" afterPath="$PROJECT_DIR$/mode/razor.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/rdoc.js" afterPath="$PROJECT_DIR$/mode/rdoc.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/red.js" afterPath="$PROJECT_DIR$/mode/red.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/rhtml.js" afterPath="$PROJECT_DIR$/mode/rhtml.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/smarty.js" afterPath="$PROJECT_DIR$/mode/smarty.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/soy_template.js" afterPath="$PROJECT_DIR$/mode/soy_template.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/sparql.js" afterPath="$PROJECT_DIR$/mode/sparql.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/stylus.js" afterPath="$PROJECT_DIR$/mode/stylus.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/svg.js" afterPath="$PROJECT_DIR$/mode/svg.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/swift.js" afterPath="$PROJECT_DIR$/mode/swift.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/tsx.js" afterPath="$PROJECT_DIR$/mode/tsx.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/turtle.js" afterPath="$PROJECT_DIR$/mode/turtle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/twig.js" afterPath="$PROJECT_DIR$/mode/twig.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/velocity.js" afterPath="$PROJECT_DIR$/mode/velocity.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/xml.js" afterPath="$PROJECT_DIR$/mode/xml.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/mode/trd.js" afterPath="$PROJECT_DIR$/mode/trd.js" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -69,7 +17,7 @@
       <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/package.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-348">
+            <state relative-caret-position="-261">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
@@ -79,8 +27,8 @@
       <file leaf-file-name="trd.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/mode/trd.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="143">
-              <caret line="79" column="1" lean-forward="false" selection-start-line="79" selection-start-column="1" selection-end-line="79" selection-end-column="1" />
+            <state relative-caret-position="290">
+              <caret line="151" column="7" lean-forward="true" selection-start-line="151" selection-start-column="7" selection-end-line="151" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -99,6 +47,7 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/mode/trd.js" />
       </list>
     </option>
@@ -674,12 +623,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1514405649375</updated>
-      <workItem from="1514405651001" duration="3118000" />
+      <workItem from="1514405651001" duration="3854000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="3118000" />
+    <option name="totallyTimeSpent" value="3854000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1535" height="904" extended-state="6" />
@@ -728,14 +677,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-348">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/mode/toml.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -744,10 +685,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-261">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mode/trd.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="79" column="1" lean-forward="false" selection-start-line="79" selection-start-column="1" selection-end-line="79" selection-end-column="1" />
+        <state relative-caret-position="290">
+          <caret line="151" column="7" lean-forward="true" selection-start-line="151" selection-start-column="7" selection-end-line="151" selection-end-column="7" />
           <folding />
         </state>
       </provider>
