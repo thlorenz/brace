@@ -9,7 +9,7 @@ var DocCommentHighlightRules = function() {
         "start" : [ {
             token : "comment.doc.tag",
             regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        },
+        }, 
         DocCommentHighlightRules.getTagRule(),
         {
             defaultToken : "comment.doc",
@@ -396,7 +396,7 @@ var FoldMode = exports.FoldMode = function() {};
 oop.inherits(FoldMode, BaseFoldMode);
 
 (function() {
-    this.foldingStartMarker = /\b(rule|declare|query|when|then)\b/;
+    this.foldingStartMarker = /\b(rule|declare|query|when|then)\b/; 
     this.foldingStopMarker = /\bend\b/;
 
     this.getFoldWidgetRange = function(session, foldStyle, row) {
@@ -414,7 +414,7 @@ oop.inherits(FoldMode, BaseFoldMode);
                     seek = "then";
                 }
                 while (token) {
-                    if (token.value == seek) {
+                    if (token.value == seek) { 
                         return Range.fromPoints(position ,{
                             row: iterator.getCurrentTokenRow(),
                             column: iterator.getCurrentTokenColumn()
