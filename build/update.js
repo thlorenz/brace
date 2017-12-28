@@ -54,17 +54,6 @@ var aceTag = 'v1.2.9';
       });
   }()
 
-  +function modes() {
-    rm('-rf', modedir);
-    mkdir(modedir);
-
-    ls(path.join(buildroot, 'mode-*.js'))
-      .forEach(function (file) {
-        var filename = path.basename(file).slice('mode-'.length);
-        mv(file, path.join(modedir, filename));
-      });
-  }()
-
   +function exts() {
     rm('-rf', extdir);
     mkdir(extdir);
@@ -86,18 +75,6 @@ var aceTag = 'v1.2.9';
         mv(file, path.join(keybindingdir, filename));
       });
   }()
-
-  +function workers() {
-    rm('-rf', workersrcdir);
-    mkdir(workersrcdir);
-
-    ls(path.join(buildroot, 'worker-*.js'))
-      .forEach(function (file) {
-        var filename = path.basename(file).slice('worker-'.length);
-        mv(file, path.join(workersrcdir, filename));
-      });
-  }()
-
 }()
 
 +function requires() {
