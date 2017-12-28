@@ -1,4 +1,4 @@
-ace.define('ace/mode/trd_highlight_rules', function (require, exports, module) {
+ace.define('ace/mode/trd_highlight_rules', function (acequire, exports, module) {
     var TrdHighLightRules = function () {
         // regexp must not have capturing parentheses. Use (?:) instead.
         // regexps are ordered -> the first match is used
@@ -69,8 +69,8 @@ ace.define('ace/mode/trd_highlight_rules', function (require, exports, module) {
         };
         this.normalizeRules();
     };
-    var oop = require('../lib/oop');
-    var TextHighlightRules = require('ace/mode/text_highlight_rules').TextHighlightRules;
+    var oop = acequire('../lib/oop');
+    var TextHighlightRules = acequire('ace/mode/text_highlight_rules').TextHighlightRules;
     oop.inherits(TrdHighLightRules, TextHighlightRules);
     exports.TrdHighLightRules = TrdHighLightRules;
 });
@@ -79,10 +79,10 @@ function validate() {
 
 }
 ace.define('ace/worker/my-worker',
-    ['require', 'exports', 'module', 'ace/lib/oop', 'ace/worker/mirror'],
-    function (require, exports, module) {
-        var oop = require('ace/lib/oop');
-        var Mirror = require('ace/worker/mirror').Mirror;
+    ["require", 'exports', 'module', 'ace/lib/oop', 'ace/worker/mirror'],
+    function (acequire, exports, module) {
+        var oop = acequire('ace/lib/oop');
+        var Mirror = acequire('ace/worker/mirror').Mirror;
 
         var MyWorker = function (sender) {
             Mirror.call(this, sender);
@@ -106,15 +106,15 @@ ace.define('ace/worker/my-worker',
         exports.MyWorker = MyWorker;
     });
 ace.define('ace/mode/trd',
-    function (require, exports, module) {
+    function (acequire, exports, module) {
         'use strict';
-        const oop = require('../lib/oop');
-        var TextMode = require('./text').Mode;
-        var TrdHighLightRules = require('./trd_highlight_rules').TrdHighLightRules;
-        var MatchingBraceOutdent = require('./matching_brace_outdent').MatchingBraceOutdent;
-        var WorkerClient = require('../worker/worker_client').WorkerClient;
-        var CstyleBehaviour = require('./behaviour/cstyle').CstyleBehaviour;
-        var CStyleFoldMode = require('./folding/cstyle').FoldMode;
+        const oop = acequire('../lib/oop');
+        var TextMode = acequire('./text').Mode;
+        var TrdHighLightRules = acequire('./trd_highlight_rules').TrdHighLightRules;
+        var MatchingBraceOutdent = acequire('./matching_brace_outdent').MatchingBraceOutdent;
+        var WorkerClient = acequire('../worker/worker_client').WorkerClient;
+        var CstyleBehaviour = acequire('./behaviour/cstyle').CstyleBehaviour;
+        var CStyleFoldMode = acequire('./folding/cstyle').FoldMode;
         var TrdHighlights = function () {
             this.HighlightRules = TrdHighLightRules;
             this.$outdent = new MatchingBraceOutdent();
@@ -126,8 +126,7 @@ ace.define('ace/mode/trd',
             this.$id = 'ace/mode/trd';
             this.createWorker = function (session) {
                 console.log(session);
-                this.$worker = new WorkerClient(['ace'],
-                    'ace/worker/my-worker', 'MyWorker', '../js/my-worker.js');
+                this.$worker = new WorkerClient(["ace"], acequire("../worker/javascript"), "JavaScriptWorker");
                 this.$worker.attachToDocument(session.getDocument());
 
                 this.$worker.on('errors', function (e) {
