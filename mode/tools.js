@@ -130,7 +130,6 @@ ace.define('ace/mode/trd',
                     console.log('annotate');
                     console.log(e);
                     session.setAnnotations(e.data);
-                    this.$worker.onUpdate(e);
                 });
 
                 this.$worker.on('terminate', function () {
