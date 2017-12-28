@@ -111,15 +111,9 @@ ace.define('ace/mode/trd',
         const oop = acequire('../lib/oop');
         var TextMode = acequire('./text').Mode;
         var TrdHighLightRules = acequire('./trd_highlight_rules').TrdHighLightRules;
-        var MatchingBraceOutdent = acequire('./matching_brace_outdent').MatchingBraceOutdent;
         var WorkerClient = acequire('../worker/worker_client').WorkerClient;
-        var CstyleBehaviour = acequire('./behaviour/cstyle').CstyleBehaviour;
-        var CStyleFoldMode = acequire('./folding/cstyle').FoldMode;
         var TrdHighlights = function () {
             this.HighlightRules = TrdHighLightRules;
-            this.$outdent = new MatchingBraceOutdent();
-            this.$behaviour = new CstyleBehaviour();
-            this.foldingRules = new CStyleFoldMode();
         };
         oop.inherits(TrdHighlights, TextMode);
         (function () {
