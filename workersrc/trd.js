@@ -1419,6 +1419,10 @@ ace.define("ace/worker/mirror", ["require", "exports", "module", "ace/range", "a
 
 });
 
+// load nodejs compatible require
+var antlr4 = require('antlr4/index');
+var TrdLexer = require('../rules/RULANGLexer');
+var TrdParser = require('../rules/RULANGParser');
 var AnnotatingErrorListener = function(annotations) {
     antlr4.error.ErrorListener.call(this);
     this.annotations = annotations;
@@ -1436,10 +1440,7 @@ AnnotatingErrorListener.prototype.syntaxError = function(recognizer, offendingSy
         type: "error"
     });
 };
-// load nodejs compatible require
-var antlr4 = require('antlr4/index');
-var TrdLexer = require('../rules/RULANGLexer');
-var TrdParser = require('../rules/RULANGParser');
+
 function validate (input) {
     var stream = antlr4.InputStream(input);
     var lexer = new TrdLexer.RULANGLexer(stream);
