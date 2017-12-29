@@ -1420,6 +1420,7 @@ ace.define("ace/worker/mirror", ["require", "exports", "module", "ace/range", "a
 });
 
 // load nodejs compatible require
+importScripts('../lib/require');
 var antlr4 = require('antlr4/index');
 var TrdLexer = require('../rules/RULANGLexer');
 var TrdParser = require('../rules/RULANGParser');
