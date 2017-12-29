@@ -1428,7 +1428,7 @@ ace.define('ace/mode/trd_worker', ["require", 'exports', 'module', 'ace/lib/oop'
         this.setTimeout(200);
     };
     oop.inherits(TrdWorker, Mirror);
-    importScripts('lib/require.js');
+    importScripts('/assets/lib/require.js');
     var antlr4 = require('antlr4/index');
     var TrdLexer = require('../rules/RULANGLexer');
     var TrdParser = require('../rules/RULANGParser');
