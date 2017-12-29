@@ -1419,88 +1419,6 @@ ace.define("ace/worker/mirror", ["require", "exports", "module", "ace/range", "a
 });
 
 // load nodejs compatible require
-function require(identifier, callback) {
-    var descriptor = resolve(identifier);
-    var cacheid = '$'+descriptor.id;
-
-    if (cache[cacheid]) {
-        if (typeof cache[cacheid] === 'string')
-            load(descriptor, cache, pwd, cache[cacheid]);
-        // NOTE The callback should always be called asynchronously to ensure
-        //      that a cached call won't differ from an uncached one.
-        callback && setTimeout(function(){callback(cache[cacheid])}, 0);
-        return cache[cacheid];
-    }
-
-    var request = new XMLHttpRequest();
-
-    // NOTE IE8 doesn't support the onload event, therefore we use
-    //      onreadystatechange as a fallback here. However, onreadystatechange
-    //      shouldn't be used for all browsers, since at least mobile Safari
-    //      seems to have an issue where onreadystatechange is called twice for
-    //      readyState 4.
-    callback && (request[request.onload===null?'onload':'onreadystatechange'] = onLoad);
-    request.open('GET', descriptor.uri, !!callback);
-    // NOTE Sending the request causes the event loop to continue. Therefore
-    //      pending AJAX load events for the same url might be executed before
-    //      the synchronous onLoad is called. This should be no problem, but in
-    //      Chrome the responseText of the sneaked in load events will be empty.
-    //      Therefore we have to lock the loading while executong send().
-    locks[cacheid] = locks[cacheid]++||1;
-    request.send();
-    locks[cacheid]--;
-    !callback && onLoad();
-    return cache[cacheid];
-
-    function onLoad() {
-        if (request.readyState != 4)
-            return;
-        if (request.status != 200 && request.status != 0 ) // 0 for Safari with file protocol
-            throw new SmoothieError('unable to load '+descriptor.id+" ("+request.status+" "+request.statusText+")");
-        if (locks[cacheid]) {
-            console.warn("module locked: "+descriptor.id);
-            callback && setTimeout(onLoad, 0);
-            return;
-        }
-        if (!cache[cacheid])
-            load(descriptor, cache, pwd, 'function(){\n'+request.responseText+'\n}');
-        callback && callback(cache[cacheid]);
-    }
-}
-var antlr4 = require('antlr4/index');
-var TrdLexer = require('../rules/RULANGLexer');
-var TrdParser = require('../rules/RULANGParser');
-var AnnotatingErrorListener = function(annotations) {
-    antlr4.error.ErrorListener.call(this);
-    this.annotations = annotations;
-    return this;
-};
-
-AnnotatingErrorListener.prototype = Object.create(antlr4.error.ErrorListener.prototype);
-AnnotatingErrorListener.prototype.constructor = AnnotatingErrorListener;
-
-AnnotatingErrorListener.prototype.syntaxError = function(recognizer, offendingSymbol, line, column, msg, e) {
-    this.annotations.push({
-        row: line - 1,
-        column: column,
-        text: msg,
-        type: "error"
-    });
-};
-
-function validate (input) {
-    var stream = antlr4.InputStream(input);
-    var lexer = new TrdLexer.RULANGLexer(stream);
-    var tokens = new antlr4.CommonTokenStream(lexer);
-    var parser = new TrdParser.RULANGParser(tokens);
-    var annotations = [];
-    var listener = new AnnotatingErrorListener(annotations)
-    parser.removeErrorListeners();
-    parser.addErrorListener(listener);
-    parser.parseRule();
-    return annotations;
-}
-
 ace.define('ace/mode/trd_worker', ["require", 'exports', 'module', 'ace/lib/oop', 'ace/worker/mirror'], function (acequire, exports, module) {
     console.log('worker start')
     var oop = acequire('ace/lib/oop');
@@ -1509,8 +1427,41 @@ ace.define('ace/mode/trd_worker', ["require", 'exports', 'module', 'ace/lib/oop'
         Mirror.call(this, sender);
         this.setTimeout(200);
     };
-
     oop.inherits(TrdWorker, Mirror);
+    importScripts('../lib/require');
+    var antlr4 = require('antlr4/index');
+    var TrdLexer = require('../rules/RULANGLexer');
+    var TrdParser = require('../rules/RULANGParser');
+    var AnnotatingErrorListener = function(annotations) {
+        antlr4.error.ErrorListener.call(this);
+        this.annotations = annotations;
+        return this;
+    };
+
+    AnnotatingErrorListener.prototype = Object.create(antlr4.error.ErrorListener.prototype);
+    AnnotatingErrorListener.prototype.constructor = AnnotatingErrorListener;
+
+    AnnotatingErrorListener.prototype.syntaxError = function(recognizer, offendingSymbol, line, column, msg, e) {
+        this.annotations.push({
+            row: line - 1,
+            column: column,
+            text: msg,
+            type: "error"
+        });
+    };
+
+    function validate (input) {
+        var stream = antlr4.InputStream(input);
+        var lexer = new TrdLexer.RULANGLexer(stream);
+        var tokens = new antlr4.CommonTokenStream(lexer);
+        var parser = new TrdParser.RULANGParser(tokens);
+        var annotations = [];
+        var listener = new AnnotatingErrorListener(annotations)
+        parser.removeErrorListeners();
+        parser.addErrorListener(listener);
+        parser.parseRule();
+        return annotations;
+    };
     (function () {
         this.onUpdate = function () {
             console.log(this.doc);
