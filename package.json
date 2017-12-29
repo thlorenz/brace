@@ -6,14 +6,17 @@
   "typings": "index.d.ts",
   "scripts": {
     "update": "(cd build && node ./update && node ./update-ts)",
-    "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html"
+    "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html",
+    "antlr4": "antlr4 -Dlanguage=JavaScript ./rules/RULANG.g4"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/thlorenz/brace.git"
   },
   "homepage": "https://github.com/thlorenz/brace",
-  "dependencies": {},
+  "dependencies": {
+    "antlr4": "^4.7.1"
+  },
   "devDependencies": {
     "browserify": "~4.2.0",
     "opener": "~1.3.0",
