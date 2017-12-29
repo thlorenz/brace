@@ -75,12 +75,12 @@ ace.define('ace/mode/trd_highlight_rules', function (acequire, exports, module) 
     exports.TrdHighLightRules = TrdHighLightRules;
 });
 
-ace.define('ace/worker/mirror', function (require, exports, module) {
+ace.define('ace/worker/mirror', function (acequire, exports, module) {
     "use strict";
 
-    var Range = require("../range").Range;
-    var Document = require("../document").Document;
-    var lang = require("../lib/lang");
+    var Range = acequire("../range").Range;
+    var Document = acequire("../document").Document;
+    var lang = acequire("../lib/lang");
 
     var Mirror = exports.Mirror = function (sender) {
         this.sender = sender;
