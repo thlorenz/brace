@@ -1436,7 +1436,22 @@ AnnotatingErrorListener.prototype.syntaxError = function(recognizer, offendingSy
         type: "error"
     });
 };
-var antlr4 = require('antlr4/index')
+// load nodejs compatible require
+var ace_require = require;
+require = undefined;
+var Honey = { 'requirePath': ['..'] };
+importScripts("../lib/require.js");
+var antlr4_require = require;
+require = ace_require;
+
+var antlr4, mylanguage;
+try {
+    require = antlr4_require;
+    antlr4 = require('antlr4/index');
+    mylanguage = require('mylanguage/index');
+} finally {
+    require = ace_require;
+}
 var TrdLexer = require('../rules/RULANGLexer');
 var TrdParser = require('../rules/RULANGParser');
 function validate (input) {
@@ -1450,7 +1465,6 @@ function validate (input) {
     parser.addErrorListener(listener);
     parser.parseRule();
     return annotations;
-    // return [{row: 0, column: 0, text: "MyMode says Hello!", type: "error"}];
 }
 
 ace.define('ace/mode/trd_worker', ["require", 'exports', 'module', 'ace/lib/oop', 'ace/worker/mirror'], function (acequire, exports, module) {
