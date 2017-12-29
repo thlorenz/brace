@@ -24,36 +24,6 @@ var aceTag = 'v1.2.9';
 
 +function updateCleanAndPutInOrder() {
 
-  // +function cloneFreshAndRemoveUnneeded() {
-  //   rm('-rf', buildroot)
-  //   exec('git clone git://github.com/ajaxorg/ace-builds.git ' + buildroot);
-  //   exec('(cd ' + buildroot + ' && git pull && git checkout ' + aceTag + ')');
-  //
-  //   [ 'demo', 'kitchen-sink', 'src-min', 'src', 'textarea' ]
-  //     .forEach(function (dir) { rm('-rf', path.join(buildroot, dir)) })
-  //
-  //   rm(path.join(buildroot, '*'));
-  //
-  //   // move src-noconflict files to root after we cleaned it since that is all we need
-  //   mv(path.join(buildroot, 'src-min-noconflict/snippets'), buildroot);
-  //   mv(path.join(buildroot, 'src-noconflict/*'), buildroot);
-  //
-  //   rm('-rf', path.join(buildroot, 'src-min-noconflict'));
-  //   rm('-rf', path.join(buildroot, 'src-noconflict'));
-  // }()
-
-
-  +function themes() {
-    rm('-rf', themedir);
-    mkdir(themedir);
-
-    ls(path.join(buildroot, 'theme-*.js'))
-      .forEach(function (file) {
-        var filename = path.basename(file).slice('theme-'.length);
-        mv(file, path.join(themedir, filename));
-      });
-  }()
-
   +function exts() {
     rm('-rf', extdir);
     mkdir(extdir);
