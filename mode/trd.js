@@ -78,33 +78,7 @@ ace.define('ace/mode/trd_highlight_rules', function (acequire, exports, module) 
 function validate() {
     return [{row: 0, column: 0, text: "MyMode says Hello!", type: "error"}];
 }
-// import './es5-shim';
-// import './worker-base';
-import './tools';
-ace.define('ace/worker/trd-worker',
-    ["require", 'exports', 'module', 'ace/lib/oop', 'ace/worker/mirror'],
-    function (acequire, exports, module) {
-        console.log('worker start')
-        var oop = acequire('ace/lib/oop');
-        var Mirror = acequire('ace/worker/mirror').Mirror;
-        var TrdWorker = function (sender) {
-            Mirror.call(this, sender);
-            this.setTimeout(200);
-        };
-
-        oop.inherits(TrdWorker, Mirror);
-
-        (function () {
-            this.onUpdate = function () {
-                console.log(this.doc);
-                var value = this.doc.getValue();
-                var annotations = validate(value);
-                this.sender.emit('annotate', annotations);
-            };
-        }).call(TrdWorker.prototype);
-        console.log('worker end')
-        exports.TrdWorker = TrdWorker;
-    });
+import '../worker/trd';
 ace.define('ace/mode/trd',
     function (acequire, exports, module) {
         'use strict';
@@ -119,7 +93,7 @@ ace.define('ace/mode/trd',
         (function () {
             this.$id = 'ace/mode/trd';
             this.createWorker = function (session) {
-                this.$worker = new WorkerClient(["ace"], acequire("ace/worker/trd-worker"), "TrdWorker", "../js/trd-worker.js");
+                this.$worker = new WorkerClient(["ace"], acequire("ace/worker/trd-worker"), "TrdWorker");
                 this.$worker.attachToDocument(session.getDocument());
 
                 this.$worker.on('errors', function (e) {
