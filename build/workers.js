@@ -10,6 +10,7 @@ var workers = module.exports =  {
   , php        :  [ 'php' ]
   , xquery     :  [ 'xquery' ]
   , xml        :  [ 'xml', 'svg', 'markdown' ]
+  , trd        :  [ 'trd' ]
 };
 
 module.exports.supported = Object.keys(workers)
