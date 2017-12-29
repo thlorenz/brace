@@ -88,7 +88,7 @@ ace.define('ace/mode/trd',
         (function () {
             this.$id = 'ace/mode/trd';
             this.createWorker = function (session) {
-                this.$worker = new WorkerClient(["ace"], acequire("../worker/trd"), "TrdWorker");
+                this.$worker = new WorkerClient(["ace"], require("../worker/trd"), "TrdWorker");
                 this.$worker.attachToDocument(session.getDocument());
 
                 this.$worker.on('errors', function (e) {
