@@ -1419,8 +1419,38 @@ ace.define("ace/worker/mirror", ["require", "exports", "module", "ace/range", "a
 
 });
 
-function validate () {
-    return [{row: 0, column: 0, text: "MyMode says Hello!", type: "error"}];
+var AnnotatingErrorListener = function(annotations) {
+    antlr4.error.ErrorListener.call(this);
+    this.annotations = annotations;
+    return this;
+};
+
+AnnotatingErrorListener.prototype = Object.create(antlr4.error.ErrorListener.prototype);
+AnnotatingErrorListener.prototype.constructor = AnnotatingErrorListener;
+
+AnnotatingErrorListener.prototype.syntaxError = function(recognizer, offendingSymbol, line, column, msg, e) {
+    this.annotations.push({
+        row: line - 1,
+        column: column,
+        text: msg,
+        type: "error"
+    });
+};
+var antlr4 = require('antlr4/index')
+var TrdLexer = require('../rules/RULANGLexer');
+var TrdParser = require('../rules/RULANGParser');
+function validate (input) {
+    var stream = antlr4.InputStream(input);
+    var lexer = new TrdLexer.RULANGLexer(stream);
+    var tokens = new antlr4.CommonTokenStream(lexer);
+    var parser = new TrdParser.RULANGParser(tokens);
+    var annotations = [];
+    var listener = new AnnotatingErrorListener(annotations)
+    parser.removeErrorListeners();
+    parser.addErrorListener(listener);
+    parser.parseRule();
+    return annotations;
+    // return [{row: 0, column: 0, text: "MyMode says Hello!", type: "error"}];
 }
 
 ace.define('ace/mode/trd_worker', ["require", 'exports', 'module', 'ace/lib/oop', 'ace/worker/mirror'], function (acequire, exports, module) {

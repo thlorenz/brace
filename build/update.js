@@ -79,7 +79,7 @@ var aceTag = 'v1.2.9';
     fixAllRequires(modedir);
     fixAllRequires(extdir);
     fixAllRequires(keybindingdir);
-    fixAllRequires(workersrcdir);
+    // fixAllRequires(workersrcdir);
     fixAllRequires(buildroot);
 }()
 
