@@ -435,4 +435,4 @@ RULANGListener.prototype.exitNumOperator = function(ctx) {
 
 
 
-exports.RULANGListener = RULANGListener;
+module.exports.RULANGListener = RULANGListener;

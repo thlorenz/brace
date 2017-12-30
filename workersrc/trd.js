@@ -1,227 +1,224 @@
 "no use strict";
-!(function (window) {
-    if (typeof window.window != "undefined" && window.document)
-        return;
-    if (window.acequire && window.define)
-        return;
+!(function(window) {
+    importScripts("http://localhost:4200/assets/lib/bundle.js");
+    console.log(self);
+    var window = self;
 
-    if (!window.console) {
-        window.console = function () {
-            var msgs = Array.prototype.slice.call(arguments, 0);
-            postMessage({type: "log", data: msgs});
-        };
-        window.console.error =
-            window.console.warn =
-                window.console.log =
-                    window.console.trace = window.console;
+
+if (typeof window.window != "undefined" && window.document)
+    return;
+if (window.acequire && window.define)
+    return;
+
+if (!window.console) {
+    window.console = function() {
+        var msgs = Array.prototype.slice.call(arguments, 0);
+        postMessage({type: "log", data: msgs});
+    };
+    window.console.error =
+    window.console.warn = 
+    window.console.log =
+    window.console.trace = window.console;
+}
+window.window = window;
+window.ace = window;
+
+window.onerror = function(message, file, line, col, err) {
+    postMessage({type: "error", data: {
+        message: message,
+        data: err.data,
+        file: file,
+        line: line, 
+        col: col,
+        stack: err.stack
+    }});
+};
+
+window.normalizeModule = function(parentId, moduleName) {
+    // normalize plugin acequires
+    if (moduleName.indexOf("!") !== -1) {
+        var chunks = moduleName.split("!");
+        return window.normalizeModule(parentId, chunks[0]) + "!" + window.normalizeModule(parentId, chunks[1]);
     }
-    window.window = window;
-    window.ace = window;
-
-    window.onerror = function (message, file, line, col, err) {
-        postMessage({
-            type: "error", data: {
-                message: message,
-                data: err.data,
-                file: file,
-                line: line,
-                col: col,
-                stack: err.stack
-            }
-        });
-    };
-
-    window.normalizeModule = function (parentId, moduleName) {
-        // normalize plugin acequires
-        if (moduleName.indexOf("!") !== -1) {
-            var chunks = moduleName.split("!");
-            return window.normalizeModule(parentId, chunks[0]) + "!" + window.normalizeModule(parentId, chunks[1]);
+    // normalize relative acequires
+    if (moduleName.charAt(0) == ".") {
+        var base = parentId.split("/").slice(0, -1).join("/");
+        moduleName = (base ? base + "/" : "") + moduleName;
+        
+        while (moduleName.indexOf(".") !== -1 && previous != moduleName) {
+            var previous = moduleName;
+            moduleName = moduleName.replace(/^\.\//, "").replace(/\/\.\//, "/").replace(/[^\/]+\/\.\.\//, "");
         }
-        // normalize relative acequires
-        if (moduleName.charAt(0) == ".") {
-            var base = parentId.split("/").slice(0, -1).join("/");
-            moduleName = (base ? base + "/" : "") + moduleName;
-
-            while (moduleName.indexOf(".") !== -1 && previous != moduleName) {
-                var previous = moduleName;
-                moduleName = moduleName.replace(/^\.\//, "").replace(/\/\.\//, "/").replace(/[^\/]+\/\.\.\//, "");
-            }
-        }
-
-        return moduleName;
-    };
-
-    window.acequire = function acequire(parentId, id) {
-        if (!id) {
-            id = parentId;
-            parentId = null;
-        }
-        if (!id.charAt)
-            throw new Error("worker.js acequire() accepts only (parentId, id) as arguments");
-
-        id = window.normalizeModule(parentId, id);
-
-        var module = window.acequire.modules[id];
-        if (module) {
-            if (!module.initialized) {
-                module.initialized = true;
-                module.exports = module.factory().exports;
-            }
-            return module.exports;
-        }
-
-        if (!window.acequire.tlns)
-            return console.log("unable to load " + id);
-
-        var path = resolveModuleId(id, window.acequire.tlns);
-        if (path.slice(-3) != ".js") path += ".js";
-
-        window.acequire.id = id;
-        window.acequire.modules[id] = {}; // prevent infinite loop on broken modules
-        importScripts(path);
-        return window.acequire(parentId, id);
-    };
-    function resolveModuleId(id, paths) {
-        var testPath = id, tail = "";
-        while (testPath) {
-            var alias = paths[testPath];
-            if (typeof alias == "string") {
-                return alias + tail;
-            } else if (alias) {
-                return alias.location.replace(/\/*$/, "/") + (tail || alias.main || alias.name);
-            } else if (alias === false) {
-                return "";
-            }
-            var i = testPath.lastIndexOf("/");
-            if (i === -1) break;
-            tail = testPath.substr(i) + tail;
-            testPath = testPath.slice(0, i);
-        }
-        return id;
     }
+    
+    return moduleName;
+};
 
-    window.acequire.modules = {};
-    window.acequire.tlns = {};
+window.acequire = function acequire(parentId, id) {
+    if (!id) {
+        id = parentId;
+        parentId = null;
+    }
+    if (!id.charAt)
+        throw new Error("worker.js acequire() accepts only (parentId, id) as arguments");
 
-    window.define = function (id, deps, factory) {
-        if (arguments.length == 2) {
-            factory = deps;
-            if (typeof id != "string") {
-                deps = id;
-                id = window.acequire.id;
-            }
-        } else if (arguments.length == 1) {
-            factory = id;
-            deps = [];
+    id = window.normalizeModule(parentId, id);
+
+    var module = window.acequire.modules[id];
+    if (module) {
+        if (!module.initialized) {
+            module.initialized = true;
+            module.exports = module.factory().exports;
+        }
+        return module.exports;
+    }
+   
+    if (!window.acequire.tlns)
+        return console.log("unable to load " + id);
+    
+    var path = resolveModuleId(id, window.acequire.tlns);
+    if (path.slice(-3) != ".js") path += ".js";
+    
+    window.acequire.id = id;
+    window.acequire.modules[id] = {}; // prevent infinite loop on broken modules
+    importScripts(path);
+    return window.acequire(parentId, id);
+};
+function resolveModuleId(id, paths) {
+    var testPath = id, tail = "";
+    while (testPath) {
+        var alias = paths[testPath];
+        if (typeof alias == "string") {
+            return alias + tail;
+        } else if (alias) {
+            return  alias.location.replace(/\/*$/, "/") + (tail || alias.main || alias.name);
+        } else if (alias === false) {
+            return "";
+        }
+        var i = testPath.lastIndexOf("/");
+        if (i === -1) break;
+        tail = testPath.substr(i) + tail;
+        testPath = testPath.slice(0, i);
+    }
+    return id;
+}
+window.acequire.modules = {};
+window.acequire.tlns = {};
+
+window.define = function(id, deps, factory) {
+    if (arguments.length == 2) {
+        factory = deps;
+        if (typeof id != "string") {
+            deps = id;
             id = window.acequire.id;
         }
+    } else if (arguments.length == 1) {
+        factory = id;
+        deps = [];
+        id = window.acequire.id;
+    }
+    
+    if (typeof factory != "function") {
+        window.acequire.modules[id] = {
+            exports: factory,
+            initialized: true
+        };
+        return;
+    }
 
-        if (typeof factory != "function") {
-            window.acequire.modules[id] = {
-                exports: factory,
-                initialized: true
-            };
-            return;
-        }
-
-        if (!deps.length)
+    if (!deps.length)
         // If there is no dependencies, we inject "require", "exports" and
         // "module" as dependencies, to provide CommonJS compatibility.
-            deps = ["require", "exports", "module"];
+        deps = ["require", "exports", "module"];
 
-        var req = function (childId) {
-            return window.acequire(id, childId);
-        };
-
-        window.acequire.modules[id] = {
-            exports: {},
-            factory: function () {
-                var module = this;
-                var returnExports = factory.apply(this, deps.map(function (dep) {
-                    switch (dep) {
-                        // Because "require", "exports" and "module" aren't actual
-                        // dependencies, we must handle them seperately.
-                        case "require":
-                            return req;
-                        case "exports":
-                            return module.exports;
-                        case "module":
-                            return module;
-                        // But for all other dependencies, we can just go ahead and
-                        // acequire them.
-                        default:
-                            return req(dep);
-                    }
-                }));
-                if (returnExports)
-                    module.exports = returnExports;
-                return module;
-            }
-        };
-    };
-    window.define.amd = {};
-    acequire.tlns = {};
-    window.initBaseUrls = function initBaseUrls(topLevelNamespaces) {
-        for (var i in topLevelNamespaces)
-            acequire.tlns[i] = topLevelNamespaces[i];
+    var req = function(childId) {
+        return window.acequire(id, childId);
     };
 
-    window.initSender = function initSender() {
-
-        var EventEmitter = window.acequire("ace/lib/event_emitter").EventEmitter;
-        var oop = window.acequire("ace/lib/oop");
-
-        var Sender = function () {
-        };
-
-        (function () {
-
-            oop.implement(this, EventEmitter);
-
-            this.callback = function (data, callbackId) {
-                postMessage({
-                    type: "call",
-                    id: callbackId,
-                    data: data
-                });
-            };
-
-            this.emit = function (name, data) {
-                postMessage({
-                    type: "event",
-                    name: name,
-                    data: data
-                });
-            };
-
-        }).call(Sender.prototype);
-
-        return new Sender();
-    };
-
-    var main = window.main = null;
-    var sender = window.sender = null;
-
-    window.onmessage = function (e) {
-        var msg = e.data;
-        if (msg.event && sender) {
-            sender._signal(msg.event, msg.data);
-        }
-        else if (msg.command) {
-            if (main[msg.command])
-                main[msg.command].apply(main, msg.args);
-            else if (window[msg.command])
-                window[msg.command].apply(window, msg.args);
-            else
-                throw new Error("Unknown command:" + msg.command);
-        }
-        else if (msg.init) {
-            window.initBaseUrls(msg.tlns);
-            sender = window.sender = window.initSender();
-            var clazz = acequire(msg.module)[msg.classname];
-            main = window.main = new clazz(sender);
+    window.acequire.modules[id] = {
+        exports: {},
+        factory: function() {
+            var module = this;
+            var returnExports = factory.apply(this, deps.map(function(dep) {
+                switch (dep) {
+                    // Because "require", "exports" and "module" aren't actual
+                    // dependencies, we must handle them seperately.
+                    case "require": return req;
+                    case "exports": return module.exports;
+                    case "module":  return module;
+                    // But for all other dependencies, we can just go ahead and
+                    // acequire them.
+                    default:        return req(dep);
+                }
+            }));
+            if (returnExports)
+                module.exports = returnExports;
+            return module;
         }
     };
+};
+window.define.amd = {};
+acequire.tlns = {};
+window.initBaseUrls  = function initBaseUrls(topLevelNamespaces) {
+    for (var i in topLevelNamespaces)
+        acequire.tlns[i] = topLevelNamespaces[i];
+};
+
+window.initSender = function initSender() {
+
+    var EventEmitter = window.acequire("ace/lib/event_emitter").EventEmitter;
+    var oop = window.acequire("ace/lib/oop");
+    
+    var Sender = function() {};
+    
+    (function() {
+        
+        oop.implement(this, EventEmitter);
+                
+        this.callback = function(data, callbackId) {
+            postMessage({
+                type: "call",
+                id: callbackId,
+                data: data
+            });
+        };
+    
+        this.emit = function(name, data) {
+            postMessage({
+                type: "event",
+                name: name,
+                data: data
+            });
+        };
+        
+    }).call(Sender.prototype);
+    
+    return new Sender();
+};
+
+var main = window.main = null;
+var sender = window.sender = null;
+
+window.onmessage = function(e) {
+    var msg = e.data;
+    if (msg.event && sender) {
+        sender._signal(msg.event, msg.data);
+    }
+    else if (msg.command) {
+        if (main[msg.command])
+            main[msg.command].apply(main, msg.args);
+        else if (window[msg.command])
+            window[msg.command].apply(window, msg.args);
+        else
+            throw new Error("Unknown command:" + msg.command);
+    }
+    else if (msg.init) {
+        window.initBaseUrls(msg.tlns);
+        sender = window.sender = window.initSender();
+        var clazz = acequire(msg.module)[msg.classname];
+        main = window.main = new clazz(sender);
+    }
+};
 })(this);
 
 ace.define("ace/lib/oop", ["require", "exports", "module"], function (acequire, exports, module) {
@@ -1418,20 +1415,25 @@ ace.define("ace/worker/mirror", ["require", "exports", "module", "ace/range", "a
 
 });
 
-// load nodejs compatible require
-ace.define('ace/mode/trd_worker', ["require", 'exports', 'module', 'ace/lib/oop', 'ace/worker/mirror'], function (acequire, exports, module) {
-    console.log('worker start')
+ace.define('ace/mode/trd_worker', [
+    "require", 
+    'exports', 
+    'module', 
+    'ace/lib/oop', 
+    'ace/worker/mirror'
+], function (acequire, exports, module) {
+    console.log('worker start');
     var oop = acequire('ace/lib/oop');
     var Mirror = acequire('ace/worker/mirror').Mirror;
+    var antlr4 = window.reactiveAntlr.antlr4;
+    var TrdLexer = window.reactiveAntlr.RULANGLexer;
+    var TrdParser = window.reactiveAntlr.RULANGParser;
     var TrdWorker = function (sender) {
         Mirror.call(this, sender);
         this.setTimeout(200);
     };
     oop.inherits(TrdWorker, Mirror);
-    importScripts('/assets/lib/require.js');
-    var antlr4 = require('antlr4/index');
-    var TrdLexer = require('../rules/RULANGLexer');
-    var TrdParser = require('../rules/RULANGParser');
+
     var AnnotatingErrorListener = function(annotations) {
         antlr4.error.ErrorListener.call(this);
         this.annotations = annotations;
@@ -1459,7 +1461,7 @@ ace.define('ace/mode/trd_worker', ["require", 'exports', 'module', 'ace/lib/oop'
         var listener = new AnnotatingErrorListener(annotations)
         parser.removeErrorListeners();
         parser.addErrorListener(listener);
-        parser.parseRule();
+        parser.RULANGParser();
         return annotations;
     };
     (function () {

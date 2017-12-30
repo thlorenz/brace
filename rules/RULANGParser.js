@@ -3791,4 +3791,4 @@ RULANGParser.prototype.expression_sempred = function(localctx, predIndex) {
 };
 
 
-exports.RULANGParser = RULANGParser;
+module.exports.RULANGParser = RULANGParser;

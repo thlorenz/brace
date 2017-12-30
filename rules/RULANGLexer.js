@@ -683,5 +683,5 @@ RULANGLexer.grammarFileName = "RULANG.g4";
 
 
 
-exports.RULANGLexer = RULANGLexer;
+module.exports.RULANGLexer = RULANGLexer;
 
