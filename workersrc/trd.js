@@ -1453,7 +1453,7 @@ ace.define('ace/mode/trd_worker', [
     };
 
     function validate (input) {
-        var stream = antlr4.InputStream(input);
+        var stream = antlr4.CharStreams.fromString(input);
         var lexer = new TrdLexer.RULANGLexer(stream);
         var tokens = new antlr4.CommonTokenStream(lexer);
         var parser = new TrdParser.RULANGParser(tokens);
@@ -1461,9 +1461,10 @@ ace.define('ace/mode/trd_worker', [
         var listener = new AnnotatingErrorListener(annotations)
         parser.removeErrorListeners();
         parser.addErrorListener(listener);
-        parser.RULANGParser();
+        parser.goal();
         return annotations;
     };
+
     (function () {
         this.onUpdate = function () {
             console.log(this.doc);
