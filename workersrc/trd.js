@@ -1,6 +1,6 @@
 "no use strict";
 !(function(window) {
-    importScripts("http://localhost:4200/assets/lib/bundle.js");
+    importScripts(self.location.origin + "/assets/lib/bundle.js");
     console.log(self);
     var window = self;
 
