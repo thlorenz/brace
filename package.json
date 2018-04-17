@@ -1,25 +1,30 @@
 {
-  "name": "brace",
-  "version": "0.11.1",
+  "name": "rc-brace",
+  "version": "1.0.0-beta.1",
   "description": "browserify compatible version of the ace editor.",
   "main": "index.js",
   "typings": "index.d.ts",
   "scripts": {
     "update": "(cd build && node ./update && node ./update-ts)",
-    "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html"
+    "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html",
+    "antlr4": "antlr4 -Dlanguage=JavaScript ./rules/RULANG.g4"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/thlorenz/brace.git"
   },
   "homepage": "https://github.com/thlorenz/brace",
-  "dependencies": {},
+  "dependencies": {
+    "antlr4": "^4.7.1"
+  },
   "devDependencies": {
+    "antlr4-webpack-loader": "^0.1.1",
     "browserify": "~4.2.0",
     "opener": "~1.3.0",
     "shelljs": "~0.2.6",
     "tape": "~4.0.0",
-    "uglify-js": "~2.2.5"
+    "uglify-js": "~2.2.5",
+    "webpack": "^3.10.0"
   },
   "keywords": [
     "ace",

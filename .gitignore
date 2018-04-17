@@ -13,5 +13,4 @@ results
 
 npm-debug.log
 node_modules
-
-workersrc
+.idea/workspace.xml
