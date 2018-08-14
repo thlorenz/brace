@@ -19,7 +19,8 @@ background: #6b3838\
 .ace-houston {\
 background-color: #333333;\
 color: #F8F8F2;\
-font-size: 14px\
+font-size: 14px;\
+font-family: Consolas;\
 }\
 .ace-houston .ace_cursor {\
 color: #F8F8F0\
