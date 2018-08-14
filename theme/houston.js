@@ -1,5 +1,3 @@
-
-/* tslint:disable */
 ace.define("ace/theme/houston",["require","exports","module","ace/lib/dom"], function(acequire, exports, module) {
 
     exports.isDark = true;
