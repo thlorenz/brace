@@ -29,8 +29,8 @@ height: 7px !important;\
 right: 7px !important;\
 }\
 .ace-houston .ace_scroller {\
-right: 7px !important;\
-bottom: 7px !important;\
+right: 0px !important;\
+bottom: 0px !important;\
 }\
 .ace-houston .ace_cursor {\
 color: #F8F8F0\
