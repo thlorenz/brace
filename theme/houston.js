@@ -24,7 +24,7 @@ font-family: Consolas;\
 width: 7px !important;\
 }\
 .ace-houston .ace_scrollbar-h {\
-height: 7px;\
+height: 7px !important;\
 }\
 .ace-houston .ace_scroller {\
 right: 7px !important;\
