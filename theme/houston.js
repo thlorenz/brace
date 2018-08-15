@@ -20,6 +20,16 @@ color: #F8F8F2;\
 font-size: 14px;\
 font-family: Consolas;\
 }\
+.ace-houston .ace_scrollbar-v {\
+width: 7px !important;\
+}\
+.ace-houston .ace_scrollbar-h {\
+height: 7px;\
+}\
+.ace-houston .ace_scroller {\
+right: 7px !important;\
+bottom: 7px !important;\
+}\
 .ace-houston .ace_cursor {\
 color: #F8F8F0\
 }\
