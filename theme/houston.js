@@ -22,9 +22,11 @@ font-family: Consolas;\
 }\
 .ace-houston .ace_scrollbar-v {\
 width: 7px !important;\
+bottom: 7px !important;\
 }\
 .ace-houston .ace_scrollbar-h {\
 height: 7px !important;\
+right: 7px !important;\
 }\
 .ace-houston .ace_scroller {\
 right: 7px !important;\
