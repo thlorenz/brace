@@ -5,7 +5,6 @@ var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var ElixirHighlightRules = function() {
-
     this.$rules = { start: 
        [ { token: 
             [ 'meta.module.elixir',
@@ -492,3 +491,11 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 });
+                (function() {
+                    ace.acequire(["ace/mode/elixir"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

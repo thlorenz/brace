@@ -5,7 +5,6 @@ var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var JuliaHighlightRules = function() {
-
     this.$rules = { start: 
        [ { include: '#function_decl' },
          { include: '#function_call' },
@@ -294,3 +293,11 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 });
+                (function() {
+                    ace.acequire(["ace/mode/julia"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

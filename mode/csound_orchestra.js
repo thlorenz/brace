@@ -536,7 +536,7 @@ var LuaHighlightRules = function() {
                         }
                         return "string.end";
                     },
-
+                    
                     regex : /\]=*\]/,
                     next  : "start"
                 }, {
@@ -573,7 +573,7 @@ var LuaHighlightRules = function() {
             regex : "\\s+|\\w+"
         } ]
     };
-
+    
     this.normalizeRules();
 };
 
@@ -613,6 +613,7 @@ var PythonHighlightRules = function() {
     var keywordMapper = this.createKeywordMapper({
         "invalid.deprecated": "debugger",
         "support.function": builtinFunctions,
+        "variable.language": "self|cls",
         "constant.language": builtinConstants,
         "keyword": keywords
     }, "identifier");
@@ -859,7 +860,6 @@ var CsoundOrchestraHighlightRules = function() {
         "OSClisten",
         "OSCraw",
         "OSCsend",
-        "OSCsendA",
         "OSCsend_lo",
         "S",
         "STKBandedWG",
@@ -910,6 +910,7 @@ var CsoundOrchestraHighlightRules = function() {
         "atonex",
         "babo",
         "balance",
+        "balance2",
         "bamboo",
         "barmodel",
         "bbcutm",
@@ -959,9 +960,11 @@ var CsoundOrchestraHighlightRules = function() {
         "chnclear",
         "chnexport",
         "chnget",
+        "chngetks",
         "chnmix",
         "chnparams",
         "chnset",
+        "chnsetks",
         "chuap",
         "clear",
         "clfilt",
@@ -1468,6 +1471,8 @@ var CsoundOrchestraHighlightRules = function() {
         "lorenz",
         "loscil",
         "loscil3",
+        "loscil3phs",
+        "loscilphs",
         "loscilx",
         "lowpass2",
         "lowres",
@@ -1538,6 +1543,7 @@ var CsoundOrchestraHighlightRules = function() {
         "midion",
         "midion2",
         "midiout",
+        "midiout_i",
         "midipgm",
         "midipitchbend",
         "midipolyaftertouch",
@@ -1766,7 +1772,6 @@ var CsoundOrchestraHighlightRules = function() {
         "pvsftw",
         "pvsfwrite",
         "pvsgain",
-        "pvsgendy",
         "pvshift",
         "pvsifd",
         "pvsin",
@@ -2004,7 +2009,6 @@ var CsoundOrchestraHighlightRules = function() {
         "sockrecv",
         "sockrecvs",
         "socksend",
-        "socksend_k",
         "socksends",
         "sorta",
         "sortd",
@@ -2019,6 +2023,7 @@ var CsoundOrchestraHighlightRules = function() {
         "sprintfk",
         "spsend",
         "sqrt",
+        "squinewave",
         "statevar",
         "stix",
         "strcat",
@@ -2104,38 +2109,6 @@ var CsoundOrchestraHighlightRules = function() {
         "tanh",
         "taninv",
         "taninv2",
-        "tb0",
-        "tb0_init",
-        "tb1",
-        "tb10",
-        "tb10_init",
-        "tb11",
-        "tb11_init",
-        "tb12",
-        "tb12_init",
-        "tb13",
-        "tb13_init",
-        "tb14",
-        "tb14_init",
-        "tb15",
-        "tb15_init",
-        "tb1_init",
-        "tb2",
-        "tb2_init",
-        "tb3",
-        "tb3_init",
-        "tb4",
-        "tb4_init",
-        "tb5",
-        "tb5_init",
-        "tb6",
-        "tb6_init",
-        "tb7",
-        "tb7_init",
-        "tb8",
-        "tb8_init",
-        "tb9",
-        "tb9_init",
         "tbvcf",
         "tempest",
         "tempo",
@@ -2344,6 +2317,38 @@ var CsoundOrchestraHighlightRules = function() {
         "tabmap",
         "tabmap_i",
         "tabslice",
+        "tb0",
+        "tb0_init",
+        "tb1",
+        "tb10",
+        "tb10_init",
+        "tb11",
+        "tb11_init",
+        "tb12",
+        "tb12_init",
+        "tb13",
+        "tb13_init",
+        "tb14",
+        "tb14_init",
+        "tb15",
+        "tb15_init",
+        "tb1_init",
+        "tb2",
+        "tb2_init",
+        "tb3",
+        "tb3_init",
+        "tb4",
+        "tb4_init",
+        "tb5",
+        "tb5_init",
+        "tb6",
+        "tb6_init",
+        "tb7",
+        "tb7_init",
+        "tb8",
+        "tb8_init",
+        "tb9",
+        "tb9_init",
         "vbap16",
         "vbap4",
         "vbap4move",
@@ -2672,3 +2677,11 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 });
+                (function() {
+                    ace.acequire(["ace/mode/csound_orchestra"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

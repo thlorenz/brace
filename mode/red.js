@@ -5,12 +5,11 @@ var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var RedHighlightRules = function() {
-
-    var compoundKeywords = "";
+    var compoundKeywords = "";        
 
     this.$rules = {
         "start" : [
-            {token : "keyword.operator",
+            {token : "keyword.operator", 
                 regex: /\s([\-+%/=<>*]|(?:\*\*\|\/\/|==|>>>?|<>|<<|=>|<=|=\?))(\s|(?=:))/},
             {token : "string.email", regex : /\w[-\w._]*\@\w[-\w._]*/},
             {token : "value.time", regex : /\b\d+:\d+(:\d+)?/},
@@ -30,7 +29,7 @@ var RedHighlightRules = function() {
             {token : "string.tag", regex : /</, next : "tag"},
             {token : "string", regex : /"/, next  : "string"},
             {token : "string.other", regex : "{", next  : "string.other"},
-            {token : "comment", regex : "comment [[{]", next : "comment"},
+            {token : "comment", regex : "comment [{]", next : "comment"},
             {token : "comment",  regex : /;.+$/},
             {token : "paren.map-start", regex : "#\\("},
             {token : "paren.block-start", regex : "[\\[]"},
@@ -40,17 +39,17 @@ var RedHighlightRules = function() {
             {token : "keyword", regex : "/local|/external"},
             {token : "keyword.preprocessor", regex : "#(if|either|" +
                 "switch|case|include|do|macrolocal|reset|process|trace)"},
-            {token : "constant.datatype!", regex :
+            {token : "constant.datatype!", regex : 
                 "(?:datatype|unset|none|logic|block|paren|string|" +
                 "file|url|char|integer|float|word|set-word|lit-word|" +
                 "get-word|refinement|issue|native|action|op|function|" +
-                "path|lit-path|set-path|get-path|routine|bitset|point|" +
+                "path|lit-path|set-path|get-path|routine|bitset|point|" + 
                 "object|typeset|error|vector|hash|pair|percent|tuple|" +
                 "map|binary|time|tag|email|handle|date|image|event|" +
                 "series|any-type|number|any-object|scalar|" +
                 "any-string|any-word|any-function|any-block|any-list|" +
                 "any-path|immediate|all-word|internal|external|default)!(?![-!?\\w~])"},
-            {token : "keyword.function", regex :
+            {token : "keyword.function", regex : 
                 "\\b(?:collect|quote|on-parse-event|math|last|source|expand|" +
                 "show|context|object|input|quit|dir|make-dir|cause-error|" +
                 "error\\?|none\\?|block\\?|any-list\\?|word\\?|char\\?|" +
@@ -91,7 +90,7 @@ var RedHighlightRules = function() {
                 "get-scroller|insert-event-func|remove-event-func|" +
                 "set-focus|help|fetch-help|about|ls|ll|pwd|cd|" +
                 "red-complete-input|matrix)(?![-!?\\w~])"},
-            {token : "keyword.action", regex :
+            {token : "keyword.action", regex : 
                 "\\b(?:to|remove|copy|insert|change|clear|move|poke|put|" +
                 "random|reverse|sort|swap|take|trim|add|subtract|" +
                 "divide|multiply|make|reflect|form|mold|modify|" +
@@ -100,7 +99,7 @@ var RedHighlightRules = function() {
                 "tail|head|head\\?|index\\?|length\\?|next|pick|" +
                 "select|tail\\?|delete|read|write)(?![-_!?\\w~])"
             },
-            {token : "keyword.native", regex :
+            {token : "keyword.native", regex : 
                 "\\b(?:not|any|set|uppercase|lowercase|checksum|" +
                 "try|catch|browse|throw|all|as|" +
                 "remove-each|func|function|does|has|do|reduce|" +
@@ -116,14 +115,14 @@ var RedHighlightRules = function() {
                 "wait|unset|new-line|new-line\\?|context\\?|set-env|" +
                 "get-env|list-env|now|sign\\?|call|size\\?)(?![-!?\\w~])"
             },
-            {token : "keyword", regex :
+            {token : "keyword", regex : 
                 "\\b(?:Red(?=\\s+\\[)|object|context|make|self|keep)(?![-!?\\w~])"
             },
             {token: "variable.language", regex : "this"},
-            {token: "keyword.control", regex :
+            {token: "keyword.control", regex : 
                 "(?:while|if|return|case|unless|either|until|loop|repeat|" +
                 "forever|foreach|forall|switch|break|continue|exit)(?![-!?\\w~])"},
-            {token: "constant.language", regex :
+            {token: "constant.language", regex : 
                 "\\b(?:true|false|on|off|yes|none|no)(?![-!?\\w~])"},
             {token: "constant.numeric", regex : /\bpi(?![^-_])/},
             {token: "constant.character", regex : "\\b(space|tab|newline|cr|lf)(?![-!?\\w~])"},
@@ -132,13 +131,13 @@ var RedHighlightRules = function() {
             {token : "variable.set-path", regex : /\w[-\w'*.?!]*(\/\w[-\w'*.?!]*)(\/\w[-\w'*.?!]*)*:/},
             {token : "variable.lit-path", regex : /'\w[-\w'*.?!]*(\/\w[-\w'*.?!]*)(\/\w[-\w'*.?!]*)*/},
             {token : "variable.path", regex : /\w[-\w'*.?!]*(\/\w[-\w'*.?!]*)(\/\w[-\w'*.?!]*)*/},
-            {token : "variable.refinement", regex : /\/\w[-\w'*.?!]*/},
-            {token : "keyword.view.style", regex :
+            {token : "variable.refinement", regex : /\/\w[-\w'*.?!]*/}, 
+            {token : "keyword.view.style", regex : 
                 "\\b(?:window|base|button|text|field|area|check|" +
                 "radio|progress|slider|camera|text-list|" +
                 "drop-list|drop-down|panel|group-box|" +
                 "tab-panel|h1|h2|h3|h4|h5|box|image|init)(?![-!?\\w~])"},
-            {token : "keyword.view.event", regex :
+            {token : "keyword.view.event", regex : 
                 "\\b(?:detect|on-detect|time|on-time|drawing|on-drawing|" +
                 "scroll|on-scroll|down|on-down|up|on-up|mid-down|" +
                 "on-mid-down|mid-up|on-mid-up|alt-down|on-alt-down|" +
@@ -153,7 +152,7 @@ var RedHighlightRules = function() {
                 "on-moving|resizing|on-resizing|zoom|on-zoom|pan|" +
                 "on-pan|rotate|on-rotate|two-tap|on-two-tap|" +
                 "press-tap|on-press-tap|create|on-create|created|on-created)(?![-!?\\w~])"},
-            {token : "keyword.view.option", regex :
+            {token : "keyword.view.option", regex : 
                 "\\b(?:all-over|center|color|default|disabled|down|" +
                 "flags|focus|font|font-color|font-name|" +
                 "font-size|hidden|hint|left|loose|name|" +
@@ -164,8 +163,8 @@ var RedHighlightRules = function() {
                 "magenta|maroon|mint|navy|oldrab|olive|orange|papaya|" +
                 "pewter|pink|purple|reblue|rebolor|sienna|silver|sky|" +
                 "snow|tanned|teal|violet|water|wheat|yello|yellow|glass)(?![-!?\\w~])"},
-            {token : "variable.get-word", regex : /\:\w[-\w'*.?!]*/},
-            {token : "variable.set-word", regex : /\w[-\w'*.?!]*\:/},
+            {token : "variable.get-word", regex : /\:\w[-\w'*.?!]*/}, 
+            {token : "variable.set-word", regex : /\w[-\w'*.?!]*\:/}, 
             {token : "variable.lit-word", regex : /'\w[-\w'*.?!]*/},
             {token : "variable.word", regex : /\b\w+[-\w'*.!?]*/},
             {caseInsensitive: true}
@@ -213,7 +212,7 @@ var FoldMode = exports.FoldMode = function(commentRegex) {
 oop.inherits(FoldMode, BaseFoldMode);
 
 (function() {
-
+    
     this.foldingStartMarker = /([\{\[\(])[^\}\]\)]*$|^\s*(\/\*)/;
     this.foldingStopMarker = /^[^\[\{\(]*([\}\]\)])|^[\s\*]*(\*\/)/;
     this.singleLineBlockCommentRe= /^\s*(\/\*).*\*\/\s*$/;
@@ -222,42 +221,42 @@ oop.inherits(FoldMode, BaseFoldMode);
     this._getFoldWidgetBase = this.getFoldWidget;
     this.getFoldWidget = function(session, foldStyle, row) {
         var line = session.getLine(row);
-
+    
         if (this.singleLineBlockCommentRe.test(line)) {
             if (!this.startRegionRe.test(line) && !this.tripleStarBlockCommentRe.test(line))
                 return "";
         }
-
+    
         var fw = this._getFoldWidgetBase(session, foldStyle, row);
-
+    
         if (!fw && this.startRegionRe.test(line))
             return "start"; // lineCommentRegionStart
-
+    
         return fw;
     };
 
     this.getFoldWidgetRange = function(session, foldStyle, row, forceMultiline) {
         var line = session.getLine(row);
-
+        
         if (this.startRegionRe.test(line))
             return this.getCommentRegionBlock(session, line, row);
-
+        
         var match = line.match(this.foldingStartMarker);
         if (match) {
             var i = match.index;
 
             if (match[1])
                 return this.openingBracketBlock(session, match[1], row, i);
-
+                
             var range = session.getCommentFoldRange(row, i + match[0].length, 1);
-
+            
             if (range && !range.isMultiLine()) {
                 if (forceMultiline) {
                     range = this.getSectionRange(session, row);
                 } else if (foldStyle != "all")
                     range = null;
             }
-
+            
             return range;
         }
 
@@ -274,7 +273,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             return session.getCommentFoldRange(row, i, -1);
         }
     };
-
+    
     this.getSectionRange = function(session, row) {
         var line = session.getLine(row);
         var startIndent = line.search(/\S/);
@@ -291,7 +290,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             if  (startIndent > indent)
                 break;
             var subRange = this.getFoldWidgetRange(session, "all", row);
-
+            
             if (subRange) {
                 if (subRange.start.row <= startRow) {
                     break;
@@ -303,14 +302,14 @@ oop.inherits(FoldMode, BaseFoldMode);
             }
             endRow = row;
         }
-
+        
         return new Range(startRow, startColumn, endRow, session.getLine(endRow).length);
     };
     this.getCommentRegionBlock = function(session, line, row) {
         var startColumn = line.search(/\s*$/);
         var maxRow = session.getLength();
         var startRow = row;
-
+        
         var re = /^\s*(?:\/\*|\/\/|--)#?(end)?region\b/;
         var depth = 1;
         while (++row < maxRow) {
@@ -394,7 +393,7 @@ oop.inherits(Mode, TextMode);
 (function() {
 
     this.lineCommentStart = ";";
-	this.blockCommentStart = "comment {";
+    this.blockComment = { start: "comment {", end: "}" };
 
     this.getNextLineIndent = function(state, line, tab) {
         var indent = this.$getIndent(line);
@@ -441,3 +440,11 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 });
+                (function() {
+                    ace.acequire(["ace/mode/red"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

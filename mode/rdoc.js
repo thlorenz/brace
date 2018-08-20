@@ -84,7 +84,7 @@ var LatexHighlightRules = function() {
             defaultToken : "text"
         }]
     };
-
+    
     this.normalizeRules();
 };
 oop.inherits(LatexHighlightRules, TextHighlightRules);
@@ -102,7 +102,6 @@ var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 var LaTeXHighlightRules = acequire("./latex_highlight_rules");
 
 var RDocHighlightRules = function() {
-
     this.$rules = {
         "start" : [
             {
@@ -234,3 +233,11 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 });
+                (function() {
+                    ace.acequire(["ace/mode/rdoc"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

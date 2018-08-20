@@ -5,7 +5,6 @@ var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var ErlangHighlightRules = function() {
-
     this.$rules = { start: 
        [ { include: '#module-directive' },
          { include: '#import-export-directive' },
@@ -1000,3 +999,11 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 });
+                (function() {
+                    ace.acequire(["ace/mode/erlang"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

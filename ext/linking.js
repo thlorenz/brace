@@ -56,6 +56,10 @@ function onClick(e) {
 
 });
                 (function() {
-                    ace.acequire(["ace/ext/linking"], function() {});
+                    ace.acequire(["ace/ext/linking"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

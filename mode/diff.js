@@ -5,7 +5,6 @@ var oop = acequire("../lib/oop");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var DiffHighlightRules = function() {
-
     this.$rules = {
         "start" : [{
                 regex: "^(?:\\*{15}|={67}|-{3}|\\+{3})$",
@@ -137,3 +136,11 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 
 });
+                (function() {
+                    ace.acequire(["ace/mode/diff"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

@@ -71,7 +71,6 @@ var HaxeHighlightRules = function() {
         "keyword": keywords,
         "constant.language": buildinConstants
     }, "identifier");
-
     this.$rules = {
         "start" : [
             {
@@ -377,3 +376,11 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 });
+                (function() {
+                    ace.acequire(["ace/mode/haxe"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            
