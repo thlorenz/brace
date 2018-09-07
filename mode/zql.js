@@ -137,7 +137,7 @@ oop.inherits(MysqlHighlightRules, TextHighlightRules);
 exports.MysqlHighlightRules = MysqlHighlightRules;
 });
 
-ace.define("ace/mode/mysql",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/mysql_highlight_rules"], function(acequire, exports, module) {
+ace.define("ace/mode/zql",["require","exports","module","ace/lib/oop","ace/mode/text","ace/mode/mysql_highlight_rules"], function(acequire, exports, module) {
 
 var oop = acequire("../lib/oop");
 var TextMode = acequire("../mode/text").Mode;
@@ -153,7 +153,7 @@ oop.inherits(Mode, TextMode);
     this.lineCommentStart = ["--", "#"]; // todo space
     this.blockComment = {start: "/*", end: "*/"};
 
-    this.$id = "ace/mode/mysql";
+    this.$id = "ace/mode/zql";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
