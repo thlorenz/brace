@@ -770,7 +770,7 @@ export function         createEditSession(text: string, mode: TextMode): IEditSe
         /**
          * [Sets the value of the distance between the left of the editor and the leftmost part of the visible content.]{: #EditSession.setScrollLeft}
         **/
-        setScrollLeft(): void;
+        setScrollLeft(scrollLeft: number): void;
 
         /**
          * [Returns the value of the distance between the left of the editor and the leftmost part of the visible content.]{: #EditSession.getScrollLeft}
