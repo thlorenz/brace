@@ -46,8 +46,11 @@ var StatusBar = function(editor, parentNode) {
 
 exports.StatusBar = StatusBar;
 
-});
-                (function() {
-                    ace.acequire(["ace/ext/statusbar"], function() {});
+});                (function() {
+                    ace.acequire(["ace/ext/statusbar"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

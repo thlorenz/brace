@@ -9,7 +9,7 @@ var DocCommentHighlightRules = function() {
         "start" : [ {
             token : "comment.doc.tag",
             regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        },
+        }, 
         DocCommentHighlightRules.getTagRule(),
         {
             defaultToken : "comment.doc",
@@ -66,7 +66,8 @@ var JavaHighlightRules = function() {
     "catch|extends|int|short|try|" +
     "char|final|interface|static|void|" +
     "class|finally|long|strictfp|volatile|" +
-    "const|float|native|super|while"
+    "const|float|native|super|while|" +
+    "var"
     );
 
     var buildinConstants = ("null|Infinity|NaN|undefined");
@@ -133,6 +134,36 @@ var JavaHighlightRules = function() {
                 token : "constant.language.boolean",
                 regex : "(?:true|false)\\b"
             }, {
+                regex: "(open(?:\\s+))?module(?=\\s*\\w)",
+                token: "keyword",
+                next: [{
+                    regex: "{",
+                    token: "paren.lparen",
+                    next: [{
+                        regex: "}",
+                        token: "paren.rparen",
+                        next: "start"
+                    }, {
+                        regex: "\\b(acequires|transitive|exports|opens|to|uses|provides|with)\\b",
+                        token: "keyword" 
+                    }]
+                }, {
+                    token : "text",
+                    regex : "\\s+"
+                }, {
+                    token : "identifier",
+                    regex : "\\w+"
+                }, {
+                    token : "punctuation.operator",
+                    regex : "."
+                }, {
+                    token : "text",
+                    regex : "\\s+"
+                }, {
+                    regex: "", // exit if there is anything else
+                    next: "start"
+                }]
+            }, {
                 token : keywordMapper,
                 regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
             }, {
@@ -160,8 +191,10 @@ var JavaHighlightRules = function() {
         ]
     };
 
+    
     this.embedRules(DocCommentHighlightRules, "doc-",
         [ DocCommentHighlightRules.getEndRule("start") ]);
+    this.normalizeRules();
 };
 
 oop.inherits(JavaHighlightRules, TextHighlightRules);
@@ -396,7 +429,7 @@ var FoldMode = exports.FoldMode = function() {};
 oop.inherits(FoldMode, BaseFoldMode);
 
 (function() {
-    this.foldingStartMarker = /\b(rule|declare|query|when|then)\b/;
+    this.foldingStartMarker = /\b(rule|declare|query|when|then)\b/; 
     this.foldingStopMarker = /\bend\b/;
 
     this.getFoldWidgetRange = function(session, foldStyle, row) {
@@ -414,7 +447,7 @@ oop.inherits(FoldMode, BaseFoldMode);
                     seek = "then";
                 }
                 while (token) {
-                    if (token.value == seek) {
+                    if (token.value == seek) { 
                         return Range.fromPoints(position ,{
                             row: iterator.getCurrentTokenRow(),
                             column: iterator.getCurrentTokenColumn()
@@ -454,4 +487,11 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 
-});
+});                (function() {
+                    ace.acequire(["ace/mode/drools"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

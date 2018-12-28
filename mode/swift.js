@@ -133,7 +133,7 @@ var SwiftHighlightRules = function() {
                 return val == open ? "paren.lparen" : "paren.rparen";
             },
             nextState: interpStart
-        };
+        }; 
         return [counter, mainRule];
     }
     
@@ -171,7 +171,7 @@ var SwiftHighlightRules = function() {
                 error: /\\./,
                 multiline: false
             }),
-            comments({type: "c", nestable: true}),
+            comments(),
             {
                  regex: /@[a-zA-Z_$][a-zA-Z_$\d\u0080-\ufffe]*/,
                  token: "variable.parameter"
@@ -379,4 +379,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/swift"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

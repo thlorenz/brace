@@ -509,10 +509,10 @@ var SnippetManager = function() {
                 return;
             
             s.startRe = guardedRegexp(s.trigger, s.guard, true);
-            s.triggerRe = new RegExp(s.trigger, "", true);
+            s.triggerRe = new RegExp(s.trigger);
 
             s.endRe = guardedRegexp(s.endTrigger, s.endGuard, true);
-            s.endTriggerRe = new RegExp(s.endTrigger, "", true);
+            s.endTriggerRe = new RegExp(s.endTrigger);
         }
 
         if (snippets && snippets.content)
@@ -1128,7 +1128,7 @@ exports.runEmmetCommand = function runEmmetCommand(editor) {
         var result = actions.run(this.action, editorProxy);
     } catch(e) {
         if (!emmet) {
-            load(runEmmetCommand.bind(this, editor));
+            exports.load(runEmmetCommand.bind(this, editor));
             return true;
         }
         editor._signal("changeStatus", typeof e == "string" ? e : e.message);
@@ -1186,11 +1186,11 @@ var onChangeMode = function(e, target) {
     if (e.enableEmmet === false)
         enabled = false;
     if (enabled)
-        load();
+        exports.load();
     exports.updateCommands(editor, enabled);
 };
 
-var load = function(cb) {
+exports.load = function(cb) {
     if (typeof emmetPath == "string") {
         acequire("ace/config").loadModule(emmetPath, function() {
             emmetPath = null;
@@ -1216,8 +1216,11 @@ exports.setCore = function(e) {
     else
        emmet = e;
 };
-});
-                (function() {
-                    ace.acequire(["ace/ext/emmet"], function() {});
+});                (function() {
+                    ace.acequire(["ace/ext/emmet"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             
