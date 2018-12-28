@@ -84,7 +84,7 @@ var LatexHighlightRules = function() {
             defaultToken : "text"
         }]
     };
-
+    
     this.normalizeRules();
 };
 oop.inherits(LatexHighlightRules, TextHighlightRules);
@@ -187,12 +187,12 @@ oop.inherits(FoldMode, BaseFoldMode);
 
         if (stack.length)
             return;
-
+        
         if (dir == 1) {
             stream.stepBackward();
             stream.stepBackward();
         }
-
+        
         if (returnRange)
             return stream.getCurrentTokenRange();
 
@@ -266,7 +266,7 @@ oop.inherits(Mode, TextMode);
     this.lineCommentStart = "%";
 
     this.$id = "ace/mode/latex";
-
+    
     this.getMatching = function(session, row, column) {
         if (row == undefined)
             row = session.selection.lead;
@@ -286,4 +286,11 @@ oop.inherits(Mode, TextMode);
 
 exports.Mode = Mode;
 
-});
+});                (function() {
+                    ace.acequire(["ace/mode/latex"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

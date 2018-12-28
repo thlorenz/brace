@@ -45,7 +45,6 @@ background-color: white;\
 color: black;\
 border: 1px solid #cbcbcb;\
 border-right: 0 none;\
-box-sizing: border-box!important;\
 outline: 0;\
 padding: 0;\
 font-size: inherit;\
@@ -54,6 +53,8 @@ line-height: inherit;\
 padding: 0 6px;\
 min-width: 17em;\
 vertical-align: top;\
+min-height: 1.8em;\
+box-sizing: content-box;\
 }\
 .ace_searchbtn {\
 border: 1px solid #cbcbcb;\
@@ -66,7 +67,6 @@ border-left: 1px solid #dcdcdc;\
 cursor: pointer;\
 margin: 0;\
 position: relative;\
-box-sizing: content-box!important;\
 color: #666;\
 }\
 .ace_searchbtn:last-child {\
@@ -176,7 +176,7 @@ var html = '<div class="ace_search right">\
         <span action="replaceAll" class="ace_searchbtn">All</span>\
     </div>\
     <div class="ace_search_options">\
-        <span action="toggleReplace" class="ace_button" title="Toggel Replace mode"\
+        <span action="toggleReplace" class="ace_button" title="Toggle Replace mode"\
             style="float:left;margin-top:-2px;padding:0 5px;">+</span>\
         <span class="ace_search_counter"></span>\
         <span action="toggleRegexpMode" class="ace_button" title="RegExp Search">.*</span>\
@@ -190,11 +190,12 @@ var SearchBox = function(editor, range, showReplaceForm) {
     var div = dom.createElement("div");
     div.innerHTML = html;
     this.element = div.firstChild;
-
+    
     this.setSession = this.setSession.bind(this);
 
     this.$init();
     this.setEditor(editor);
+    dom.importCssString(searchboxCss, "ace_searchbox", editor.container);
 };
 
 (function() {
@@ -203,7 +204,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
         editor.renderer.scroller.appendChild(this.element);
         this.editor = editor;
     };
-
+    
     this.setSession = function(e) {
         this.searchRange = null;
         this.$syncOptions(true);
@@ -286,6 +287,8 @@ var SearchBox = function(editor, range, showReplaceForm) {
             sb.searchInput.focus();
         },
         "Ctrl-H|Command-Option-F": function(sb) {
+            if (sb.editor.getReadOnly())
+                return;
             sb.replaceOption.checked = true;
             sb.$syncOptions();
             sb.replaceInput.focus();
@@ -354,7 +357,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
             sb.$syncOptions();
         }
     }]);
-
+    
     this.setSearchRange = function(range) {
         this.searchRange = range;
         if (range) {
@@ -372,7 +375,9 @@ var SearchBox = function(editor, range, showReplaceForm) {
         dom.setCssClass(this.regExpOption, "checked", this.regExpOption.checked);
         dom.setCssClass(this.wholeWordOption, "checked", this.wholeWordOption.checked);
         dom.setCssClass(this.caseSensitiveOption, "checked", this.caseSensitiveOption.checked);
-        this.replaceBox.style.display = this.replaceOption.checked ? "" : "none";
+        var readOnly = this.editor.getReadOnly();
+        this.replaceOption.style.display = readOnly ? "none" : "";
+        this.replaceBox.style.display = this.replaceOption.checked && !readOnly ? "" : "none";
         this.find(false, false, preventScroll);
     };
 
@@ -406,11 +411,11 @@ var SearchBox = function(editor, range, showReplaceForm) {
             var value = this.searchRange
                 ? editor.session.getTextRange(this.searchRange)
                 : editor.getValue();
-
+            
             var offset = editor.session.doc.positionToIndex(editor.selection.anchor);
             if (this.searchRange)
                 offset -= editor.session.doc.positionToIndex(this.searchRange.start);
-
+                
             var last = regex.lastIndex = 0;
             var m;
             while ((m = regex.exec(value))) {
@@ -466,7 +471,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
         this.active = false;
         this.setSearchRange(null);
         this.editor.off("changeSession", this.setSession);
-
+        
         this.element.style.display = "none";
         this.editor.keyBinding.removeKeyboardHandler(this.$closeSearchBarKb);
         this.editor.focus();
@@ -476,7 +481,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
         this.editor.on("changeSession", this.setSession);
         this.element.style.display = "";
         this.replaceOption.checked = isReplace;
-
+        
         if (value)
             this.searchInput.value = value;
         
@@ -484,7 +489,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
         this.searchInput.select();
 
         this.editor.keyBinding.addKeyboardHandler(this.$closeSearchBarKb);
-
+        
         this.$syncOptions(true);
     };
 
@@ -501,8 +506,11 @@ exports.Search = function(editor, isReplace) {
     sb.show(editor.session.getTextRange(), isReplace);
 };
 
-});
-                (function() {
-                    ace.acequire(["ace/ext/searchbox"], function() {});
+});                (function() {
+                    ace.acequire(["ace/ext/searchbox"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             
