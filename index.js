@@ -20254,7 +20254,7 @@ exports.createEditSession = function(text, mode) {
 };
 exports.EditSession = EditSession;
 exports.UndoManager = UndoManager;
-exports.version = "1.2.9";
+exports.version = "1.4.2";
 });
             (function() {
                 ace.acequire(["ace/ace"], function(a) {
