@@ -1468,7 +1468,7 @@ exports.addTouchMoveListener = function (el, callback) {
     exports.addListener(el, "touchmove", function (e) {
         var touches = e.touches;
         if (touches.length > 1) return;
-
+        
         var touchObj = touches[0];
 
         e.wheelX = startx - touchObj.clientX;
@@ -1949,7 +1949,7 @@ var TextInput = function(parentNode, host) {
     var tempStyle = '';
     var isSelectionEmpty = true;
     try { var isFocused = document.activeElement === text; } catch(e) {}
-
+    
     event.addListener(text, "blur", function(e) {
         host.onBlur(e);
         isFocused = false;
@@ -1984,7 +1984,7 @@ var TextInput = function(parentNode, host) {
         if (inComposition)
             return;
         inComposition = true;
-
+        
         if (inputHandler) {
             selectionStart = 0;
             selectionEnd = isEmpty ? 0 : text.value.length - 1;
@@ -1995,7 +1995,7 @@ var TextInput = function(parentNode, host) {
         try {
             text.setSelectionRange(selectionStart, selectionEnd);
         } catch(e) {}
-
+        
         inComposition = false;
     }
 
@@ -2036,7 +2036,7 @@ var TextInput = function(parentNode, host) {
     this.setInputHandler = function(cb) {inputHandler = cb;};
     this.getInputHandler = function() {return inputHandler;};
     var afterContextMenu = false;
-
+    
     var sendText = function(data) {
         if (text.selectionStart === 4 && text.selectionEnd === 5) {
           return;
@@ -2065,7 +2065,7 @@ var TextInput = function(parentNode, host) {
             if (data == PLACEHOLDER.charAt(0)) {
             } else if (data.charAt(data.length - 1) == PLACEHOLDER.charAt(0))
                 data = data.slice(0, -1);
-
+            
             if (data)
                 host.onTextInput(data);
         }
@@ -2082,7 +2082,7 @@ var TextInput = function(parentNode, host) {
         sendText(data);
         resetValue();
     };
-
+    
     var handleClipboardData = function(e, data, forceIEMime) {
         var clipboardData = e.clipboardData || window.clipboardData;
         if (!clipboardData || BROKEN_SETDATA)
@@ -2128,15 +2128,15 @@ var TextInput = function(parentNode, host) {
             });
         }
     };
-
+    
     var onCut = function(e) {
         doCopy(e, true);
     };
-
+    
     var onCopy = function(e) {
         doCopy(e, false);
     };
-
+    
     var onPaste = function(e) {
         var data = handleClipboardData(e);
         if (typeof data == "string") {
@@ -2162,7 +2162,7 @@ var TextInput = function(parentNode, host) {
     event.addListener(text, "copy", onCopy);
     event.addListener(text, "paste", onPaste);
     var onCompositionStart = function(e) {
-        if (inComposition || !host.onCompositionStart || host.$readOnly)
+        if (inComposition || !host.onCompositionStart || host.$readOnly) 
             return;
         inComposition = {};
         inComposition.canUndo = host.session.$undoManager;
@@ -2182,7 +2182,7 @@ var TextInput = function(parentNode, host) {
             return;
         var val = text.value.replace(/\x01/g, "");
         if (inComposition.lastValue === val) return;
-
+        
         host.onCompositionUpdate(val);
         if (inComposition.lastValue)
             host.undo();
@@ -2237,8 +2237,8 @@ var TextInput = function(parentNode, host) {
           onInput();
         }
     };
-
-
+    
+    
 
     var syncComposition = lang.delayedCall(onCompositionUpdate, 50);
 
@@ -2265,7 +2265,7 @@ var TextInput = function(parentNode, host) {
         host._emit("nativecontextmenu", {target: host, domEvent: e});
         this.moveToMouse(e, true);
     };
-
+    
     this.moveToMouse = function(e, bringToFront) {
         if (!tempStyle)
             tempStyle = text.style.cssText;
@@ -2281,7 +2281,7 @@ var TextInput = function(parentNode, host) {
         var move = function(e) {
             text.style.left = e.clientX - left - 2 + "px";
             text.style.top = Math.min(e.clientY - top - 2, maxTop) + "px";
-        };
+        }; 
         move(e);
 
         if (e.type != "mousedown")
@@ -2322,7 +2322,7 @@ var TextInput = function(parentNode, host) {
     });
     event.addListener(host.renderer.scroller, "contextmenu", onContextMenu);
     event.addListener(text, "contextmenu", onContextMenu);
-
+    
     if (useragent.isIOS) {
         var typingResetTimeout = null;
         var typing = false;
@@ -2340,7 +2340,7 @@ var TextInput = function(parentNode, host) {
         var detectArrowKeys = function(e) {
             if (document.activeElement !== text) return;
             if (typing) return;
-
+          
             if (cut) {
                 return setTimeout(function () {
                     cut = false;
@@ -2399,7 +2399,7 @@ var TextInputIOS = acequire("./textinput_ios").TextInput;
 var TextInput = function(parentNode, host) {
     if (useragent.isIOS)
         return TextInputIOS.call(this, parentNode, host);
-
+    
     var text = dom.createElement("textarea");
     text.className = "ace_text-input";
 
@@ -3024,10 +3024,10 @@ function DefaultHandlers(mouseHandler) {
         }
         
         var editor = this.editor;
-
+        
         if (!this.$lastScroll)
             this.$lastScroll = { t: 0, vx: 0, vy: 0, allowed: 0 };
-
+        
         var prevScroll = this.$lastScroll;
         var t = ev.domEvent.timeStamp;
         var dt = t - prevScroll.t;
@@ -3037,15 +3037,15 @@ function DefaultHandlers(mouseHandler) {
             vx = (vx + prevScroll.vx) / 2;
             vy = (vy + prevScroll.vy) / 2;
         }
-
+        
         var direction = Math.abs(vx / vy);
-
+        
         var canScroll = false;
         if (direction >= 1 && editor.renderer.isScrollableBy(ev.wheelX * ev.speed, 0))
             canScroll = true;
         if (direction <= 1 && editor.renderer.isScrollableBy(0, ev.wheelY * ev.speed))
             canScroll = true;
-
+            
         if (canScroll) {
             prevScroll.allowed = t;
         } else if (t - prevScroll.allowed < SCROLL_COOLDOWN_T) {
@@ -3059,7 +3059,7 @@ function DefaultHandlers(mouseHandler) {
                 prevScroll.allowed = 0;
             }
         }
-
+        
         prevScroll.t = t;
         prevScroll.vx = vx;
         prevScroll.vy = vy;
@@ -3069,7 +3069,7 @@ function DefaultHandlers(mouseHandler) {
             return ev.stop();
         }
     };
-
+    
     this.onTouchMove = function(ev) {
         this.editor._emit("mousewheel", ev);
     };
@@ -3156,7 +3156,7 @@ function Tooltip (parentNode) {
     this.getWidth = function() {
         return this.getElement().offsetWidth;
     };
-
+    
     this.destroy = function() {
         this.isOpen = false;
         if (this.$element && this.$element.parentNode) {
@@ -4741,7 +4741,7 @@ function _invertLevel(lev, levels, _array) {
 	}
 }
 
-function _getCharClass(chars, types, classes, ix) {
+function _getCharClass(chars, types, classes, ix) {			
 	var cType = types[ix], wType, nType, len, i;
 	switch(cType){
 		case L:
@@ -4796,7 +4796,7 @@ function _getCharClass(chars, types, classes, ix) {
 			}
 			if (i < len){
 				var c = chars[ix], rtlCandidate = (c >= 0x0591 && c <= 0x08FF) || c == 0xFB1E;
-
+				
 				wType = types[i];
 				if (rtlCandidate && (wType == R || wType == AL)){
 					return R;
@@ -4825,10 +4825,10 @@ function _getCharClass(chars, types, classes, ix) {
 	}
 }
 
-function _getCharacterType( ch ) {
+function _getCharacterType( ch ) {		
 	var uc = ch.charCodeAt(0), hi = uc >> 8;
-
-	if (hi == 0) {
+	
+	if (hi == 0) {		
 		return ((uc > 0x00BF) ? L : UnicodeTBL00[uc]);
 	} else if (hi == 5) {
 		return (/[\u0591-\u05f4]/.test(ch) ? R : L);
@@ -4840,15 +4840,15 @@ function _getCharacterType( ch ) {
 		else if (uc == 0x066A)
 			return ET;
 		else if (/[\u06f0-\u06f9]/.test(ch))
-			return EN;
+			return EN;			
 		else
 			return AL;
 	} else if (hi == 0x20 && uc <= 0x205F) {
 		return UnicodeTBL20[uc & 0xFF];
 	} else if (hi == 0xFE) {
 		return (uc >= 0xFE70 ? AL : ON);
-	}
-	return ON;
+	}		
+	return ON;	
 }
 
 function _isArabicDiacritics( ch ) {
@@ -4866,9 +4866,9 @@ exports.DOT = "\xB7";
 exports.doBidiReorder = function(text, textCharTypes, isRtl) {
 	if (text.length < 2)
 		return {};
-
+		
 	var chars = text.split(""), logicalFromVisual = new Array(chars.length),
-		bidiLevels = new Array(chars.length), levels = [];
+		bidiLevels = new Array(chars.length), levels = []; 
 
 	dir = isRtl ? RTL : LTR;
 
@@ -4882,7 +4882,7 @@ exports.doBidiReorder = function(text, textCharTypes, isRtl) {
 	for (var i = 0; i < logicalFromVisual.length - 1; i++) { //fix levels to reflect character width
 		if (textCharTypes[i] === AN) {
 			levels[i] = exports.AN;
-		} else if (levels[i] === R && ((textCharTypes[i] > AL && textCharTypes[i] < LRE)
+		} else if (levels[i] === R && ((textCharTypes[i] > AL && textCharTypes[i] < LRE) 
 			|| textCharTypes[i] === ON || textCharTypes[i] === BN)) {
 			levels[i] = exports.ON_R;
 		} else if ((i > 0 && chars[i - 1] === '\u0644') && /\u0622|\u0623|\u0625|\u0627/.test(chars[i])) {
@@ -4892,7 +4892,7 @@ exports.doBidiReorder = function(text, textCharTypes, isRtl) {
 	}
 	if (chars[chars.length - 1] === exports.DOT)
 		levels[chars.length - 1] = exports.B;
-
+				
 	for (var i = 0; i < logicalFromVisual.length; i++) {
 		bidiLevels[i] = levels[logicalFromVisual[i]];
 	}
@@ -4907,7 +4907,7 @@ exports.hasBidiCharacters = function(text, textCharTypes){
 			ret = true;
 	}
 	return ret;
-};
+};	
 exports.getVisualFromLogicalIdx = function(logIdx, rowMap) {
 	for (var i = 0; i < rowMap.logicalFromVisual.length; i++) {
 		if (rowMap.logicalFromVisual[i] == logIdx)
@@ -4959,7 +4959,7 @@ var BidiHandler = function(session) {
                 this.seenBidi = true;
                 this.currentRow = null;
             }
-        }
+        } 
         else {
             this.currentRow = null;
         }
@@ -4998,7 +4998,7 @@ var BidiHandler = function(session) {
     this.updateRowLine = function(docRow, splitIndex) {
         if (docRow === undefined)
             docRow = this.getDocumentRow();
-
+            
         this.wrapIndent = 0;
         this.isLastRow = (docRow === this.session.getLength() - 1);
         this.line = this.session.getLine(docRow);
@@ -5028,7 +5028,7 @@ var BidiHandler = function(session) {
             return ch;
         });
     };
-
+    
     this.updateBidiMap = function() {
         var textCharTypes = [], endOfLine = this.isLastRow ? this.EOF : this.EOL;
         var line = this.line + (this.showInvisibles ? endOfLine : bidiUtil.DOT);
@@ -5068,11 +5068,11 @@ var BidiHandler = function(session) {
     };
 
     this.setEolChar = function(eolChar) {
-        this.EOL = eolChar;
+        this.EOL = eolChar; 
     };
 
     this.setTextDir = function(isRtlDir) {
-        this.isRtlDir = isRtlDir;
+        this.isRtlDir = isRtlDir; 
     };
     this.getPosLeft = function(col) {
         col -= this.wrapIndent;
@@ -5126,7 +5126,7 @@ var BidiHandler = function(session) {
         if (this.wrapIndent) {
             posX -= this.wrapIndent * this.charWidths[bidiUtil.L];
         }
-
+    
         while(posX > offset + charWidth/2) {
             offset += charWidth;
             if(visualIdx === levels.length - 1) {
@@ -5135,7 +5135,7 @@ var BidiHandler = function(session) {
             }
             charWidth = this.charWidths[levels[++visualIdx]];
         }
-
+    
         if (visualIdx > 0 && (levels[visualIdx - 1] % 2 !== 0) && (levels[visualIdx] % 2 === 0)){
             if(posX < offset)
                 visualIdx--;
@@ -6693,7 +6693,7 @@ var TokenIterator = function(session, initialRow, initialColumn) {
         var column = this.getCurrentTokenColumn();
         return new Range(this.$row, column, this.$row, column + token.value.length);
     };
-
+    
 }).call(TokenIterator.prototype);
 
 exports.TokenIterator = TokenIterator;
@@ -6925,7 +6925,7 @@ var CstyleBehaviour = function(options) {
     this.add("string_dquotes", "insertion", function(state, action, editor, session, text) {
         var quotes = session.$mode.$quotes || defaultQuotes;
         if (text.length == 1 && quotes[text]) {
-            if (this.lineCommentStart && this.lineCommentStart.indexOf(text) != -1)
+            if (this.lineCommentStart && this.lineCommentStart.indexOf(text) != -1) 
                 return;
             initContext(editor);
             var quote = text;
@@ -6938,15 +6938,15 @@ var CstyleBehaviour = function(options) {
                 var line = session.doc.getLine(cursor.row);
                 var leftChar = line.substring(cursor.column-1, cursor.column);
                 var rightChar = line.substring(cursor.column, cursor.column + 1);
-
+                
                 var token = session.getTokenAt(cursor.row, cursor.column);
                 var rightToken = session.getTokenAt(cursor.row, cursor.column + 1);
                 if (leftChar == "\\" && token && /escape/.test(token.type))
                     return null;
-
+                
                 var stringBefore = token && /string|escape/.test(token.type);
                 var stringAfter = !rightToken || /string|escape/.test(rightToken.type);
-
+                
                 var pair;
                 if (rightChar == quote) {
                     pair = stringBefore !== stringAfter;
@@ -6991,7 +6991,7 @@ var CstyleBehaviour = function(options) {
 
 };
 
-
+    
 CstyleBehaviour.isSaneInsertion = function(editor, session) {
     var cursor = editor.getCursorPosition();
     var iterator = new TokenIterator(session, cursor.row, cursor.column);
@@ -8060,7 +8060,7 @@ var BackgroundTokenizer = function(tokenizer, editor) {
         
         if (endLine == -1)
             endLine = currentLine;
-
+        
         if (startLine <= endLine)
             self.fireUpdateEvent(startLine, endLine);
     };
@@ -11473,7 +11473,7 @@ var Search = function() {
                 firstRange = null;
                 return false;
             }
-
+            
             return true;
         });
 
@@ -11633,7 +11633,7 @@ var Search = function() {
 
         var firstRow = range ? range.start.row : 0;
         var lastRow = range ? range.end.row : session.getLength() - 1;
-
+        
         if (backwards) {
             var forEach = function(callback) {
                 var row = start.row;
@@ -11832,7 +11832,7 @@ MultiHashHandler.prototype = HashHandler.prototype;
     
     function getPosition(command) {
         return typeof command == "object" && command.bindKey
-            && command.bindKey.position
+            && command.bindKey.position 
             || (command.isDefault ? -100 : 0);
     }
     this._addCommandToBinding = function(keyId, command, position) {
@@ -11847,7 +11847,7 @@ MultiHashHandler.prototype = HashHandler.prototype;
             } else if ((i = ckb[keyId].indexOf(command)) != -1) {
                 ckb[keyId].splice(i, 1);
             }
-
+            
             if (typeof position != "number") {
                 position = getPosition(command);
             }
@@ -13098,7 +13098,7 @@ Editor.$uid = 0;
         
         oldSession && oldSession._signal("changeEditor", {oldEditor: this});
         session && session._signal("changeEditor", {editor: this});
-
+        
         if (session && session.bgTokenizer)
             session.bgTokenizer.scheduleStart();
     };
@@ -15102,12 +15102,12 @@ var Marker = function(parentEl) {
             next = row + 1 < end ? session.getScreenLastRowColumn(row + 1) : row == end ? 0 : range.end.column;
             clazzModified = clazz + (row == start  ? " ace_start" : "") + " ace_br"
                 + getBorderClass(row == start || row == start + 1 && range.start.column, prev < curr, curr > next, row == end);
-
+            
             if (this.session.$bidiHandler.isBidiRow(row)) {
-                this.drawBidiSingleLineMarker(stringBuilder, lineRange, clazzModified,
+                this.drawBidiSingleLineMarker(stringBuilder, lineRange, clazzModified, 
                     layerConfig, row == end ? 0 : 1, extraStyle);
             } else {
-                this.drawSingleLineMarker(stringBuilder, lineRange, clazzModified,
+                this.drawSingleLineMarker(stringBuilder, lineRange, clazzModified,  
                     layerConfig, row == end ? 0 : 1, extraStyle);
             }
         }
@@ -16040,7 +16040,7 @@ oop.inherits(VScrollBar, ScrollBar);
     this.setHeight = function(height) {
         this.element.style.height = height + "px";
     };
-    this.setInnerHeight =
+    this.setInnerHeight = 
     this.setScrollHeight = function(height) {
         this.scrollHeight = height;
         if (height > MAX_SCROLL_H) {
@@ -17238,7 +17238,7 @@ var VirtualRenderer = function(container, theme) {
         }
         
         this._signal("beforeRender");
-
+        
         if (this.session && this.session.$bidiHandler)
             this.session.$bidiHandler.updateCharacterWidths(this.$fontMetrics);
 
@@ -17336,7 +17336,7 @@ var VirtualRenderer = function(container, theme) {
     this.$autosize = function() {
         var height = this.session.getScreenLength() * this.lineHeight;
         var maxHeight = this.$maxLines * this.lineHeight;
-        var desiredHeight = Math.min(maxHeight,
+        var desiredHeight = Math.min(maxHeight, 
             Math.max((this.$minLines || 1) * this.lineHeight, height)
         ) + this.scrollMargin.v + (this.$extraHeight || 0);
         if (this.$horizScroll)
@@ -17695,7 +17695,7 @@ var VirtualRenderer = function(container, theme) {
     this.screenToTextCoordinates = function(x, y) {
         var canvasPos = this.scroller.getBoundingClientRect();
         var offsetX = x + this.scrollLeft - canvasPos.left - this.$padding;
-
+        
         var col = Math.round(offsetX / this.characterWidth);
 
         var row = (y + this.scrollTop - canvasPos.top) / this.lineHeight;
@@ -17709,7 +17709,7 @@ var VirtualRenderer = function(container, theme) {
         var x = this.$padding + (this.session.$bidiHandler.isBidiRow(pos.row, row)
              ? this.session.$bidiHandler.getPosLeft(pos.column)
              : Math.round(pos.column * this.characterWidth));
-
+        
         var y = pos.row * this.lineHeight;
 
         return {
@@ -20254,7 +20254,7 @@ exports.createEditSession = function(text, mode) {
 };
 exports.EditSession = EditSession;
 exports.UndoManager = UndoManager;
-exports.version = "1.4.2";
+exports.version = "1.2.9";
 });
             (function() {
                 ace.acequire(["ace/ace"], function(a) {

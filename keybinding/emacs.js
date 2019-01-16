@@ -615,7 +615,7 @@ var iSearchCommandModule = acequire("../commands/incremental_search_commands");
 var screenToTextBlockCoordinates = function(x, y) {
     var canvasPos = this.scroller.getBoundingClientRect();
     var offsetX = x + this.scrollLeft - canvasPos.left - this.$padding;
-
+    
     var col = Math.floor(offsetX / this.characterWidth);
 
     var row = Math.floor(
