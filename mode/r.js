@@ -275,9 +275,10 @@ var MatchingBraceOutdent = function() {};
 exports.MatchingBraceOutdent = MatchingBraceOutdent;
 });
 
-ace.define("ace/mode/r",["require","exports","module","ace/range","ace/lib/oop","ace/mode/text","ace/mode/text_highlight_rules","ace/mode/r_highlight_rules","ace/mode/matching_brace_outdent"], function(acequire, exports, module) {
+ace.define("ace/mode/r",["require","exports","module","ace/unicode","ace/range","ace/lib/oop","ace/mode/text","ace/mode/text_highlight_rules","ace/mode/r_highlight_rules","ace/mode/matching_brace_outdent"], function(acequire, exports, module) {
    "use strict";
 
+   var unicode = acequire("../unicode");
    var Range = acequire("../range").Range;
    var oop = acequire("../lib/oop");
    var TextMode = acequire("./text").Mode;
@@ -292,10 +293,19 @@ ace.define("ace/mode/r",["require","exports","module","ace/range","ace/lib/oop",
    };
    oop.inherits(Mode, TextMode);
 
-   (function()
-   {
+   (function() {
       this.lineCommentStart = "#";
+      this.tokenRe = new RegExp("^[" + unicode.wordChars + "._]+", "g");
+
+      this.nonTokenRe = new RegExp("^(?:[^" + unicode.wordChars + "._]|\s])+", "g");
        this.$id = "ace/mode/r";
    }).call(Mode.prototype);
    exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/r"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            
