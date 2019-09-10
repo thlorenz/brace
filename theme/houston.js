@@ -18,7 +18,6 @@ background: #6b3838\
 background-color: #333333;\
 color: #F8F8F2;\
 font-size: 14px;\
-font-family: Consolas;\
 }\
 .ace-houston .ace_scrollbar-v {\
 width: 7px !important;\
