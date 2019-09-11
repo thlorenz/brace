@@ -3,7 +3,7 @@ ace.define("ace/theme/zebraDark",["require","exports","module","ace/lib/dom"], f
     exports.isDark = true;
     exports.cssClass = "ace-zebraDark";
     exports.cssText = ".ace-zebraDark .ace_gutter {\
-background: #3c3c3c;\
+background: #262626;\
 color: rgba(255, 255, 255, 0.3)\
 }\
 .ace-zebraDark .ace_print-margin {\
