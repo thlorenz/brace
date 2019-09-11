@@ -8,7 +8,7 @@ color: rgba(255, 255, 255, 0.3)\
 }\
 .ace-zebraDark .ace_print-margin {\
 width: 1px;\
-background: #555651\
+background: #333\
 }\
 .ace_gutter-cell.ace_error {\
 background-image: none;\
