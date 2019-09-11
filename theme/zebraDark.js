@@ -15,7 +15,7 @@ background-image: none;\
 background: #6b3838\
 }\
 .ace-zebraDark {\
-background-color: #333333;\
+background-color: #262626;\
 color: #F8F8F2;\
 font-size: 14px;\
 }\
