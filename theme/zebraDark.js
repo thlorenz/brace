@@ -63,7 +63,7 @@ color: #52524d\
 .ace-zebraDark .ace_keyword,\
 .ace-zebraDark .ace_meta.ace_tag,\
 .ace-zebraDark .ace_storage {\
-color: #F92672\
+color: rgb(255, 126, 48)\
 }\
 .ace-zebraDark .ace_punctuation,\
 .ace-zebraDark .ace_punctuation.ace_tag {\
