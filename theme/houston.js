@@ -15,7 +15,7 @@ background-image: none;\
 background: #6b3838\
 }\
 .ace-houston {\
-background-color: #333333;\
+background-color: none;\
 color: #F8F8F2;\
 font-size: 14px;\
 }\
