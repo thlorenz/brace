@@ -435,7 +435,15 @@ oop.inherits(Mode, TextMode);
     };
 
     this.$id = "ace/mode/sh";
+    this.snippetFileId = "ace/snippets/sh";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/sh"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

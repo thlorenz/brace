@@ -181,7 +181,8 @@ var JavaScriptHighlightRules = function(options) {
                 next  : "property"
             }, {
                 token : "storage.type",
-                regex : /=>/
+                regex : /=>/,
+                next  : "start"
             }, {
                 token : "keyword.operator",
                 regex : /--|\+\+|\.{3}|===|==|=|!=|!==|<+=?|>+=?|!|&&|\|\||\?:|[!$%&*+\-~\/^]=?/,
@@ -783,6 +784,7 @@ oop.inherits(Mode, TextMode);
     };
 
     this.$id = "ace/mode/javascript";
+    this.snippetFileId = "ace/snippets/javascript";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
@@ -806,7 +808,8 @@ var JavaHighlightRules = function() {
     "catch|extends|int|short|try|" +
     "char|final|interface|static|void|" +
     "class|finally|long|strictfp|volatile|" +
-    "const|float|native|super|while"
+    "const|float|native|super|while|" +
+    "var"
     );
 
     var buildinConstants = ("null|Infinity|NaN|undefined");
@@ -873,6 +876,36 @@ var JavaHighlightRules = function() {
                 token : "constant.language.boolean",
                 regex : "(?:true|false)\\b"
             }, {
+                regex: "(open(?:\\s+))?module(?=\\s*\\w)",
+                token: "keyword",
+                next: [{
+                    regex: "{",
+                    token: "paren.lparen",
+                    next: [{
+                        regex: "}",
+                        token: "paren.rparen",
+                        next: "start"
+                    }, {
+                        regex: "\\b(acequires|transitive|exports|opens|to|uses|provides|with)\\b",
+                        token: "keyword" 
+                    }]
+                }, {
+                    token : "text",
+                    regex : "\\s+"
+                }, {
+                    token : "identifier",
+                    regex : "\\w+"
+                }, {
+                    token : "punctuation.operator",
+                    regex : "."
+                }, {
+                    token : "text",
+                    regex : "\\s+"
+                }, {
+                    regex: "", // exit if there is anything else
+                    next: "start"
+                }]
+            }, {
                 token : keywordMapper,
                 regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
             }, {
@@ -900,8 +933,10 @@ var JavaHighlightRules = function() {
         ]
     };
 
+    
     this.embedRules(DocCommentHighlightRules, "doc-",
         [ DocCommentHighlightRules.getEndRule("start") ]);
+    this.normalizeRules();
 };
 
 oop.inherits(JavaHighlightRules, TextHighlightRules);
@@ -909,16 +944,76 @@ oop.inherits(JavaHighlightRules, TextHighlightRules);
 exports.JavaHighlightRules = JavaHighlightRules;
 });
 
-ace.define("ace/mode/java",["require","exports","module","ace/lib/oop","ace/mode/javascript","ace/mode/java_highlight_rules"], function(acequire, exports, module) {
+ace.define("ace/mode/folding/java",["require","exports","module","ace/lib/oop","ace/mode/folding/cstyle","ace/range"], function(acequire, exports, module) {
+"use strict";
+
+var oop = acequire("../../lib/oop");
+var CStyleFoldMode = acequire("./cstyle").FoldMode;
+var Range = acequire("../../range").Range;
+
+var FoldMode = exports.FoldMode = function() {};
+oop.inherits(FoldMode, CStyleFoldMode);
+
+(function() {
+    this.importRegex = /^import /;
+    this.getCStyleFoldWidget = this.getFoldWidget;
+    this.getFoldWidget = function(session, foldStyle, row) {
+        if (foldStyle === "markbegin") {
+            var line = session.getLine(row);
+            if (this.importRegex.test(line)) {
+                if (row == 0 || !this.importRegex.test(session.getLine(row - 1)))
+                    return "start";
+            }
+        }
+
+        return this.getCStyleFoldWidget(session, foldStyle, row);
+    };
+    
+    this.getCstyleFoldWidgetRange = this.getFoldWidgetRange;
+    this.getFoldWidgetRange = function(session, foldStyle, row, forceMultiline) {
+        var line = session.getLine(row);
+        var match = line.match(this.importRegex);
+        if (!match || foldStyle !== "markbegin")
+            return this.getCstyleFoldWidgetRange(session, foldStyle, row, forceMultiline);
+
+        var startColumn = match[0].length;
+        var maxRow = session.getLength();
+        var startRow = row;
+        var endRow = row;
+
+        while (++row < maxRow) {
+            var line = session.getLine(row);
+            if (line.match(/^\s*$/))
+                continue;
+
+            if (!line.match(this.importRegex))
+                break;
+
+            endRow = row;
+        }
+
+        if (endRow > startRow) {
+            var endColumn = session.getLine(endRow).length;
+            return new Range(startRow, startColumn, endRow, endColumn);
+        }
+    };
+
+}).call(FoldMode.prototype);
+
+});
+
+ace.define("ace/mode/java",["require","exports","module","ace/lib/oop","ace/mode/javascript","ace/mode/java_highlight_rules","ace/mode/folding/java"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var JavaScriptMode = acequire("./javascript").Mode;
 var JavaHighlightRules = acequire("./java_highlight_rules").JavaHighlightRules;
+var JavaFoldMode = acequire("./folding/java").FoldMode;
 
 var Mode = function() {
     JavaScriptMode.call(this);
     this.HighlightRules = JavaHighlightRules;
+    this.foldingRules = new JavaFoldMode();
 };
 oop.inherits(Mode, JavaScriptMode);
 
@@ -929,7 +1024,15 @@ oop.inherits(Mode, JavaScriptMode);
     };
 
     this.$id = "ace/mode/java";
+    this.snippetFileId = "ace/snippets/java";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/java"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

@@ -1,43 +1,120 @@
-ace.define("ace/mode/lucene_highlight_rules",["require","exports","module","ace/lib/oop","ace/lib/lang","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
+ace.define("ace/mode/lucene_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
-var lang = acequire("../lib/lang");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
 var LuceneHighlightRules = function() {
     this.$rules = {
         "start" : [
             {
-                token : "constant.character.negation",
-                regex : "[\\-]"
+                token: "constant.language.escape",
+                regex: /\\[\-+&|!(){}\[\]^"~*?:\\]/
             }, {
-                token : "constant.character.interro",
-                regex : "[\\?]"
+                token: "constant.character.negation",
+                regex: "\\-"
             }, {
-                token : "constant.character.asterisk",
-                regex : "[\\*]"
+                token: "constant.character.interro",
+                regex: "\\?"
+            }, {
+                token: "constant.character.acequired",
+                regex: "\\+"
+            }, {
+                token: "constant.character.asterisk",
+                regex: "\\*"
             }, {
                 token: 'constant.character.proximity',
-                regex: '~[0-9]+\\b'
+                regex: '~(?:0\\.[0-9]+|[0-9]+)?'
             }, {
-                token : 'keyword.operator',
-                regex: '(?:AND|OR|NOT)\\b'
+                token: 'keyword.operator',
+                regex: '(AND|OR|NOT|TO)\\b'
             }, {
-                token : "paren.lparen",
-                regex : "[\\(]"
+                token: "paren.lparen",
+                regex: "[\\(\\{\\[]"
             }, {
-                token : "paren.rparen",
-                regex : "[\\)]"
+                token: "paren.rparen",
+                regex: "[\\)\\}\\]]"
             }, {
-                token : "keyword",
-                regex : "[\\S]+:"
+                token: "keyword.operator",
+                regex: /[><=^]/
             }, {
-                token : "string",           // " string
-                regex : '".*?"'
+                token: "constant.numeric",
+                regex: /\d[\d.-]*/
             }, {
-                token : "text",
-                regex : "\\s+"
+                token: "string",
+                regex: /"(?:\\"|[^"])*"/
+            }, {
+                token: "keyword",
+                regex: /(?:\\.|[^\s\-+&|!(){}\[\]^"~*?:\\])+:/,
+                next: "maybeRegex"
+            }, {
+                token: "term",
+                regex: /\w+/
+            }, {
+                token: "text",
+                regex: /\s+/
+            }
+        ],
+        "maybeRegex": [{
+            token: "text",
+            regex: /\s+/
+        }, {
+            token: "string.regexp.start",
+            regex: "/",
+            next: "regex"
+        }, {
+            regex: "",
+            next: "start"
+        }],
+        "regex": [
+            {
+                token: "regexp.keyword.operator",
+                regex: "\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"
+            }, {
+                token: "string.regexp.end",
+                regex: "/[sxngimy]*",
+                next: "no_regex"
+            }, {
+                token : "invalid",
+                regex: /\{\d+\b,?\d*\}[+*]|[+*$^?][+*]|[$^][?]|\?{3,}/
+            }, {
+                token : "constant.language.escape",
+                regex: /\(\?[:=!]|\)|\{\d+\b,?\d*\}|[+*]\?|[()$^+*?.]/
+            }, {
+                token: "constant.language.escape",
+                regex: "<\d+-\d+>|[~&@]"
+            }, {
+                token : "constant.language.delimiter",
+                regex: /\|/
+            }, {
+                token: "constant.language.escape",
+                regex: /\[\^?/,
+                next: "regex_character_class"
+            }, {
+                token: "empty",
+                regex: "$",
+                next: "no_regex"
+            }, {
+                defaultToken: "string.regexp"
+            }
+        ],
+        "regex_character_class": [
+            {
+                token: "regexp.charclass.keyword.operator",
+                regex: "\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"
+            }, {
+                token: "constant.language.escape",
+                regex: "]",
+                next: "regex"
+            }, {
+                token: "constant.language.escape",
+                regex: "-"
+            }, {
+                token: "empty",
+                regex: "$",
+                next: "no_regex"
+            }, {
+                defaultToken: "string.regexp.charachterclass"
             }
         ]
     };
@@ -67,4 +144,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/lucene"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

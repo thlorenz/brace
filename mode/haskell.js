@@ -366,7 +366,15 @@ oop.inherits(Mode, TextMode);
     this.lineCommentStart = "--";
     this.blockComment = null;
     this.$id = "ace/mode/haskell";
+    this.snippetFileId = "ace/snippets/haskell";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/haskell"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

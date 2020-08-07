@@ -4,9 +4,9 @@ ace.define("ace/mode/css_highlight_rules",["require","exports","module","ace/lib
 var oop = acequire("../lib/oop");
 var lang = acequire("../lib/lang");
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
-var supportType = exports.supportType = "align-content|align-items|align-self|all|animation|animation-delay|animation-direction|animation-duration|animation-fill-mode|animation-iteration-count|animation-name|animation-play-state|animation-timing-function|backface-visibility|background|background-attachment|background-blend-mode|background-clip|background-color|background-image|background-origin|background-position|background-repeat|background-size|border|border-bottom|border-bottom-color|border-bottom-left-radius|border-bottom-right-radius|border-bottom-style|border-bottom-width|border-collapse|border-color|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-left|border-left-color|border-left-style|border-left-width|border-radius|border-right|border-right-color|border-right-style|border-right-width|border-spacing|border-style|border-top|border-top-color|border-top-left-radius|border-top-right-radius|border-top-style|border-top-width|border-width|bottom|box-shadow|box-sizing|caption-side|clear|clip|color|column-count|column-fill|column-gap|column-rule|column-rule-color|column-rule-style|column-rule-width|column-span|column-width|columns|content|counter-increment|counter-reset|cursor|direction|display|empty-cells|filter|flex|flex-basis|flex-direction|flex-flow|flex-grow|flex-shrink|flex-wrap|float|font|font-family|font-size|font-size-adjust|font-stretch|font-style|font-variant|font-weight|hanging-punctuation|height|justify-content|left|letter-spacing|line-height|list-style|list-style-image|list-style-position|list-style-type|margin|margin-bottom|margin-left|margin-right|margin-top|max-height|max-width|min-height|min-width|nav-down|nav-index|nav-left|nav-right|nav-up|opacity|order|outline|outline-color|outline-offset|outline-style|outline-width|overflow|overflow-x|overflow-y|padding|padding-bottom|padding-left|padding-right|padding-top|page-break-after|page-break-before|page-break-inside|perspective|perspective-origin|position|quotes|resize|right|tab-size|table-layout|text-align|text-align-last|text-decoration|text-decoration-color|text-decoration-line|text-decoration-style|text-indent|text-justify|text-overflow|text-shadow|text-transform|top|transform|transform-origin|transform-style|transition|transition-delay|transition-duration|transition-property|transition-timing-function|unicode-bidi|vertical-align|visibility|white-space|width|word-break|word-spacing|word-wrap|z-index";
+var supportType = exports.supportType = "align-content|align-items|align-self|all|animation|animation-delay|animation-direction|animation-duration|animation-fill-mode|animation-iteration-count|animation-name|animation-play-state|animation-timing-function|backface-visibility|background|background-attachment|background-blend-mode|background-clip|background-color|background-image|background-origin|background-position|background-repeat|background-size|border|border-bottom|border-bottom-color|border-bottom-left-radius|border-bottom-right-radius|border-bottom-style|border-bottom-width|border-collapse|border-color|border-image|border-image-outset|border-image-repeat|border-image-slice|border-image-source|border-image-width|border-left|border-left-color|border-left-style|border-left-width|border-radius|border-right|border-right-color|border-right-style|border-right-width|border-spacing|border-style|border-top|border-top-color|border-top-left-radius|border-top-right-radius|border-top-style|border-top-width|border-width|bottom|box-shadow|box-sizing|caption-side|clear|clip|color|column-count|column-fill|column-gap|column-rule|column-rule-color|column-rule-style|column-rule-width|column-span|column-width|columns|content|counter-increment|counter-reset|cursor|direction|display|empty-cells|filter|flex|flex-basis|flex-direction|flex-flow|flex-grow|flex-shrink|flex-wrap|float|font|font-family|font-size|font-size-adjust|font-stretch|font-style|font-variant|font-weight|hanging-punctuation|height|justify-content|left|letter-spacing|line-height|list-style|list-style-image|list-style-position|list-style-type|margin|margin-bottom|margin-left|margin-right|margin-top|max-height|max-width|max-zoom|min-height|min-width|min-zoom|nav-down|nav-index|nav-left|nav-right|nav-up|opacity|order|outline|outline-color|outline-offset|outline-style|outline-width|overflow|overflow-x|overflow-y|padding|padding-bottom|padding-left|padding-right|padding-top|page-break-after|page-break-before|page-break-inside|perspective|perspective-origin|position|quotes|resize|right|tab-size|table-layout|text-align|text-align-last|text-decoration|text-decoration-color|text-decoration-line|text-decoration-style|text-indent|text-justify|text-overflow|text-shadow|text-transform|top|transform|transform-origin|transform-style|transition|transition-delay|transition-duration|transition-property|transition-timing-function|unicode-bidi|user-select|user-zoom|vertical-align|visibility|white-space|width|word-break|word-spacing|word-wrap|z-index";
 var supportFunction = exports.supportFunction = "rgb|rgba|url|attr|counter|counters";
-var supportConstant = exports.supportConstant = "absolute|after-edge|after|all-scroll|all|alphabetic|always|antialiased|armenian|auto|avoid-column|avoid-page|avoid|balance|baseline|before-edge|before|below|bidi-override|block-line-height|block|bold|bolder|border-box|both|bottom|box|break-all|break-word|capitalize|caps-height|caption|center|central|char|circle|cjk-ideographic|clone|close-quote|col-resize|collapse|column|consider-shifts|contain|content-box|cover|crosshair|cubic-bezier|dashed|decimal-leading-zero|decimal|default|disabled|disc|disregard-shifts|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ease-in|ease-in-out|ease-out|ease|ellipsis|end|exclude-ruby|fill|fixed|georgian|glyphs|grid-height|groove|hand|hanging|hebrew|help|hidden|hiragana-iroha|hiragana|horizontal|icon|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|ideographic|inactive|include-ruby|inherit|initial|inline-block|inline-box|inline-line-height|inline-table|inline|inset|inside|inter-ideograph|inter-word|invert|italic|justify|katakana-iroha|katakana|keep-all|last|left|lighter|line-edge|line-through|line|linear|list-item|local|loose|lower-alpha|lower-greek|lower-latin|lower-roman|lowercase|lr-tb|ltr|mathematical|max-height|max-size|medium|menu|message-box|middle|move|n-resize|ne-resize|newspaper|no-change|no-close-quote|no-drop|no-open-quote|no-repeat|none|normal|not-allowed|nowrap|nw-resize|oblique|open-quote|outset|outside|overline|padding-box|page|pointer|pre-line|pre-wrap|pre|preserve-3d|progress|relative|repeat-x|repeat-y|repeat|replaced|reset-size|ridge|right|round|row-resize|rtl|s-resize|scroll|se-resize|separate|slice|small-caps|small-caption|solid|space|square|start|static|status-bar|step-end|step-start|steps|stretch|strict|sub|super|sw-resize|table-caption|table-cell|table-column-group|table-column|table-footer-group|table-header-group|table-row-group|table-row|table|tb-rl|text-after-edge|text-before-edge|text-bottom|text-size|text-top|text|thick|thin|transparent|underline|upper-alpha|upper-latin|upper-roman|uppercase|use-script|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace|z-index|zero";
+var supportConstant = exports.supportConstant = "absolute|after-edge|after|all-scroll|all|alphabetic|always|antialiased|armenian|auto|avoid-column|avoid-page|avoid|balance|baseline|before-edge|before|below|bidi-override|block-line-height|block|bold|bolder|border-box|both|bottom|box|break-all|break-word|capitalize|caps-height|caption|center|central|char|circle|cjk-ideographic|clone|close-quote|col-resize|collapse|column|consider-shifts|contain|content-box|cover|crosshair|cubic-bezier|dashed|decimal-leading-zero|decimal|default|disabled|disc|disregard-shifts|distribute-all-lines|distribute-letter|distribute-space|distribute|dotted|double|e-resize|ease-in|ease-in-out|ease-out|ease|ellipsis|end|exclude-ruby|fill|fixed|georgian|glyphs|grid-height|groove|hand|hanging|hebrew|help|hidden|hiragana-iroha|hiragana|horizontal|icon|ideograph-alpha|ideograph-numeric|ideograph-parenthesis|ideograph-space|ideographic|inactive|include-ruby|inherit|initial|inline-block|inline-box|inline-line-height|inline-table|inline|inset|inside|inter-ideograph|inter-word|invert|italic|justify|katakana-iroha|katakana|keep-all|last|left|lighter|line-edge|line-through|line|linear|list-item|local|loose|lower-alpha|lower-greek|lower-latin|lower-roman|lowercase|lr-tb|ltr|mathematical|max-height|max-size|medium|menu|message-box|middle|move|n-resize|ne-resize|newspaper|no-change|no-close-quote|no-drop|no-open-quote|no-repeat|none|normal|not-allowed|nowrap|nw-resize|oblique|open-quote|outset|outside|overline|padding-box|page|pointer|pre-line|pre-wrap|pre|preserve-3d|progress|relative|repeat-x|repeat-y|repeat|replaced|reset-size|ridge|right|round|row-resize|rtl|s-resize|scroll|se-resize|separate|slice|small-caps|small-caption|solid|space|square|start|static|status-bar|step-end|step-start|steps|stretch|strict|sub|super|sw-resize|table-caption|table-cell|table-column-group|table-column|table-footer-group|table-header-group|table-row-group|table-row|table|tb-rl|text-after-edge|text-before-edge|text-bottom|text-size|text-top|text|thick|thin|transparent|underline|upper-alpha|upper-latin|upper-roman|uppercase|use-script|vertical-ideographic|vertical-text|visible|w-resize|wait|whitespace|z-index|zero|zoom";
 var supportConstantColor = exports.supportConstantColor = "aliceblue|antiquewhite|aqua|aquamarine|azure|beige|bisque|black|blanchedalmond|blue|blueviolet|brown|burlywood|cadetblue|chartreuse|chocolate|coral|cornflowerblue|cornsilk|crimson|cyan|darkblue|darkcyan|darkgoldenrod|darkgray|darkgreen|darkgrey|darkkhaki|darkmagenta|darkolivegreen|darkorange|darkorchid|darkred|darksalmon|darkseagreen|darkslateblue|darkslategray|darkslategrey|darkturquoise|darkviolet|deeppink|deepskyblue|dimgray|dimgrey|dodgerblue|firebrick|floralwhite|forestgreen|fuchsia|gainsboro|ghostwhite|gold|goldenrod|gray|green|greenyellow|grey|honeydew|hotpink|indianred|indigo|ivory|khaki|lavender|lavenderblush|lawngreen|lemonchiffon|lightblue|lightcoral|lightcyan|lightgoldenrodyellow|lightgray|lightgreen|lightgrey|lightpink|lightsalmon|lightseagreen|lightskyblue|lightslategray|lightslategrey|lightsteelblue|lightyellow|lime|limegreen|linen|magenta|maroon|mediumaquamarine|mediumblue|mediumorchid|mediumpurple|mediumseagreen|mediumslateblue|mediumspringgreen|mediumturquoise|mediumvioletred|midnightblue|mintcream|mistyrose|moccasin|navajowhite|navy|oldlace|olive|olivedrab|orange|orangered|orchid|palegoldenrod|palegreen|paleturquoise|palevioletred|papayawhip|peachpuff|peru|pink|plum|powderblue|purple|rebeccapurple|red|rosybrown|royalblue|saddlebrown|salmon|sandybrown|seagreen|seashell|sienna|silver|skyblue|slateblue|slategray|slategrey|snow|springgreen|steelblue|tan|teal|thistle|tomato|turquoise|violet|wheat|white|whitesmoke|yellow|yellowgreen";
 var supportConstantFonts = exports.supportConstantFonts = "arial|century|comic|courier|cursive|fantasy|garamond|georgia|helvetica|impact|lucida|symbol|system|tahoma|times|trebuchet|utopia|verdana|webdings|sans-serif|serif|monospace";
 
@@ -36,7 +36,7 @@ var CssHighlightRules = function() {
             regex: "\\}"
         }, {
             token: "string",
-            regex: "@",
+            regex: "@(?!viewport)",
             next:  "media"
         }, {
             token: "keyword",
@@ -97,6 +97,9 @@ var CssHighlightRules = function() {
             regex : "-(webkit|ms|moz|o)-",
             token : "text"
         }, {
+            token : "punctuation.operator",
+            regex : "[:;]"
+        }, {
             token : "paren.rparen",
             regex : "\\}",
             next : "start"
@@ -104,7 +107,7 @@ var CssHighlightRules = function() {
             include : ["strings", "url", "comments"]
         }, {
             token : ["constant.numeric", "keyword"],
-            regex : "(" + numRe + ")(ch|cm|deg|em|ex|fr|gd|grad|Hz|in|kHz|mm|ms|pc|pt|px|rad|rem|s|turn|vh|vm|vw|%)"
+            regex : "(" + numRe + ")(ch|cm|deg|em|ex|fr|gd|grad|Hz|in|kHz|mm|ms|pc|pt|px|rad|rem|s|turn|vh|vmax|vmin|vm|vw|%)"
         }, {
             token : "constant.numeric",
             regex : numRe
@@ -373,7 +376,8 @@ var JavaScriptHighlightRules = function(options) {
                 next  : "property"
             }, {
                 token : "storage.type",
-                regex : /=>/
+                regex : /=>/,
+                next  : "start"
             }, {
                 token : "keyword.operator",
                 regex : /--|\+\+|\.{3}|===|==|=|!=|!==|<+=?|>+=?|!|&&|\|\||\?:|[!$%&*+\-~\/^]=?/,
@@ -1008,17 +1012,17 @@ var constantOtherSymbol = exports.constantOtherSymbol = {
     regex : "[:](?:[A-Za-z_]|[@$](?=[a-zA-Z0-9_]))[a-zA-Z0-9_]*[!=?]?"
 };
 
-var qString = exports.qString = {
+exports.qString = {
     token : "string", // single line
     regex : "['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"
 };
 
-var qqString = exports.qqString = {
+exports.qqString = {
     token : "string", // single line
     regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
 };
 
-var tString = exports.tString = {
+exports.tString = {
     token : "string", // backtick string
     regex : "[`](?:(?:\\\\.)|(?:[^'\\\\]))*?[`]"
 };
@@ -1028,9 +1032,34 @@ var constantNumericHex = exports.constantNumericHex = {
     regex : "0[xX][0-9a-fA-F](?:[0-9a-fA-F]|_(?=[0-9a-fA-F]))*\\b"
 };
 
+var constantNumericBinary = exports.constantNumericBinary = {
+    token: "constant.numeric",
+    regex: /\b(0[bB][01](?:[01]|_(?=[01]))*)\b/
+};
+
+var constantNumericDecimal = exports.constantNumericDecimal = {
+    token: "constant.numeric",
+    regex: /\b(0[dD](?:[1-9](?:[\d]|_(?=[\d]))*|0))\b/
+};
+
+var constantNumericOctal = exports.constantNumericDecimal = {
+    token: "constant.numeric",
+    regex: /\b(0[oO]?(?:[1-7](?:[0-7]|_(?=[0-7]))*|0))\b/
+};
+
+var constantNumericRational = exports.constantNumericRational = {
+    token: "constant.numeric", //rational + complex
+    regex: /\b([\d]+(?:[./][\d]+)?ri?)\b/
+};
+
+var constantNumericComplex = exports.constantNumericComplex = {
+    token: "constant.numeric", //simple complex numbers
+    regex: /\b([\d]i)\b/
+};
+
 var constantNumericFloat = exports.constantNumericFloat = {
-    token : "constant.numeric", // float
-    regex : "[+-]?\\d(?:\\d|_(?=\\d))*(?:(?:\\.\\d(?:\\d|_(?=\\d))*)?(?:[eE][+-]?\\d+)?)?\\b"
+    token : "constant.numeric", // float + complex
+    regex : "[+-]?\\d(?:\\d|_(?=\\d))*(?:(?:\\.\\d(?:\\d|_(?=\\d))*)?(?:[eE][+-]?\\d+)?)?i?\\b"
 };
 
 var instanceVariable = exports.instanceVariable = {
@@ -1070,18 +1099,19 @@ var RubyHighlightRules = function() {
         "filter_parameter_logging|match|get|post|resources|redirect|scope|assert_routing|" +
         "translate|localize|extract_locale_from_tld|caches_page|expire_page|caches_action|expire_action|" +
         "cache|expire_fragment|expire_cache_for|observe|cache_sweeper|" +
-        "has_many|has_one|belongs_to|has_and_belongs_to_many"
+        "has_many|has_one|belongs_to|has_and_belongs_to_many|p|warn|refine|using|module_function|extend|alias_method|" +
+        "private_class_method|remove_method|undef_method"
     );
 
     var keywords = (
         "alias|and|BEGIN|begin|break|case|class|def|defined|do|else|elsif|END|end|ensure|" +
         "__FILE__|finally|for|gem|if|in|__LINE__|module|next|not|or|private|protected|public|" +
-        "redo|rescue|retry|return|super|then|undef|unless|until|when|while|yield"
+        "redo|rescue|retry|return|super|then|undef|unless|until|when|while|yield|__ENCODING__|prepend"
     );
 
     var buildinConstants = (
         "true|TRUE|false|FALSE|nil|NIL|ARGF|ARGV|DATA|ENV|RUBY_PLATFORM|RUBY_RELEASE_DATE|" +
-        "RUBY_VERSION|STDERR|STDIN|STDOUT|TOPLEVEL_BINDING"
+        "RUBY_VERSION|STDERR|STDIN|STDOUT|TOPLEVEL_BINDING|RUBY_PATCHLEVEL|RUBY_REVISION|RUBY_COPYRIGHT|RUBY_ENGINE|RUBY_ENGINE_VERSION|RUBY_DESCRIPTION"
     );
 
     var builtinVariables = (
@@ -1097,126 +1127,191 @@ var RubyHighlightRules = function() {
         "invalid.deprecated": "debugger" // TODO is this a remnant from js mode?
     }, "identifier");
 
+    var escapedChars = "\\\\(?:n(?:[1-7][0-7]{0,2}|0)|[nsrtvfbae'\"\\\\]|c(?:\\\\M-)?.|M-(?:\\\\C-|\\\\c)?.|C-(?:\\\\M-)?.|[0-7]{3}|x[\\da-fA-F]{2}|u[\\da-fA-F]{4}|u{[\\da-fA-F]{1,6}(?:\\s[\\da-fA-F]{1,6})*})";
+
+    var closeParen = {
+        "(": ")",
+        "[": "]",
+        "{": "}",
+        "<": ">",
+        "^": "^",
+        "|": "|",
+        "%": "%"
+    };
+
     this.$rules = {
-        "start" : [
+        "start": [
             {
-                token : "comment",
-                regex : "#.*$"
+                token: "comment",
+                regex: "#.*$"
             }, {
-                token : "comment", // multi line comment
-                regex : "^=begin(?:$|\\s.*$)",
-                next : "comment"
+                token: "comment.multiline", // multi line comment
+                regex: "^=begin(?=$|\\s.*$)",
+                next: "comment"
             }, {
-                token : "string.regexp",
-                regex : "[/](?:(?:\\[(?:\\\\]|[^\\]])+\\])|(?:\\\\/|[^\\]/]))*[/]\\w*\\s*(?=[).,;]|$)"
+                token: "string.regexp",
+                regex: /[/](?=.*\/)/,
+                next: "regex"
             },
 
             [{
-                regex: "[{}]", onMatch: function(val, state, stack) {
-                    this.next = val == "{" ? this.nextState : "";
-                    if (val == "{" && stack.length) {
-                        stack.unshift("start", state);
-                        return "paren.lparen";
-                    }
-                    if (val == "}" && stack.length) {
-                        stack.shift();
-                        this.next = stack.shift();
-                        if (this.next.indexOf("string") != -1)
-                            return "paren.end";
-                    }
-                    return val == "{" ? "paren.lparen" : "paren.rparen";
-                },
-                nextState: "start"
-            }, {
-                token : "string.start",
-                regex : /"/,
-                push  : [{
-                    token : "constant.language.escape",
-                    regex : /\\(?:[nsrtvfbae'"\\]|c.|C-.|M-.(?:\\C-.)?|[0-7]{3}|x[\da-fA-F]{2}|u[\da-fA-F]{4})/
+                token: ["constant.other.symbol.ruby", "string.start"],
+                regex: /(:)?(")/,
+                push: [{
+                    token: "constant.language.escape",
+                    regex: escapedChars
                 }, {
-                    token : "paren.start",
-                    regex : /#{/,
-                    push  : "start"
+                    token: "paren.start",
+                    regex: /#{/,
+                    push: "start"
                 }, {
-                    token : "string.end",
-                    regex : /"/,
-                    next  : "pop"
+                    token: "string.end",
+                    regex: /"/,
+                    next: "pop"
                 }, {
                     defaultToken: "string"
                 }]
             }, {
-                token : "string.start",
-                regex : /`/,
-                push  : [{
-                    token : "constant.language.escape",
-                    regex : /\\(?:[nsrtvfbae'"\\]|c.|C-.|M-.(?:\\C-.)?|[0-7]{3}|x[\da-fA-F]{2}|u[\da-fA-F]{4})/
+                token: "string.start",
+                regex: /`/,
+                push: [{
+                    token: "constant.language.escape",
+                    regex: escapedChars
                 }, {
-                    token : "paren.start",
-                    regex : /#{/,
-                    push  : "start"
+                    token: "paren.start",
+                    regex: /#{/,
+                    push: "start"
                 }, {
-                    token : "string.end",
-                    regex : /`/,
-                    next  : "pop"
+                    token: "string.end",
+                    regex: /`/,
+                    next: "pop"
                 }, {
                     defaultToken: "string"
                 }]
             }, {
-                token : "string.start",
-                regex : /'/,
-                push  : [{
-                    token : "constant.language.escape",
-                    regex : /\\['\\]/
-                },  {
-                    token : "string.end",
-                    regex : /'/,
-                    next  : "pop"
+                token: ["constant.other.symbol.ruby", "string.start"],
+                regex: /(:)?(')/,
+                push: [{
+                    token: "constant.language.escape",
+                    regex: /\\['\\]/
+                }, {
+                    token: "string.end",
+                    regex: /'/,
+                    next: "pop"
                 }, {
                     defaultToken: "string"
                 }]
+            }, {
+                token: "string.start",//doesn't see any differences between strings and array of strings in highlighting
+                regex: /%[qwx]([(\[<{^|%])/, onMatch: function (val, state, stack) {
+                    if (stack.length)
+                        stack = [];
+                    var paren = val[val.length - 1];
+                    stack.unshift(paren, state);
+                    this.next = "qStateWithoutInterpolation";
+                    return this.token;
+                }
+            }, {
+                token: "string.start", //doesn't see any differences between strings and array of strings in highlighting
+                regex: /%[QWX]?([(\[<{^|%])/, onMatch: function (val, state, stack) {
+                    if (stack.length)
+                        stack = [];
+                    var paren = val[val.length - 1];
+                    stack.unshift(paren, state);
+                    this.next = "qStateWithInterpolation";
+                    return this.token;
+                }
+            }, {
+                token: "constant.other.symbol.ruby", //doesn't see any differences between symbols and array of symbols in highlighting
+                regex: /%[si]([(\[<{^|%])/, onMatch: function (val, state, stack) {
+                    if (stack.length)
+                        stack = [];
+                    var paren = val[val.length - 1];
+                    stack.unshift(paren, state);
+                    this.next = "sStateWithoutInterpolation";
+                    return this.token;
+                }
+            }, {
+                token: "constant.other.symbol.ruby", //doesn't see any differences between symbols and array of symbols in highlighting
+                regex: /%[SI]([(\[<{^|%])/, onMatch: function (val, state, stack) {
+                    if (stack.length)
+                        stack = [];
+                    var paren = val[val.length - 1];
+                    stack.unshift(paren, state);
+                    this.next = "sStateWithInterpolation";
+                    return this.token;
+                }
+            }, {
+                token: "string.regexp",
+                regex: /%[r]([(\[<{^|%])/, onMatch: function (val, state, stack) {
+                    if (stack.length)
+                        stack = [];
+                    var paren = val[val.length - 1];
+                    stack.unshift(paren, state);
+                    this.next = "rState";
+                    return this.token;
+                }
             }],
 
             {
-                token : "text", // namespaces aren't symbols
-                regex : "::"
+                token: "punctuation", // namespaces aren't symbols
+                regex: "::"
+            },
+            instanceVariable,
+            {
+                token: "variable.global", // global variable
+                regex: "[$][a-zA-Z_\\d]+"
             }, {
-                token : "variable.instance", // instance variable
-                regex : "@{1,2}[a-zA-Z_\\d]+"
+                token: "support.class", // class name
+                regex: "[A-Z][a-zA-Z_\\d]*"
             }, {
-                token : "support.class", // class name
-                regex : "[A-Z][a-zA-Z_\\d]+"
+                token: ["punctuation.operator", "support.function"],
+                regex: /(\.)([a-zA-Z_\d]+)(?=\()/
+            }, {
+                token: ["punctuation.operator", "identifier"],
+                regex: /(\.)([a-zA-Z_][a-zA-Z_\d]*)/
+            }, {
+                token: "string.character",
+                regex: "\\B\\?(?:" + escapedChars + "|\\S)"
+            }, {
+                token: "punctuation.operator",
+                regex: /\?(?=.+:)/
             },
 
+            constantNumericRational,
+            constantNumericComplex,
             constantOtherSymbol,
             constantNumericHex,
             constantNumericFloat,
-
+            constantNumericBinary,
+            constantNumericDecimal,
+            constantNumericOctal,
             {
-                token : "constant.language.boolean",
-                regex : "(?:true|false)\\b"
+                token: "constant.language.boolean",
+                regex: "(?:true|false)\\b"
             }, {
-                token : keywordMapper,
-                regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+                token: keywordMapper,
+                regex: "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
             }, {
-                token : "punctuation.separator.key-value",
-                regex : "=>"
+                token: "punctuation.separator.key-value",
+                regex: "=>"
             }, {
                 stateName: "heredoc",
-                onMatch : function(value, currentState, stack) {
-                    var next = value[2] == '-' ? "indentedHeredoc" : "heredoc";
+                onMatch: function (value, currentState, stack) {
+                    var next = (value[2] == '-' || value[2] == '~') ? "indentedHeredoc" : "heredoc";
                     var tokens = value.split(this.splitRegex);
                     stack.push(next, tokens[3]);
                     return [
-                        {type:"constant", value: tokens[1]},
-                        {type:"string", value: tokens[2]},
-                        {type:"support.class", value: tokens[3]},
-                        {type:"string", value: tokens[4]}
+                        {type: "constant", value: tokens[1]},
+                        {type: "string", value: tokens[2]},
+                        {type: "support.class", value: tokens[3]},
+                        {type: "string", value: tokens[4]}
                     ];
                 },
-                regex : "(<<-?)(['\"`]?)([\\w]+)(['\"`]?)",
+                regex: "(<<[-~]?)(['\"`]?)([\\w]+)(['\"`]?)",
                 rules: {
                     heredoc: [{
-                        onMatch:  function(value, currentState, stack) {
+                        onMatch: function(value, currentState, stack) {
                             if (value === stack[1]) {
                                 stack.shift();
                                 stack.shift();
@@ -1233,7 +1328,7 @@ var RubyHighlightRules = function() {
                         token: "string",
                         regex: "^ +"
                     }, {
-                        onMatch:  function(value, currentState, stack) {
+                        onMatch: function(value, currentState, stack) {
                             if (value === stack[1]) {
                                 stack.shift();
                                 stack.shift();
@@ -1248,38 +1343,261 @@ var RubyHighlightRules = function() {
                     }]
                 }
             }, {
-                regex : "$",
-                token : "empty",
-                next : function(currentState, stack) {
+                regex: "$",
+                token: "empty",
+                next: function(currentState, stack) {
                     if (stack[0] === "heredoc" || stack[0] === "indentedHeredoc")
                         return stack[0];
                     return currentState;
                 }
+            },  {
+                token: "keyword.operator",
+                regex: "!|\\$|%|&|\\*|/|\\-\\-|\\-|\\+\\+|\\+|~|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|%=|\\+=|\\-=|&=|\\^=|\\||\\b(?:in|instanceof|new|delete|typeof|void)"
             }, {
-               token : "string.character",
-               regex : "\\B\\?."
+                token: "paren.lparen",
+                regex: "[[({]"
             }, {
-                token : "keyword.operator",
-                regex : "!|\\$|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|%=|\\+=|\\-=|&=|\\^=|\\b(?:in|instanceof|new|delete|typeof|void)"
+                token: "paren.rparen",
+                regex: "[\\])}]",
+                onMatch: function(value, currentState, stack) {
+                    this.next = '';
+                    if (value == "}" && stack.length > 1 && stack[1] != "start") {
+                        stack.shift();
+                        this.next = stack.shift();
+                    }
+                    return this.token;
+                }
             }, {
-                token : "paren.lparen",
-                regex : "[[({]"
+                token: "text",
+                regex: "\\s+"
             }, {
-                token : "paren.rparen",
-                regex : "[\\])}]"
-            }, {
-                token : "text",
-                regex : "\\s+"
+                token: "punctuation.operator",
+                regex: /[?:,;.]/
             }
         ],
-        "comment" : [
+        "comment": [
             {
-                token : "comment", // closing comment
-                regex : "^=end(?:$|\\s.*$)",
-                next : "start"
+                token: "comment.multiline", // closing comment
+                regex: "^=end(?=$|\\s.*$)",
+                next: "start"
             }, {
-                token : "comment", // comment spanning whole line
-                regex : ".+"
+                token: "comment", // comment spanning whole line
+                regex: ".+"
+            }
+        ],
+        "qStateWithInterpolation": [{
+            token: "string.start",// excluded nested |^% due to difficulty in realization
+            regex: /[(\[<{]/, onMatch: function (val, state, stack) {
+                if (stack.length && val === stack[0]) {
+                    stack.unshift(val, state);
+                    return this.token;
+                }
+                return "string";
+            }
+        }, {
+            token: "constant.language.escape",
+            regex: escapedChars
+        }, {
+            token: "constant.language.escape",
+            regex: /\\./
+        }, {
+            token: "paren.start",
+            regex: /#{/,
+            push: "start"
+        }, {
+            token: "string.end",
+            regex: /[)\]>}^|%]/, onMatch: function (val, state, stack) {
+                if (stack.length && val === closeParen[stack[0]]) {
+                    stack.shift();
+                    this.next = stack.shift();
+                    return this.token;
+                }
+                this.next = '';
+                return "string";
+            }
+        }, {
+            defaultToken: "string"
+        }],
+        "qStateWithoutInterpolation": [{
+            token: "string.start",// excluded nested |^% due to difficulty in realization
+            regex: /[(\[<{]/, onMatch: function (val, state, stack) {
+                if (stack.length && val === stack[0]) {
+                    stack.unshift(val, state);
+                    return this.token;
+                }
+                return "string";
+            }
+        }, {
+            token: "constant.language.escape",
+            regex: /\\['\\]/
+        }, {
+            token: "constant.language.escape",
+            regex: /\\./
+        }, {
+            token: "string.end",
+            regex: /[)\]>}^|%]/, onMatch: function (val, state, stack) {
+                if (stack.length && val === closeParen[stack[0]]) {
+                    stack.shift();
+                    this.next = stack.shift();
+                    return this.token;
+                }
+                this.next = '';
+                return "string";
+            }
+        }, {
+            defaultToken: "string"
+        }],
+        "sStateWithoutInterpolation": [{
+            token: "constant.other.symbol.ruby",// excluded nested |^% due to difficulty in realization
+            regex: /[(\[<{]/, onMatch: function (val, state, stack) {
+                if (stack.length && val === stack[0]) {
+                    stack.unshift(val, state);
+                    return this.token;
+                }
+                return "constant.other.symbol.ruby";
+            }
+        }, {
+            token: "constant.other.symbol.ruby",
+            regex: /[)\]>}^|%]/, onMatch: function (val, state, stack) {
+                if (stack.length && val === closeParen[stack[0]]) {
+                    stack.shift();
+                    this.next = stack.shift();
+                    return this.token;
+                }
+                this.next = '';
+                return "constant.other.symbol.ruby";
+            }
+        }, {
+            defaultToken: "constant.other.symbol.ruby"
+        }],
+        "sStateWithInterpolation": [{
+            token: "constant.other.symbol.ruby",// excluded nested |^% due to difficulty in realization
+            regex: /[(\[<{]/, onMatch: function (val, state, stack) {
+                if (stack.length && val === stack[0]) {
+                    stack.unshift(val, state);
+                    return this.token;
+                }
+                return "constant.other.symbol.ruby";
+            }
+        }, {
+            token: "constant.language.escape",
+            regex: escapedChars
+        }, {
+            token: "constant.language.escape",
+            regex: /\\./
+        }, {
+            token: "paren.start",
+            regex: /#{/,
+            push: "start"
+        }, {
+            token: "constant.other.symbol.ruby",
+            regex: /[)\]>}^|%]/, onMatch: function (val, state, stack) {
+                if (stack.length && val === closeParen[stack[0]]) {
+                    stack.shift();
+                    this.next = stack.shift();
+                    return this.token;
+                }
+                this.next = '';
+                return "constant.other.symbol.ruby";
+            }
+        }, {
+            defaultToken: "constant.other.symbol.ruby"
+        }],
+        "rState": [{
+            token: "string.regexp",// excluded nested |^% due to difficulty in realization
+            regex: /[(\[<{]/, onMatch: function (val, state, stack) {
+                if (stack.length && val === stack[0]) {
+                    stack.unshift(val, state);
+                    return this.token;
+                }
+                return "constant.language.escape";
+            }
+        }, {
+            token: "paren.start",
+            regex: /#{/,
+            push: "start"
+        }, {
+            token: "string.regexp",
+            regex: /\//
+        }, {
+            token: "string.regexp",
+            regex: /[)\]>}^|%][imxouesn]*/, onMatch: function (val, state, stack) {
+                if (stack.length && val[0] === closeParen[stack[0]]) {
+                    stack.shift();
+                    this.next = stack.shift();
+                    return this.token;
+                }
+                this.next = '';
+                return "constant.language.escape";
+            }
+        },
+            {include: "regex"},
+            {
+                defaultToken: "string.regexp"
+            }],
+        "regex": [
+            {// character classes
+                token: "regexp.keyword",
+                regex: /\\[wWdDhHsS]/
+            }, {
+                token: "constant.language.escape",
+                regex: /\\[AGbBzZ]/
+            }, {
+                token: "constant.language.escape",
+                regex: /\\g<[a-zA-Z0-9]*>/
+            }, {
+                token: ["constant.language.escape", "regexp.keyword", "constant.language.escape"],
+                regex: /(\\p{\^?)(Alnum|Alpha|Blank|Cntrl|Digit|Graph|Lower|Print|Punct|Space|Upper|XDigit|Word|ASCII|Any|Assigned|Arabic|Armenian|Balinese|Bengali|Bopomofo|Braille|Buginese|Buhid|Canadian_Aboriginal|Carian|Cham|Cherokee|Common|Coptic|Cuneiform|Cypriot|Cyrillic|Deseret|Devanagari|Ethiopic|Georgian|Glagolitic|Gothic|Greek|Gujarati|Gurmukhi|Han|Hangul|Hanunoo|Hebrew|Hiragana|Inherited|Kannada|Katakana|Kayah_Li|Kharoshthi|Khmer|Lao|Latin|Lepcha|Limbu|Linear_B|Lycian|Lydian|Malayalam|Mongolian|Myanmar|New_Tai_Lue|Nko|Ogham|Ol_Chiki|Old_Italic|Old_Persian|Oriya|Osmanya|Phags_Pa|Phoenician|Rejang|Runic|Saurashtra|Shavian|Sinhala|Sundanese|Syloti_Nagri|Syriac|Tagalog|Tagbanwa|Tai_Le|Tamil|Telugu|Thaana|Thai|Tibetan|Tifinagh|Ugaritic|Vai|Yi|Ll|Lm|Lt|Lu|Lo|Mn|Mc|Me|Nd|Nl|Pc|Pd|Ps|Pe|Pi|Pf|Po|No|Sm|Sc|Sk|So|Zs|Zl|Zp|Cc|Cf|Cn|Co|Cs|N|L|M|P|S|Z|C)(})/
+            }, {
+                token: ["constant.language.escape", "invalid", "constant.language.escape"],
+                regex: /(\\p{\^?)([^/]*)(})/
+            }, {// escapes
+                token: "regexp.keyword.operator",
+                regex: "\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"
+            }, {// flag
+                token: "string.regexp",
+                regex: /[/][imxouesn]*/,
+                next: "start"
+            }, {// invalid operators
+                token: "invalid",
+                regex: /\{\d+\b,?\d*\}[+*]|[+*$^?][+*]|[$^][?]|\?{3,}/
+            }, {// operators
+                token: "constant.language.escape",
+                regex: /\(\?(?:[:=!>]|<'?[a-zA-Z]*'?>|<[=!])|\)|\{\d+\b,?\d*\}|[+*]\?|[()$^+*?.]/
+            }, {
+                token: "constant.language.delimiter",
+                regex: /\|/
+            }, {
+                token: "regexp.keyword",
+                regex: /\[\[:(?:alnum|alpha|blank|cntrl|digit|graph|lower|print|punct|space|upper|xdigit|word|ascii):\]\]/
+            }, {
+                token: "constant.language.escape",
+                regex: /\[\^?/,
+                push: "regex_character_class"
+            }, {
+                defaultToken: "string.regexp"
+            }
+        ],
+        "regex_character_class": [
+            {
+                token: "regexp.keyword",
+                regex: /\\[wWdDhHsS]/
+            }, {
+                token: "regexp.charclass.keyword.operator",
+                regex: "\\\\(?:u[\\da-fA-F]{4}|x[\\da-fA-F]{2}|.)"
+            }, {
+                token: "constant.language.escape",
+                regex: /&?&?\[\^?/,
+                push: "regex_character_class"
+            }, {
+                token: "constant.language.escape",
+                regex: "]",
+                next: "pop"
+            }, {
+                token: "constant.language.escape",
+                regex: "-"
+            }, {
+                defaultToken: "string.regexp.characterclass"
             }
         ]
     };
@@ -1541,7 +1859,15 @@ oop.inherits(Mode, TextMode);
     this.lineCommentStart = "//";
     
     this.$id = "ace/mode/haml";
+    this.snippetFileId = "ace/snippets/haml";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/haml"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

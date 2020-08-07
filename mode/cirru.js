@@ -21,7 +21,7 @@ var CirruHighlightRules = function() {
             next: 'line'
         }, {
             token: 'support.function',
-            regex: /[^\(\)"\s]+/,
+            regex: /[^\(\)"\s{}\[\]]+/,
             next: 'line'
         }, {
             token: 'string.quoted.double',
@@ -66,7 +66,7 @@ var CirruHighlightRules = function() {
             next: 'start'
         }, {
             token: 'variable.parameter',
-            regex: /[^\(\)"\s]+/
+            regex: /[^\(\)"\s{}\[\]]+/
         }, {
             token: 'storage.modifier',
             regex: /\(/,
@@ -200,4 +200,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/cirru"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

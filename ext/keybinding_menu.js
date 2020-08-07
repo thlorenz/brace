@@ -22,7 +22,6 @@ color: black;\
 }\
 .ace_optionsMenuEntry:hover {\
 background-color: rgba(100, 100, 100, 0.1);\
--webkit-transition: all 0.5s;\
 transition: all 0.3s\
 }\
 .ace_closeButton {\
@@ -33,7 +32,7 @@ padding: 7px;\
 position: absolute;\
 right: -8px;\
 top: -8px;\
-z-index: 1000;\
+z-index: 100000;\
 }\
 .ace_closeButton{\
 background: rgba(245, 146, 146, 0.9);\
@@ -45,56 +44,77 @@ font-weight: bold;\
 .ace_optionsMenuCommand {\
 color: darkcyan;\
 font-weight: normal;\
+}\
+.ace_optionsMenuEntry input, .ace_optionsMenuEntry button {\
+vertical-align: middle;\
+}\
+.ace_optionsMenuEntry button[ace_selected_button=true] {\
+background: #e7e7e7;\
+box-shadow: 1px 0px 2px 0px #adadad inset;\
+border-color: #adadad;\
+}\
+.ace_optionsMenuEntry button {\
+background: white;\
+border: 1px solid lightgray;\
+margin: 0px;\
+}\
+.ace_optionsMenuEntry button:hover{\
+background: #f0f0f0;\
 }";
 dom.importCssString(cssText);
-module.exports.overlayPage = function overlayPage(editor, contentElement, top, right, bottom, left) {
-    top = top ? 'top: ' + top + ';' : '';
-    bottom = bottom ? 'bottom: ' + bottom + ';' : '';
-    right = right ? 'right: ' + right + ';' : '';
-    left = left ? 'left: ' + left + ';' : '';
 
+module.exports.overlayPage = function overlayPage(editor, contentElement, callback) {
     var closer = document.createElement('div');
-    var contentContainer = document.createElement('div');
+    var ignoreFocusOut = false;
 
     function documentEscListener(e) {
         if (e.keyCode === 27) {
-            closer.click();
+            close();
+        }
+    }
+
+    function close() {
+        if (!closer) return;
+        document.removeEventListener('keydown', documentEscListener);
+        closer.parentNode.removeChild(closer);
+        if (editor) {
+            editor.focus();
+        }
+        closer = null;
+        callback && callback();
+    }
+    function setIgnoreFocusOut(ignore) {
+        ignoreFocusOut = ignore;
+        if (ignore) {
+            closer.style.pointerEvents = "none";
+            contentElement.style.pointerEvents = "auto";
         }
     }
 
     closer.style.cssText = 'margin: 0; padding: 0; ' +
         'position: fixed; top:0; bottom:0; left:0; right:0;' +
         'z-index: 9990; ' +
-        'background-color: rgba(0, 0, 0, 0.3);';
-    closer.addEventListener('click', function() {
-        document.removeEventListener('keydown', documentEscListener);
-        closer.parentNode.removeChild(closer);
-        editor.focus();
-        closer = null;
+        (editor ? 'background-color: rgba(0, 0, 0, 0.3);' : '');
+    closer.addEventListener('click', function(e) {
+        if (!ignoreFocusOut) {
+            close();
+        }
     });
     document.addEventListener('keydown', documentEscListener);
 
-    contentContainer.style.cssText = top + right + bottom + left;
-    contentContainer.addEventListener('click', function(e) {
+    contentElement.addEventListener('click', function (e) {
         e.stopPropagation();
     });
 
-    var wrapper = dom.createElement("div");
-    wrapper.style.position = "relative";
-    
-    var closeButton = dom.createElement("div");
-    closeButton.className = "ace_closeButton";
-    closeButton.addEventListener('click', function() {
-        closer.click();
-    });
-    
-    wrapper.appendChild(closeButton);
-    contentContainer.appendChild(wrapper);
-    
-    contentContainer.appendChild(contentElement);
-    closer.appendChild(contentContainer);
+    closer.appendChild(contentElement);
     document.body.appendChild(closer);
-    editor.blur();
+    if (editor) {
+        editor.blur();
+    }
+    return {
+        close: close,
+        setIgnoreFocusOut: setIgnoreFocusOut
+    };
 };
 
 });
@@ -132,7 +152,7 @@ module.exports.getEditorKeybordShortcuts = function(editor) {
 
 ace.define("ace/ext/keybinding_menu",["require","exports","module","ace/editor","ace/ext/menu_tools/overlay_page","ace/ext/menu_tools/get_editor_keyboard_shortcuts"], function(acequire, exports, module) {
     "use strict";
-    var Editor = acequire("ace/editor").Editor;
+    var Editor = acequire("../editor").Editor;
     function showKeyboardShortcuts (editor) {
         if(!document.getElementById('kbshortcutmenu')) {
             var overlayPage = acequire('./menu_tools/overlay_page').overlayPage;
@@ -147,7 +167,7 @@ ace.define("ace/ext/keybinding_menu",["require","exports","module","ace/editor",
 
             el.id = 'kbshortcutmenu';
             el.innerHTML = '<h1>Keyboard Shortcuts</h1>' + commands + '</div>';
-            overlayPage(editor, el, '0', '0', '0', null);
+            overlayPage(editor, el);
         }
     }
     module.exports.init = function(editor) {
@@ -163,8 +183,11 @@ ace.define("ace/ext/keybinding_menu",["require","exports","module","ace/editor",
         }]);
     };
 
-});
-                (function() {
-                    ace.acequire(["ace/ext/keybinding_menu"], function() {});
+});                (function() {
+                    ace.acequire(["ace/ext/keybinding_menu"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

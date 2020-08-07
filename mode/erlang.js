@@ -996,7 +996,15 @@ oop.inherits(Mode, TextMode);
     this.lineCommentStart = "%";
     this.blockComment = null;
     this.$id = "ace/mode/erlang";
+    this.snippetFileId = "ace/snippets/erlang";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/erlang"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

@@ -92,8 +92,6 @@ dom.importCssString(".ace_occur-highlight {\n\
     background-color: rgba(87, 255, 8, 0.25);\n\
     position: absolute;\n\
     z-index: 4;\n\
-    -moz-box-sizing: border-box;\n\
-    -webkit-box-sizing: border-box;\n\
     box-sizing: border-box;\n\
     box-shadow: 0 0 4px rgb(91, 255, 50);\n\
 }\n\
@@ -327,7 +325,7 @@ oop.inherits(IncrementalSearchKeyboardHandler, HashHandler);
     this.attach = function(editor) {
         var iSearch = this.$iSearch;
         HashHandler.call(this, exports.iSearchCommands, editor.commands.platform);
-        this.$commandExecHandler = editor.commands.addEventListener('exec', function(e) {
+        this.$commandExecHandler = editor.commands.on('exec', function(e) {
             if (!e.command.isIncrementalSearchCommand)
                 return iSearch.deactivate();
             e.stopPropagation();
@@ -342,7 +340,7 @@ oop.inherits(IncrementalSearchKeyboardHandler, HashHandler);
 
     this.detach = function(editor) {
         if (!this.$commandExecHandler) return;
-        editor.commands.removeEventListener('exec', this.$commandExecHandler);
+        editor.commands.off('exec', this.$commandExecHandler);
         delete this.$commandExecHandler;
     };
 
@@ -351,7 +349,7 @@ oop.inherits(IncrementalSearchKeyboardHandler, HashHandler);
         if (((hashId === 1/*ctrl*/ || hashId === 8/*command*/) && key === 'v')
          || (hashId === 1/*ctrl*/ && key === 'y')) return null;
         var cmd = handleKeyboard$super.call(this, data, hashId, key, keyCode);
-        if (cmd.command) { return cmd; }
+        if (cmd && cmd.command) { return cmd; }
         if (hashId == -1) {
             var extendCmd = this.commands.extendSearchTerm;
             if (extendCmd) { return {command: extendCmd, args: key}; }
@@ -408,27 +406,28 @@ function objectToRegExp(obj) {
 
 (function() {
 
-    this.activate = function(ed, backwards) {
-        this.$editor = ed;
-        this.$startPos = this.$currentPos = ed.getCursorPosition();
+    this.activate = function(editor, backwards) {
+        this.$editor = editor;
+        this.$startPos = this.$currentPos = editor.getCursorPosition();
         this.$options.needle = '';
         this.$options.backwards = backwards;
-        ed.keyBinding.addKeyboardHandler(this.$keyboardHandler);
-        this.$originalEditorOnPaste = ed.onPaste; ed.onPaste = this.onPaste.bind(this);
-        this.$mousedownHandler = ed.addEventListener('mousedown', this.onMouseDown.bind(this));
-        this.selectionFix(ed);
+        editor.keyBinding.addKeyboardHandler(this.$keyboardHandler);
+        this.$originalEditorOnPaste = editor.onPaste; 
+        editor.onPaste = this.onPaste.bind(this);
+        this.$mousedownHandler = editor.on('mousedown', this.onMouseDown.bind(this));
+        this.selectionFix(editor);
         this.statusMessage(true);
     };
 
     this.deactivate = function(reset) {
         this.cancelSearch(reset);
-        var ed = this.$editor;
-        ed.keyBinding.removeKeyboardHandler(this.$keyboardHandler);
+        var editor = this.$editor;
+        editor.keyBinding.removeKeyboardHandler(this.$keyboardHandler);
         if (this.$mousedownHandler) {
-            ed.removeEventListener('mousedown', this.$mousedownHandler);
+            editor.off('mousedown', this.$mousedownHandler);
             delete this.$mousedownHandler;
         }
-        ed.onPaste = this.$originalEditorOnPaste;
+        editor.onPaste = this.$originalEditorOnPaste;
         this.message('');
     };
 
@@ -550,8 +549,6 @@ function objectToRegExp(obj) {
         if (this.$editor.showCommandLine) {
             this.$editor.showCommandLine(msg);
             this.$editor.focus();
-        } else {
-            console.log(msg);
         }
     };
 
@@ -565,8 +562,6 @@ dom.importCssString && dom.importCssString("\
 .ace_marker-layer .ace_isearch-result {\
   position: absolute;\
   z-index: 6;\
-  -moz-box-sizing: border-box;\
-  -webkit-box-sizing: border-box;\
   box-sizing: border-box;\
 }\
 div.ace_isearch-result {\
@@ -612,19 +607,6 @@ acequire("../incremental_search");
 var iSearchCommandModule = acequire("../commands/incremental_search_commands");
 
 
-var screenToTextBlockCoordinates = function(x, y) {
-    var canvasPos = this.scroller.getBoundingClientRect();
-    var offsetX = x + this.scrollLeft - canvasPos.left - this.$padding;
-
-    var col = Math.floor(offsetX / this.characterWidth);
-
-    var row = Math.floor(
-        (y + this.scrollTop - canvasPos.top) / this.lineHeight
-    );
-
-    return this.session.screenToDocumentPosition(row, col, offsetX);
-};
-
 var HashHandler = acequire("./hash_handler").HashHandler;
 exports.handler = new HashHandler();
 
@@ -641,8 +623,6 @@ exports.handler.attach = function(editor) {
         dom.importCssString('\
             .emacs-mode .ace_cursor{\
                 border: 1px rgba(50,250,50,0.8) solid!important;\
-                -moz-box-sizing: border-box!important;\
-                -webkit-box-sizing: border-box!important;\
                 box-sizing: border-box!important;\
                 background-color: rgba(0,250,0,0.9);\
                 opacity: 0.5;\
@@ -716,25 +696,25 @@ exports.handler.attach = function(editor) {
 
     editor.on("click", $resetMarkMode);
     editor.on("changeSession", $kbSessionChange);
-    editor.renderer.screenToTextCoordinates = screenToTextBlockCoordinates;
+    editor.renderer.$blockCursor = true;
     editor.setStyle("emacs-mode");
     editor.commands.addCommands(commands);
     exports.handler.platform = editor.commands.platform;
     editor.$emacsModeHandler = this;
-    editor.addEventListener('copy', this.onCopy);
-    editor.addEventListener('paste', this.onPaste);
+    editor.on('copy', this.onCopy);
+    editor.on('paste', this.onPaste);
 };
 
 exports.handler.detach = function(editor) {
-    delete editor.renderer.screenToTextCoordinates;
+    editor.renderer.$blockCursor = false;
     editor.session.$selectLongWords = $formerLongWords;
     editor.session.$useEmacsStyleLineStart = $formerLineStart;
-    editor.removeEventListener("click", $resetMarkMode);
-    editor.removeEventListener("changeSession", $kbSessionChange);
+    editor.off("click", $resetMarkMode);
+    editor.off("changeSession", $kbSessionChange);
     editor.unsetStyle("emacs-mode");
     editor.commands.removeCommands(commands);
-    editor.removeEventListener('copy', this.onCopy);
-    editor.removeEventListener('paste', this.onPaste);
+    editor.off('copy', this.onCopy);
+    editor.off('paste', this.onPaste);
     editor.$emacsModeHandler = null;
 };
 
@@ -1128,6 +1108,7 @@ exports.handler.addCommands({
                 editor.$handlesEmacsOnCopy = false;
                 if (editor.inMultiSelectMode) editor.forEachSelection({exec: deselect});
                 else deselect();
+                editor.setEmacsMark(null);
                 editor.session.$emacsMarkRing = marks.concat(deselectedMarks.reverse());
             }, 0);
         },
@@ -1178,4 +1159,11 @@ exports.killRing = {
     }
 };
 
-});
+});                (function() {
+                    ace.acequire(["ace/keyboard/emacs"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

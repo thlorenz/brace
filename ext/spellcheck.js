@@ -28,7 +28,6 @@ exports.contextMenuHandler = function(e){
     });
 
     host.textInput.setInputHandler(function(newVal) {
-        console.log(newVal , value, text.selectionStart, text.selectionEnd);
         if (newVal == value)
             return '';
         if (newVal.lastIndexOf(value, 0) === 0)
@@ -64,8 +63,11 @@ acequire("../config").defineOptions(Editor.prototype, "editor", {
     }
 });
 
-});
-                (function() {
-                    ace.acequire(["ace/ext/spellcheck"], function() {});
+});                (function() {
+                    ace.acequire(["ace/ext/spellcheck"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

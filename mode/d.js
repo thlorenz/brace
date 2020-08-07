@@ -308,7 +308,7 @@ var DHighlightRules = function() {
                 regex: '[a-zA-Z]+'
             }, {
                 token: 'string',
-                regex: '".*"'
+                regex: '"[^"]*"'
             }, {
                 token: 'comment',
                 regex: '//.*$'
@@ -510,4 +510,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/d"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

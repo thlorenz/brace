@@ -398,7 +398,15 @@ oop.inherits(Mode, TextMode);
     this.$indentWithTabs = true;
     
     this.$id = "ace/mode/makefile";
+    this.snippetFileId = "ace/snippets/makefile";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/makefile"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

@@ -5,7 +5,9 @@ var oop = acequire("../lib/oop");
 
 var TextHighlightRules = acequire("./text_highlight_rules").TextHighlightRules;
 
-var CsoundPreprocessorHighlightRules = function() {
+var CsoundPreprocessorHighlightRules = function(embeddedRulePrefix) {
+
+    this.embeddedRulePrefix = embeddedRulePrefix === undefined ? "" : embeddedRulePrefix;
 
     this.semicolonComments = {
         token : "comment.line.semicolon.csound",
@@ -84,6 +86,17 @@ var CsoundPreprocessorHighlightRules = function() {
         }, {
             token : "keyword.preprocessor.csound",
             regex : /#include/,
+            push  : [
+                this.comments,
+                {
+                    token : "string.csound",
+                    regex : /([^ \t])(?:.*?\1)/,
+                    next  : "pop"
+                }
+            ]
+        }, {
+            token : "keyword.preprocessor.csound",
+            regex : /#includestr/,
             push  : [
                 this.comments,
                 {
@@ -211,6 +224,12 @@ oop.inherits(CsoundPreprocessorHighlightRules, TextHighlightRules);
 (function() {
 
     this.pushRule = function(params) {
+        if (Array.isArray(params.next)) {
+            for (var i = 0; i < params.next.length; i++) {
+                params.next[i] = this.embeddedRulePrefix + params.next[i];
+            }
+        }
+
         return {
             regex : params.regex, onMatch: function(value, currentState, stack, line) {
                 if (stack.length === 0)
@@ -225,34 +244,23 @@ oop.inherits(CsoundPreprocessorHighlightRules, TextHighlightRules);
                 this.next = stack[stack.length - 1];
                 return params.token;
             },
+
             get next() { return Array.isArray(params.next) ? params.next[params.next.length - 1] : params.next; },
             set next(next) {
-                if (Array.isArray(params.next)) {
-                    var oldNext = params.next[params.next.length - 1];
-                    var oldNextIndex = oldNext.length - 1;
-                    var newNextIndex = next.length - 1;
-                    if (newNextIndex > oldNextIndex) {
-                        while (oldNextIndex >= 0 && newNextIndex >= 0) {
-                            if (oldNext.charAt(oldNextIndex) !== next.charAt(newNextIndex)) {
-                                var prefix = next.substr(0, newNextIndex);
-                                for (var i = 0; i < params.next.length; i++) {
-                                    params.next[i] = prefix + params.next[i];
-                                }
-                                break;
-                            }
-                            oldNextIndex--;
-                            newNextIndex--;
-                        }
-                    }
-                } else {
+                if (!Array.isArray(params.next)) {
                     params.next = next;
                 }
             },
+
             get token() { return params.token; }
         };
     };
 
     this.popRule = function(params) {
+        if (params.next) {
+            params.next = this.embeddedRulePrefix + params.next;
+        }
+
         return {
             regex : params.regex, onMatch: function(value, currentState, stack, line) {
                 stack.pop();
@@ -279,9 +287,9 @@ var oop = acequire("../lib/oop");
 
 var CsoundPreprocessorHighlightRules = acequire("./csound_preprocessor_highlight_rules").CsoundPreprocessorHighlightRules;
 
-var CsoundScoreHighlightRules = function() {
+var CsoundScoreHighlightRules = function(embeddedRulePrefix) {
 
-    CsoundPreprocessorHighlightRules.call(this);
+    CsoundPreprocessorHighlightRules.call(this, embeddedRulePrefix);
 
     this.quotedStringContents.push({
         token : "invalid.illegal.csound-score",
@@ -536,7 +544,7 @@ var LuaHighlightRules = function() {
                         }
                         return "string.end";
                     },
-
+                    
                     regex : /\]=*\]/,
                     next  : "start"
                 }, {
@@ -573,7 +581,7 @@ var LuaHighlightRules = function() {
             regex : "\\s+|\\w+"
         } ]
     };
-
+    
     this.normalizeRules();
 };
 
@@ -593,7 +601,7 @@ var PythonHighlightRules = function() {
     var keywords = (
         "and|as|assert|break|class|continue|def|del|elif|else|except|exec|" +
         "finally|for|from|global|if|import|in|is|lambda|not|or|pass|print|" +
-        "raise|return|try|while|with|yield|async|await"
+        "raise|return|try|while|with|yield|async|await|nonlocal"
     );
 
     var builtinConstants = (
@@ -603,22 +611,26 @@ var PythonHighlightRules = function() {
     var builtinFunctions = (
         "abs|divmod|input|open|staticmethod|all|enumerate|int|ord|str|any|" +
         "eval|isinstance|pow|sum|basestring|execfile|issubclass|print|super|" +
-        "binfile|iter|property|tuple|bool|filter|len|range|type|bytearray|" +
+        "binfile|bin|iter|property|tuple|bool|filter|len|range|type|bytearray|" +
         "float|list|raw_input|unichr|callable|format|locals|reduce|unicode|" +
         "chr|frozenset|long|reload|vars|classmethod|getattr|map|repr|xrange|" +
         "cmp|globals|max|reversed|zip|compile|hasattr|memoryview|round|" +
-        "__import__|complex|hash|min|set|apply|delattr|help|next|setattr|" +
-        "buffer|dict|hex|object|slice|coerce|dir|id|oct|sorted|intern"
+        "__import__|complex|hash|min|apply|delattr|help|next|setattr|set|" +
+        "buffer|dict|hex|object|slice|coerce|dir|id|oct|sorted|intern|" +
+        "ascii|breakpoint|bytes"
     );
     var keywordMapper = this.createKeywordMapper({
         "invalid.deprecated": "debugger",
         "support.function": builtinFunctions,
+        "variable.language": "self|cls",
         "constant.language": builtinConstants,
         "keyword": keywords
     }, "identifier");
 
-    var strPre = "(?:r|u|ur|R|U|UR|Ur|uR)?";
-
+    var strPre = "[uU]?";
+    var strRawPre = "[rR]";
+    var strFormatPre = "[fF]";
+    var strRawFormatPre = "(?:[rR][fF]|[fF][rR])";
     var decimalInteger = "(?:(?:[1-9]\\d*)|(?:0))";
     var octInteger = "(?:0[oO]?[0-7]+)";
     var hexInteger = "(?:0[xX][\\dA-Fa-f]+)";
@@ -629,10 +641,10 @@ var PythonHighlightRules = function() {
     var fraction = "(?:\\.\\d+)";
     var intPart = "(?:\\d+)";
     var pointFloat = "(?:(?:" + intPart + "?" + fraction + ")|(?:" + intPart + "\\.))";
-    var exponentFloat = "(?:(?:" + pointFloat + "|" +  intPart + ")" + exponent + ")";
+    var exponentFloat = "(?:(?:" + pointFloat + "|" + intPart + ")" + exponent + ")";
     var floatNumber = "(?:" + exponentFloat + "|" + pointFloat + ")";
 
-    var stringEscape =  "\\\\(x[0-9A-Fa-f]{2}|[0-7]{3}|[\\\\abfnrtv'\"]|U[0-9A-Fa-f]{8}|u[0-9A-Fa-f]{4})";
+    var stringEscape = "\\\\(x[0-9A-Fa-f]{2}|[0-7]{3}|[\\\\abfnrtv'\"]|U[0-9A-Fa-f]{8}|u[0-9A-Fa-f]{4})";
 
     this.$rules = {
         "start" : [ {
@@ -655,82 +667,313 @@ var PythonHighlightRules = function() {
             regex : strPre + "'(?=.)",
             next : "qstring"
         }, {
-            token : "constant.numeric", // imaginary
-            regex : "(?:" + floatNumber + "|\\d+)[jJ]\\b"
+            token: "string",
+            regex: strRawPre + '"{3}',
+            next: "rawqqstring3"
         }, {
-            token : "constant.numeric", // float
-            regex : floatNumber
+            token: "string", 
+            regex: strRawPre + '"(?=.)',
+            next: "rawqqstring"
         }, {
-            token : "constant.numeric", // long integer
-            regex : integer + "[lL]\\b"
+            token: "string",
+            regex: strRawPre + "'{3}",
+            next: "rawqstring3"
         }, {
-            token : "constant.numeric", // integer
-            regex : integer + "\\b"
+            token: "string",
+            regex: strRawPre + "'(?=.)",
+            next: "rawqstring"
         }, {
-            token : keywordMapper,
-            regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
+            token: "string",
+            regex: strFormatPre + '"{3}',
+            next: "fqqstring3"
         }, {
-            token : "keyword.operator",
-            regex : "\\+|\\-|\\*|\\*\\*|\\/|\\/\\/|%|<<|>>|&|\\||\\^|~|<|>|<=|=>|==|!=|<>|="
+            token: "string",
+            regex: strFormatPre + '"(?=.)',
+            next: "fqqstring"
         }, {
-            token : "paren.lparen",
-            regex : "[\\[\\(\\{]"
+            token: "string",
+            regex: strFormatPre + "'{3}",
+            next: "fqstring3"
         }, {
-            token : "paren.rparen",
-            regex : "[\\]\\)\\}]"
+            token: "string",
+            regex: strFormatPre + "'(?=.)",
+            next: "fqstring"
+        },{
+            token: "string",
+            regex: strRawFormatPre + '"{3}',
+            next: "rfqqstring3"
         }, {
-            token : "text",
-            regex : "\\s+"
-        } ],
-        "qqstring3" : [ {
-            token : "constant.language.escape",
-            regex : stringEscape
+            token: "string",
+            regex: strRawFormatPre + '"(?=.)',
+            next: "rfqqstring"
         }, {
-            token : "string", // multi line """ string end
-            regex : '"{3}',
-            next : "start"
+            token: "string",
+            regex: strRawFormatPre + "'{3}",
+            next: "rfqstring3"
         }, {
-            defaultToken : "string"
-        } ],
-        "qstring3" : [ {
-            token : "constant.language.escape",
-            regex : stringEscape
+            token: "string",
+            regex: strRawFormatPre + "'(?=.)",
+            next: "rfqstring"
         }, {
-            token : "string",  // multi line ''' string end
-            regex : "'{3}",
-            next : "start"
+            token: "keyword.operator",
+            regex: "\\+|\\-|\\*|\\*\\*|\\/|\\/\\/|%|@|<<|>>|&|\\||\\^|~|<|>|<=|=>|==|!=|<>|="
         }, {
-            defaultToken : "string"
-        } ],
-        "qqstring" : [{
-            token : "constant.language.escape",
-            regex : stringEscape
+            token: "punctuation",
+            regex: ",|:|;|\\->|\\+=|\\-=|\\*=|\\/=|\\/\\/=|%=|@=|&=|\\|=|^=|>>=|<<=|\\*\\*="
         }, {
-            token : "string",
-            regex : "\\\\$",
-            next  : "qqstring"
+            token: "paren.lparen",
+            regex: "[\\[\\(\\{]"
         }, {
-            token : "string",
-            regex : '"|$',
-            next  : "start"
+            token: "paren.rparen",
+            regex: "[\\]\\)\\}]"
+        }, {
+            token: "text",
+            regex: "\\s+"
+        }, {
+            include: "constants"
+        }],
+        "qqstring3": [{
+            token: "constant.language.escape",
+            regex: stringEscape
+        }, {
+            token: "string", // multi line """ string end
+            regex: '"{3}',
+            next: "start"
         }, {
             defaultToken: "string"
         }],
-        "qstring" : [{
-            token : "constant.language.escape",
-            regex : stringEscape
+        "qstring3": [{
+            token: "constant.language.escape",
+            regex: stringEscape
         }, {
-            token : "string",
-            regex : "\\\\$",
-            next  : "qstring"
-        }, {
-            token : "string",
-            regex : "'|$",
-            next  : "start"
+            token: "string",  // multi line ''' string end
+            regex: "'{3}",
+            next: "start"
         }, {
             defaultToken: "string"
+        }],
+        "qqstring": [{
+            token: "constant.language.escape",
+            regex: stringEscape
+        }, {
+            token: "string",
+            regex: "\\\\$",
+            next: "qqstring"
+        }, {
+            token: "string",
+            regex: '"|$',
+            next: "start"
+        }, {
+            defaultToken: "string"
+        }],
+        "qstring": [{
+            token: "constant.language.escape",
+            regex: stringEscape
+        }, {
+            token: "string",
+            regex: "\\\\$",
+            next: "qstring"
+        }, {
+            token: "string",
+            regex: "'|$",
+            next: "start"
+        }, {
+            defaultToken: "string"
+        }],
+        "rawqqstring3": [{
+            token: "string", // multi line """ string end
+            regex: '"{3}',
+            next: "start"
+        }, {
+            defaultToken: "string"
+        }],
+        "rawqstring3": [{
+            token: "string",  // multi line ''' string end
+            regex: "'{3}",
+            next: "start"
+        }, {
+            defaultToken: "string"
+        }],
+        "rawqqstring": [{
+            token: "string",
+            regex: "\\\\$",
+            next: "rawqqstring"
+        }, {
+            token: "string",
+            regex: '"|$',
+            next: "start"
+        }, {
+            defaultToken: "string"
+        }],
+        "rawqstring": [{
+            token: "string",
+            regex: "\\\\$",
+            next: "rawqstring"
+        }, {
+            token: "string",
+            regex: "'|$",
+            next: "start"
+        }, {
+            defaultToken: "string"
+        }],
+        "fqqstring3": [{
+            token: "constant.language.escape",
+            regex: stringEscape
+        }, {
+            token: "string", // multi line """ string end
+            regex: '"{3}',
+            next: "start"
+        }, {
+            token: "paren.lparen",
+            regex: "{",
+            push: "fqstringParRules"
+        }, {
+            defaultToken: "string"
+        }],
+        "fqstring3": [{
+            token: "constant.language.escape",
+            regex: stringEscape
+        }, {
+            token: "string",  // multi line ''' string end
+            regex: "'{3}",
+            next: "start"
+        }, {
+            token: "paren.lparen",
+            regex: "{",
+            push: "fqstringParRules"
+        }, {
+            defaultToken: "string"
+        }],
+        "fqqstring": [{
+            token: "constant.language.escape",
+            regex: stringEscape
+        }, {
+            token: "string",
+            regex: "\\\\$",
+            next: "fqqstring"
+        }, {
+            token: "string",
+            regex: '"|$',
+            next: "start"
+        }, {
+            token: "paren.lparen",
+            regex: "{",
+            push: "fqstringParRules"
+        }, {
+            defaultToken: "string"
+        }],
+        "fqstring": [{
+            token: "constant.language.escape",
+            regex: stringEscape
+        }, {
+            token: "string",
+            regex: "'|$",
+            next: "start"
+        }, {
+            token: "paren.lparen",
+            regex: "{",
+            push: "fqstringParRules"
+        }, {
+            defaultToken: "string"
+        }],
+        "rfqqstring3": [{
+            token: "string", // multi line """ string end
+            regex: '"{3}',
+            next: "start"
+        }, {
+            token: "paren.lparen",
+            regex: "{",
+            push: "fqstringParRules"
+        }, {
+            defaultToken: "string"
+        }],
+        "rfqstring3": [{
+            token: "string",  // multi line ''' string end
+            regex: "'{3}",
+            next: "start"
+        }, {
+            token: "paren.lparen",
+            regex: "{",
+            push: "fqstringParRules"
+        }, {
+            defaultToken: "string"
+        }],
+        "rfqqstring": [{
+            token: "string",
+            regex: "\\\\$",
+            next: "rfqqstring"
+        }, {
+            token: "string",
+            regex: '"|$',
+            next: "start"
+        }, {
+            token: "paren.lparen",
+            regex: "{",
+            push: "fqstringParRules"
+        }, {
+            defaultToken: "string"
+        }],
+        "rfqstring": [{
+            token: "string",
+            regex: "'|$",
+            next: "start"
+        }, {
+            token: "paren.lparen",
+            regex: "{",
+            push: "fqstringParRules"
+        }, {
+            defaultToken: "string"
+        }],
+        "fqstringParRules": [{//TODO: nested {}
+            token: "paren.lparen",
+            regex: "[\\[\\(]"
+        }, {
+            token: "paren.rparen",
+            regex: "[\\]\\)]"
+        }, {
+            token: "string",
+            regex: "\\s+"
+        }, {
+            token: "string",
+            regex: "'[^']*'"
+        }, {
+            token: "string",
+            regex: '"[^"]*"'
+        }, {
+            token: "function.support",
+            regex: "(!s|!r|!a)"
+        }, {
+            include: "constants"
+        },{
+            token: 'paren.rparen',
+            regex: "}",
+            next: 'pop'
+        },{
+            token: 'paren.lparen',
+            regex: "{",
+            push: "fqstringParRules"
+        }],
+        "constants": [{
+            token: "constant.numeric", // imaginary
+            regex: "(?:" + floatNumber + "|\\d+)[jJ]\\b"
+        }, {
+            token: "constant.numeric", // float
+            regex: floatNumber
+        }, {
+            token: "constant.numeric", // long integer
+            regex: integer + "[lL]\\b"
+        }, {
+            token: "constant.numeric", // integer
+            regex: integer + "\\b"
+        }, {
+            token: ["punctuation", "function.support"],// method
+            regex: "(\\.)([a-zA-Z_]+)\\b"
+        }, {
+            token: keywordMapper,
+            regex: "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
         }]
     };
+    this.normalizeRules();
 };
 
 oop.inherits(PythonHighlightRules, TextHighlightRules);
@@ -749,9 +992,9 @@ var CsoundScoreHighlightRules = acequire("./csound_score_highlight_rules").Csoun
 var LuaHighlightRules = acequire("./lua_highlight_rules").LuaHighlightRules;
 var PythonHighlightRules = acequire("./python_highlight_rules").PythonHighlightRules;
 
-var CsoundOrchestraHighlightRules = function() {
+var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
 
-    CsoundPreprocessorHighlightRules.call(this);
+    CsoundPreprocessorHighlightRules.call(this, embeddedRulePrefix);
     var opcodes = [
         "ATSadd",
         "ATSaddnz",
@@ -854,12 +1097,13 @@ var CsoundOrchestraHighlightRules = function() {
         "MixerSend",
         "MixerSetLevel",
         "MixerSetLevel_i",
+        "OSCbundle",
+        "OSCcount",
         "OSCinit",
         "OSCinitM",
         "OSClisten",
         "OSCraw",
         "OSCsend",
-        "OSCsendA",
         "OSCsend_lo",
         "S",
         "STKBandedWG",
@@ -902,6 +1146,7 @@ var CsoundOrchestraHighlightRules = function() {
         "ampdb",
         "ampdbfs",
         "ampmidi",
+        "ampmidicurve",
         "ampmidid",
         "areson",
         "aresonk",
@@ -910,10 +1155,13 @@ var CsoundOrchestraHighlightRules = function() {
         "atonex",
         "babo",
         "balance",
+        "balance2",
         "bamboo",
         "barmodel",
         "bbcutm",
         "bbcuts",
+        "beadsynt",
+        "beosc",
         "betarand",
         "bexprnd",
         "bformdec1",
@@ -923,8 +1171,8 @@ var CsoundOrchestraHighlightRules = function() {
         "biquada",
         "birnd",
         "bpf",
+        "bpfcos",
         "bqrez",
-        "buchla",
         "butbp",
         "butbr",
         "buthp",
@@ -947,7 +1195,6 @@ var CsoundOrchestraHighlightRules = function() {
         "ceps",
         "cepsinv",
         "chanctrl",
-        "changed",
         "changed2",
         "chani",
         "chano",
@@ -959,9 +1206,19 @@ var CsoundOrchestraHighlightRules = function() {
         "chnclear",
         "chnexport",
         "chnget",
+        "chngeta",
+        "chngeti",
+        "chngetk",
+        "chngetks",
+        "chngets",
         "chnmix",
         "chnparams",
         "chnset",
+        "chnseta",
+        "chnseti",
+        "chnsetk",
+        "chnsetks",
+        "chnsets",
         "chuap",
         "clear",
         "clfilt",
@@ -1026,6 +1283,7 @@ var CsoundOrchestraHighlightRules = function() {
         "dconv",
         "dct",
         "dctinv",
+        "deinterleave",
         "delay",
         "delay1",
         "delayk",
@@ -1089,7 +1347,9 @@ var CsoundOrchestraHighlightRules = function() {
         "faustaudio",
         "faustcompile",
         "faustctl",
+        "faustdsp",
         "faustgen",
+        "faustplay",
         "fft",
         "fftinv",
         "ficlose",
@@ -1116,6 +1376,7 @@ var CsoundOrchestraHighlightRules = function() {
         "fluidCCk",
         "fluidControl",
         "fluidEngine",
+        "fluidInfo",
         "fluidLoad",
         "fluidNote",
         "fluidOut",
@@ -1151,9 +1412,11 @@ var CsoundOrchestraHighlightRules = function() {
         "fractalnoise",
         "framebuffer",
         "freeverb",
+        "ftaudio",
         "ftchnls",
         "ftconv",
         "ftcps",
+        "ftexists",
         "ftfree",
         "ftgen",
         "ftgenonce",
@@ -1164,11 +1427,13 @@ var CsoundOrchestraHighlightRules = function() {
         "ftlptim",
         "ftmorf",
         "ftom",
+        "ftprint",
         "ftresize",
         "ftresizei",
         "ftsamplebank",
         "ftsave",
         "ftsavek",
+        "ftslice",
         "ftsr",
         "gain",
         "gainslider",
@@ -1185,12 +1450,14 @@ var CsoundOrchestraHighlightRules = function() {
         "getcol",
         "getftargs",
         "getrow",
+        "getrowlin",
         "getseed",
         "gogobel",
         "grain",
         "grain2",
         "grain3",
         "granule",
+        "gtf",
         "guiro",
         "harmon",
         "harmon2",
@@ -1240,6 +1507,7 @@ var CsoundOrchestraHighlightRules = function() {
         "insremot",
         "int",
         "integ",
+        "interleave",
         "interp",
         "invalue",
         "inx",
@@ -1430,10 +1698,12 @@ var CsoundOrchestraHighlightRules = function() {
         "la_k_upper_solve_mr",
         "la_k_vc_set",
         "la_k_vr_set",
+        "lastcycle",
         "lenarray",
         "lfo",
         "limit",
         "limit1",
+        "lincos",
         "line",
         "linen",
         "linenr",
@@ -1468,6 +1738,8 @@ var CsoundOrchestraHighlightRules = function() {
         "lorenz",
         "loscil",
         "loscil3",
+        "loscil3phs",
+        "loscilphs",
         "loscilx",
         "lowpass2",
         "lowres",
@@ -1517,6 +1789,7 @@ var CsoundOrchestraHighlightRules = function() {
         "median",
         "mediank",
         "metro",
+        "metro2",
         "mfb",
         "midglobal",
         "midiarp",
@@ -1538,6 +1811,7 @@ var CsoundOrchestraHighlightRules = function() {
         "midion",
         "midion2",
         "midiout",
+        "midiout_i",
         "midipgm",
         "midipitchbend",
         "midipolyaftertouch",
@@ -1565,11 +1839,6 @@ var CsoundOrchestraHighlightRules = function() {
         "mp3len",
         "mp3nchnls",
         "mp3scal",
-        "mp3scal_check",
-        "mp3scal_load",
-        "mp3scal_load2",
-        "mp3scal_play",
-        "mp3scal_play2",
         "mp3sr",
         "mpulse",
         "mrtmsg",
@@ -1599,6 +1868,8 @@ var CsoundOrchestraHighlightRules = function() {
         "nsamp",
         "nstance",
         "nstrnum",
+        "nstrstr",
+        "ntof",
         "ntom",
         "ntrpol",
         "nxtpow2",
@@ -1716,6 +1987,7 @@ var CsoundOrchestraHighlightRules = function() {
         "prepiano",
         "print",
         "print_type",
+        "printarray",
         "printf",
         "printf_i",
         "printk",
@@ -1728,7 +2000,6 @@ var CsoundOrchestraHighlightRules = function() {
         "ptable",
         "ptable3",
         "ptablei",
-        "ptableiw",
         "ptablew",
         "ptrack",
         "puts",
@@ -1766,7 +2037,6 @@ var CsoundOrchestraHighlightRules = function() {
         "pvsftw",
         "pvsfwrite",
         "pvsgain",
-        "pvsgendy",
         "pvshift",
         "pvsifd",
         "pvsin",
@@ -1874,6 +2144,7 @@ var CsoundOrchestraHighlightRules = function() {
         "qnan",
         "r2c",
         "rand",
+        "randc",
         "randh",
         "randi",
         "random",
@@ -1895,6 +2166,7 @@ var CsoundOrchestraHighlightRules = function() {
         "remoteport",
         "remove",
         "repluck",
+        "reshapearray",
         "reson",
         "resonk",
         "resonr",
@@ -1933,6 +2205,7 @@ var CsoundOrchestraHighlightRules = function() {
         "schedkwhen",
         "schedkwhennamed",
         "schedule",
+        "schedulek",
         "schedwhen",
         "scoreline",
         "scoreline_i",
@@ -1973,7 +2246,6 @@ var CsoundOrchestraHighlightRules = function() {
         "shaker",
         "shiftin",
         "shiftout",
-        "signalflowgraph",
         "signum",
         "sin",
         "sinh",
@@ -1981,6 +2253,7 @@ var CsoundOrchestraHighlightRules = function() {
         "sinsyn",
         "sleighbells",
         "slicearray",
+        "slicearray_i",
         "slider16",
         "slider16f",
         "slider16table",
@@ -2004,7 +2277,6 @@ var CsoundOrchestraHighlightRules = function() {
         "sockrecv",
         "sockrecvs",
         "socksend",
-        "socksend_k",
         "socksends",
         "sorta",
         "sortd",
@@ -2019,6 +2291,7 @@ var CsoundOrchestraHighlightRules = function() {
         "sprintfk",
         "spsend",
         "sqrt",
+        "squinewave",
         "statevar",
         "stix",
         "strcat",
@@ -2035,6 +2308,7 @@ var CsoundOrchestraHighlightRules = function() {
         "strget",
         "strindex",
         "strindexk",
+        "string2array",
         "strlen",
         "strlenk",
         "strlower",
@@ -2042,6 +2316,7 @@ var CsoundOrchestraHighlightRules = function() {
         "strrindex",
         "strrindexk",
         "strset",
+        "strstrip",
         "strsub",
         "strsubk",
         "strtod",
@@ -2062,6 +2337,7 @@ var CsoundOrchestraHighlightRules = function() {
         "system",
         "system_i",
         "tab",
+        "tab2array",
         "tab2pvs",
         "tab_i",
         "tabifd",
@@ -2077,7 +2353,6 @@ var CsoundOrchestraHighlightRules = function() {
         "tableigpw",
         "tableikt",
         "tableimix",
-        "tableiw",
         "tablekt",
         "tablemix",
         "tableng",
@@ -2096,6 +2371,7 @@ var CsoundOrchestraHighlightRules = function() {
         "tabmorphi",
         "tabplay",
         "tabrec",
+        "tabrowlin",
         "tabsum",
         "tabw",
         "tabw_i",
@@ -2104,38 +2380,6 @@ var CsoundOrchestraHighlightRules = function() {
         "tanh",
         "taninv",
         "taninv2",
-        "tb0",
-        "tb0_init",
-        "tb1",
-        "tb10",
-        "tb10_init",
-        "tb11",
-        "tb11_init",
-        "tb12",
-        "tb12_init",
-        "tb13",
-        "tb13_init",
-        "tb14",
-        "tb14_init",
-        "tb15",
-        "tb15_init",
-        "tb1_init",
-        "tb2",
-        "tb2_init",
-        "tb3",
-        "tb3_init",
-        "tb4",
-        "tb4_init",
-        "tb5",
-        "tb5_init",
-        "tb6",
-        "tb6_init",
-        "tb7",
-        "tb7_init",
-        "tb8",
-        "tb8_init",
-        "tb9",
-        "tb9_init",
         "tbvcf",
         "tempest",
         "tempo",
@@ -2161,6 +2405,8 @@ var CsoundOrchestraHighlightRules = function() {
         "trhighest",
         "trigger",
         "trigseq",
+        "trim",
+        "trim_i",
         "trirand",
         "trlowest",
         "trmix",
@@ -2314,6 +2560,7 @@ var CsoundOrchestraHighlightRules = function() {
         "array",
         "bformdec",
         "bformenc",
+        "changed",
         "copy2ftab",
         "copy2ttab",
         "hrtfer",
@@ -2323,6 +2570,7 @@ var CsoundOrchestraHighlightRules = function() {
         "mintab",
         "pop",
         "pop_f",
+        "ptableiw",
         "push",
         "push_f",
         "scalet",
@@ -2341,9 +2589,42 @@ var CsoundOrchestraHighlightRules = function() {
         "stack",
         "sumtab",
         "tabgen",
+        "tableiw",
         "tabmap",
         "tabmap_i",
         "tabslice",
+        "tb0",
+        "tb0_init",
+        "tb1",
+        "tb10",
+        "tb10_init",
+        "tb11",
+        "tb11_init",
+        "tb12",
+        "tb12_init",
+        "tb13",
+        "tb13_init",
+        "tb14",
+        "tb14_init",
+        "tb15",
+        "tb15_init",
+        "tb1_init",
+        "tb2",
+        "tb2_init",
+        "tb3",
+        "tb3_init",
+        "tb4",
+        "tb4_init",
+        "tb5",
+        "tb5_init",
+        "tb6",
+        "tb6_init",
+        "tb7",
+        "tb7_init",
+        "tb8",
+        "tb8_init",
+        "tb9",
+        "tb9_init",
         "vbap16",
         "vbap4",
         "vbap4move",
@@ -2491,6 +2772,8 @@ var CsoundOrchestraHighlightRules = function() {
         next  : "macro parameter value braced string"
     });
 
+    var scoreHighlightRules = new CsoundScoreHighlightRules("csound-score-");
+
     this.addRules({
         "macro parameter value braced string": [
             {
@@ -2589,7 +2872,7 @@ var CsoundOrchestraHighlightRules = function() {
             {
                 token : "punctuation.definition.string.begin.csound",
                 regex : /{{/,
-                next  : "csound-score-start"
+                next  : scoreHighlightRules.embeddedRulePrefix + "start"
             }, this.popRule({
                 token : "empty",
                 regex : /$/
@@ -2639,7 +2922,7 @@ var CsoundOrchestraHighlightRules = function() {
             regex : /}}/
         })
     ];
-    this.embedRules(CsoundScoreHighlightRules, "csound-score-", rules);
+    this.embedRules(scoreHighlightRules.getRules(), scoreHighlightRules.embeddedRulePrefix, rules);
     this.embedRules(PythonHighlightRules, "python-", rules);
     this.embedRules(LuaHighlightRules, "lua-", rules);
 
@@ -2668,7 +2951,16 @@ oop.inherits(Mode, TextMode);
     this.lineCommentStart = ";";
     this.blockComment = {start: "/*", end: "*/"};
 
+    this.$id = "ace/mode/csound_orchestra";
+    this.snippetFileId = "ace/snippets/csound_orchestra";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/csound_orchestra"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

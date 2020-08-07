@@ -8,7 +8,7 @@ var SqlHighlightRules = function() {
 
     var keywords = (
         "select|insert|update|delete|from|where|and|or|group|by|order|limit|offset|having|as|case|" +
-        "when|else|end|type|left|right|join|on|outer|desc|asc|union|create|table|primary|key|if|" +
+        "when|then|else|end|type|left|right|join|on|outer|desc|asc|union|create|table|primary|key|if|" +
         "foreign|not|references|default|null|inner|cross|natural|database|drop|grant"
     );
 
@@ -96,8 +96,16 @@ oop.inherits(Mode, TextMode);
     this.lineCommentStart = "--";
 
     this.$id = "ace/mode/sql";
+    this.snippetFileId = "ace/snippets/sql";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
 
-});
+});                (function() {
+                    ace.acequire(["ace/mode/sql"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

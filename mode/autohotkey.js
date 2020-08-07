@@ -46,7 +46,9 @@ var AutoHotKeyHighlightRules = function() {
          { token: 'keyword.operator.ahk',
            regex: '=|==|<>|:=|<|>|\\*|\\/|\\+|:|\\?|\\-' },
          { token: 'punctuation.ahk',
-           regex: '#|`|::|,|\\{|\\}|\\(|\\)|\\%' },
+           regex: /#|`|::|,|%/ },
+         { token: 'paren',
+           regex: /[{}()]/ },
          { token: 
             [ 'punctuation.quote.double',
               'string.quoted.ahk',
@@ -232,4 +234,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/autohotkey"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

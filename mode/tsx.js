@@ -9,7 +9,7 @@ var DocCommentHighlightRules = function() {
         "start" : [ {
             token : "comment.doc.tag",
             regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        },
+        }, 
         DocCommentHighlightRules.getTagRule(),
         {
             defaultToken : "comment.doc",
@@ -181,7 +181,8 @@ var JavaScriptHighlightRules = function(options) {
                 next  : "property"
             }, {
                 token : "storage.type",
-                regex : /=>/
+                regex : /=>/,
+                next  : "start"
             }, {
                 token : "keyword.operator",
                 regex : /--|\+\+|\.{3}|===|==|=|!=|!==|<+=?|>+=?|!|&&|\|\||\?:|[!$%&*+\-~\/^]=?/,
@@ -581,7 +582,7 @@ var FoldMode = exports.FoldMode = function(commentRegex) {
 oop.inherits(FoldMode, BaseFoldMode);
 
 (function() {
-
+    
     this.foldingStartMarker = /([\{\[\(])[^\}\]\)]*$|^\s*(\/\*)/;
     this.foldingStopMarker = /^[^\[\{\(]*([\}\]\)])|^[\s\*]*(\*\/)/;
     this.singleLineBlockCommentRe= /^\s*(\/\*).*\*\/\s*$/;
@@ -590,42 +591,42 @@ oop.inherits(FoldMode, BaseFoldMode);
     this._getFoldWidgetBase = this.getFoldWidget;
     this.getFoldWidget = function(session, foldStyle, row) {
         var line = session.getLine(row);
-
+    
         if (this.singleLineBlockCommentRe.test(line)) {
             if (!this.startRegionRe.test(line) && !this.tripleStarBlockCommentRe.test(line))
                 return "";
         }
-
+    
         var fw = this._getFoldWidgetBase(session, foldStyle, row);
-
+    
         if (!fw && this.startRegionRe.test(line))
             return "start"; // lineCommentRegionStart
-
+    
         return fw;
     };
 
     this.getFoldWidgetRange = function(session, foldStyle, row, forceMultiline) {
         var line = session.getLine(row);
-
+        
         if (this.startRegionRe.test(line))
             return this.getCommentRegionBlock(session, line, row);
-
+        
         var match = line.match(this.foldingStartMarker);
         if (match) {
             var i = match.index;
 
             if (match[1])
                 return this.openingBracketBlock(session, match[1], row, i);
-
+                
             var range = session.getCommentFoldRange(row, i + match[0].length, 1);
-
+            
             if (range && !range.isMultiLine()) {
                 if (forceMultiline) {
                     range = this.getSectionRange(session, row);
                 } else if (foldStyle != "all")
                     range = null;
             }
-
+            
             return range;
         }
 
@@ -642,7 +643,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             return session.getCommentFoldRange(row, i, -1);
         }
     };
-
+    
     this.getSectionRange = function(session, row) {
         var line = session.getLine(row);
         var startIndent = line.search(/\S/);
@@ -659,7 +660,7 @@ oop.inherits(FoldMode, BaseFoldMode);
             if  (startIndent > indent)
                 break;
             var subRange = this.getFoldWidgetRange(session, "all", row);
-
+            
             if (subRange) {
                 if (subRange.start.row <= startRow) {
                     break;
@@ -671,14 +672,14 @@ oop.inherits(FoldMode, BaseFoldMode);
             }
             endRow = row;
         }
-
+        
         return new Range(startRow, startColumn, endRow, session.getLine(endRow).length);
     };
     this.getCommentRegionBlock = function(session, line, row) {
         var startColumn = line.search(/\s*$/);
         var maxRow = session.getLength();
         var startRow = row;
-
+        
         var re = /^\s*(?:\/\*|\/\/|--)#?(end)?region\b/;
         var depth = 1;
         while (++row < maxRow) {
@@ -714,7 +715,7 @@ var CStyleFoldMode = acequire("./folding/cstyle").FoldMode;
 
 var Mode = function() {
     this.HighlightRules = JavaScriptHighlightRules;
-
+    
     this.$outdent = new MatchingBraceOutdent();
     this.$behaviour = new CstyleBehaviour();
     this.foldingRules = new CStyleFoldMode();
@@ -783,57 +784,46 @@ oop.inherits(Mode, TextMode);
     };
 
     this.$id = "ace/mode/javascript";
+    this.snippetFileId = "ace/snippets/javascript";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
 });
 
-ace.define("ace/mode/typescript_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/javascript_highlight_rules"], function(acequire, exports, module) {
+ace.define("ace/mode/typescript_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/javascript_highlight_rules"], function (acequire, exports, module) {
 "use strict";
 
 var oop = acequire("../lib/oop");
 var JavaScriptHighlightRules = acequire("./javascript_highlight_rules").JavaScriptHighlightRules;
 
-var TypeScriptHighlightRules = function(options) {
+var TypeScriptHighlightRules = function (options) {
 
-    var tsRules =  [
+    var tsRules = [
         {
-            token: ["keyword.operator.ts", "text", "variable.parameter.function.ts", "text"],
-            regex: "\\b(module)(\\s*)([a-zA-Z0-9_?.$][\\w?.$]*)(\\s*\\{)"
-        },
-        {
-            token: ["storage.type.variable.ts", "text", "keyword.other.ts", "text"],
-            regex: "(super)(\\s*\\()([a-zA-Z0-9,_?.$\\s]+\\s*)(\\))"
-        },
-        {
-            token: ["entity.name.function.ts","paren.lparen", "paren.rparen"],
-            regex: "([a-zA-Z_?.$][\\w?.$]*)(\\()(\\))"
-        },
-        {
-            token: ["variable.parameter.function.ts", "text", "variable.parameter.function.ts"],
-            regex: "([a-zA-Z0-9_?.$][\\w?.$]*)(\\s*:\\s*)([a-zA-Z0-9_?.$][\\w?.$]*)"
-        },
-        {
-            token: ["keyword.operator.ts"],
-            regex: "(?:\\b(constructor|declare|interface|as|AS|public|private|class|extends|export|super)\\b)"
-        },
-        {
-            token: ["storage.type.variable.ts"],
-            regex: "(?:\\b(this\\.|string\\b|bool\\b|number)\\b)"
-        },
-        {
-            token: ["keyword.operator.ts", "storage.type.variable.ts", "keyword.operator.ts", "storage.type.variable.ts"],
-            regex: "(class)(\\s+[a-zA-Z0-9_?.$][\\w?.$]*\\s+)(extends)(\\s+[a-zA-Z0-9_?.$][\\w?.$]*\\s+)?"
+            token: ["storage.type", "text", "entity.name.function.ts"],
+            regex: "(function)(\\s+)([a-zA-Z0-9\$_\u00a1-\uffff][a-zA-Z0-9\d\$_\u00a1-\uffff]*)"
         },
         {
             token: "keyword",
-            regex: "(?:super|export|class|extends|import)\\b"
+            regex: "(?:\\b(constructor|declare|interface|as|AS|public|private|extends|export|super|readonly|module|namespace|abstract|implements)\\b)"
+        },
+        {
+            token: ["keyword", "storage.type.variable.ts"],
+            regex: "(class|type)(\\s+[a-zA-Z0-9_?.$][\\w?.$]*)"
+         },
+        {
+            token: "keyword",
+            regex: "\\b(?:super|export|import|keyof|infer)\\b"
+        }, 
+        {
+            token: ["storage.type.variable.ts"],
+            regex: "(?:\\b(this\\.|string\\b|bool\\b|boolean\\b|number\\b|true\\b|false\\b|undefined\\b|any\\b|null\\b|(?:unique )?symbol\\b|object\\b|never\\b|enum\\b))"
         }
     ];
 
     var JSRules = new JavaScriptHighlightRules({jsx: (options && options.jsx) == true}).getRules();
-
-    JSRules.start = tsRules.concat(JSRules.start);
+    
+    JSRules.no_regex = tsRules.concat(JSRules.no_regex);
     this.$rules = JSRules;
 };
 
@@ -854,7 +844,7 @@ var MatchingBraceOutdent = acequire("./matching_brace_outdent").MatchingBraceOut
 
 var Mode = function() {
     this.HighlightRules = TypeScriptHighlightRules;
-
+    
     this.$outdent = new MatchingBraceOutdent();
     this.$behaviour = new CstyleBehaviour();
     this.foldingRules = new CStyleFoldMode();
@@ -888,4 +878,11 @@ oop.inherits(Mode, tsMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/tsx"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

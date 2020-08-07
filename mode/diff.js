@@ -108,7 +108,7 @@ oop.inherits(FoldMode, BaseFoldMode);
         }
         if (row == start.row + 1)
             return;
-        return  Range.fromPoints(start, {row: row - 1, column: line.length});
+        return new Range(start.row, start.column, row - 1, line.length);
     };
 
 }).call(FoldMode.prototype);
@@ -125,15 +125,23 @@ var FoldMode = acequire("./folding/diff").FoldMode;
 
 var Mode = function() {
     this.HighlightRules = HighlightRules;
-    this.foldingRules = new FoldMode(["diff", "index", "\\+{3}", "@@|\\*{5}"], "i");
+    this.foldingRules = new FoldMode(["diff", "@@|\\*{5}"], "i");
 };
 oop.inherits(Mode, TextMode);
 
 (function() {
 
     this.$id = "ace/mode/diff";
+    this.snippetFileId = "ace/snippets/diff";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
 
-});
+});                (function() {
+                    ace.acequire(["ace/mode/diff"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

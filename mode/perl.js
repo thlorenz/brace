@@ -367,7 +367,15 @@ oop.inherits(Mode, TextMode);
     };
 
     this.$id = "ace/mode/perl";
+    this.snippetFileId = "ace/snippets/perl";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/perl"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

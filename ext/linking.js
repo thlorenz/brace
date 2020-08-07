@@ -1,6 +1,6 @@
 ace.define("ace/ext/linking",["require","exports","module","ace/editor","ace/config"], function(acequire, exports, module) {
 
-var Editor = acequire("ace/editor").Editor;
+var Editor = acequire("../editor").Editor;
 
 acequire("../config").defineOptions(Editor.prototype, "editor", {
     enableLinking: {
@@ -54,8 +54,11 @@ function onClick(e) {
     }
 }
 
-});
-                (function() {
-                    ace.acequire(["ace/ext/linking"], function() {});
+});                (function() {
+                    ace.acequire(["ace/ext/linking"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

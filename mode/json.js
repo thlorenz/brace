@@ -275,6 +275,9 @@ oop.inherits(Mode, TextMode);
 
 (function() {
 
+    this.lineCommentStart = "//";
+    this.blockComment = {start: "/*", end: "*/"};
+    
     this.getNextLineIndent = function(state, line, tab) {
         var indent = this.$getIndent(line);
 
@@ -316,4 +319,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/json"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

@@ -301,7 +301,15 @@ oop.inherits(Mode, TextMode);
     };
 
     this.$id = "ace/mode/clojure";
+    this.snippetFileId = "ace/snippets/clojure";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/clojure"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            
