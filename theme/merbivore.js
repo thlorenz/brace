@@ -92,4 +92,11 @@ background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgb
 
 var dom = acequire("../lib/dom");
 dom.importCssString(exports.cssText, exports.cssClass);
-});
+});                (function() {
+                    ace.acequire(["ace/theme/merbivore"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

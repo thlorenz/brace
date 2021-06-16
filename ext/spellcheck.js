@@ -64,8 +64,11 @@ acequire("../config").defineOptions(Editor.prototype, "editor", {
     }
 });
 
-});
-                (function() {
-                    ace.acequire(["ace/ext/spellcheck"], function() {});
+});                (function() {
+                    ace.acequire(["ace/ext/spellcheck"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

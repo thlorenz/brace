@@ -69,7 +69,7 @@ var SwiftHighlightRules = function() {
             + "|convenience|dynamic|final|infix|lazy|mutating|nonmutating|optional|override|postfix"
             + "|prefix|acequired|static|guard|defer",
         "storage.type": "bool|double|Double"
-            + "|extension|float|Float|int|Int|private|public|string|String",
+            + "|extension|float|Float|int|Int|open|internal|fileprivate|private|public|string|String",
         "constant.language":
             "false|Infinity|NaN|nil|no|null|null|off|on|super|this|true|undefined|yes",
         "support.function":
@@ -133,7 +133,7 @@ var SwiftHighlightRules = function() {
                 return val == open ? "paren.lparen" : "paren.rparen";
             },
             nextState: interpStart
-        };
+        }; 
         return [counter, mainRule];
     }
     
@@ -171,7 +171,7 @@ var SwiftHighlightRules = function() {
                 error: /\\./,
                 multiline: false
             }),
-            comments({type: "c", nestable: true}),
+            comments(),
             {
                  regex: /@[a-zA-Z_$][a-zA-Z_$\d\u0080-\ufffe]*/,
                  token: "variable.parameter"
@@ -379,4 +379,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/swift"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

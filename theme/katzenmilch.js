@@ -118,4 +118,11 @@ rbackground-color: rgba(73, 166, 210, 0.039)\
 
 var dom = acequire("../lib/dom");
 dom.importCssString(exports.cssText, exports.cssClass);
-});
+});                (function() {
+                    ace.acequire(["ace/theme/katzenmilch"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

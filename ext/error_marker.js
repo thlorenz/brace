@@ -1,6 +1,9 @@
 
-;
-                (function() {
-                    ace.acequire(["ace/ext/error_marker"], function() {});
+;                (function() {
+                    ace.acequire(["ace/ext/error_marker"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             

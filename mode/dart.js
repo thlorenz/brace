@@ -76,7 +76,7 @@ var c_cppHighlightRules = function() {
     );
 
     var keywordOperators = (
-        "and|and_eq|bitand|bitor|compl|not|not_eq|or|or_eq|typeid|xor|xor_eq" +
+        "and|and_eq|bitand|bitor|compl|not|not_eq|or|or_eq|typeid|xor|xor_eq|" +
         "const_cast|dynamic_cast|reinterpret_cast|static_cast|sizeof|namespace"
     );
 
@@ -519,12 +519,17 @@ var DartHighlightRules = function() {
         "storage.type.primitive.dart": storageType
     }, "identifier");
 
-    var stringfill = {
+    var stringfill = [{
+        token : "constant.language.escape",
+        regex : /\\./
+    }, {
+        token : "text",
+        regex : /\$(?:\w+|{[^"'}]+})?/
+    }, {
         defaultToken : "string"
-    };
+    }];
 
-    this.$rules = 
-        {
+    this.$rules = {
     "start": [
         {
             token : "comment",
@@ -637,30 +642,34 @@ var DartHighlightRules = function() {
     "qdoc" : [
         {
             token : "string",
-            regex : ".*?'''",
+            regex : "'''",
             next : "start"
-        }, stringfill],
+        }
+    ].concat(stringfill),
 
     "qqdoc" : [
         {
             token : "string",
-            regex : '.*?"""',
+            regex : '"""',
             next : "start"
-        }, stringfill],
+        }
+    ].concat(stringfill),
 
     "qstring" : [
         {
             token : "string",
-            regex : "[^\\\\']*(?:\\\\.[^\\\\']*)*'",
+            regex : "'|$",
             next : "start"
-        }, stringfill],
+        }
+    ].concat(stringfill),
 
     "qqstring" : [
         {
             token : "string",
-            regex : '[^\\\\"]*(?:\\\\.[^\\\\"]*)*"',
+            regex : '"|$',
             next : "start"
-        }, stringfill]
+        }
+    ].concat(stringfill)
 };
 
     this.embedRules(DocCommentHighlightRules, "doc-",
@@ -694,4 +703,11 @@ oop.inherits(Mode, CMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/dart"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

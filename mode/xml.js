@@ -210,7 +210,7 @@ var TokenIterator = acequire("../../token_iterator").TokenIterator;
 var lang = acequire("../../lib/lang");
 
 function is(token, type) {
-    return token.type.lastIndexOf(type + ".xml") > -1;
+    return token && token.type.lastIndexOf(type + ".xml") > -1;
 }
 
 var XmlBehaviour = function () {
@@ -280,14 +280,19 @@ var XmlBehaviour = function () {
             if (is(token, "reference.attribute-value"))
                 return;
             if (is(token, "attribute-value")) {
-                var firstChar = token.value.charAt(0);
-                if (firstChar == '"' || firstChar == "'") {
-                    var lastChar = token.value.charAt(token.value.length - 1);
-                    var tokenEnd = iterator.getCurrentTokenColumn() + token.value.length;
-                    if (tokenEnd > position.column || tokenEnd == position.column && firstChar != lastChar)
+                var tokenEndColumn = iterator.getCurrentTokenColumn() + token.value.length;
+                if (position.column < tokenEndColumn)
+                    return;
+                if (position.column == tokenEndColumn) {
+                    var nextToken = iterator.stepForward();
+                    if (nextToken && is(nextToken, "attribute-value"))
                         return;
+                    iterator.stepBackward();
                 }
             }
+            
+            if (/^\s*>/.test(session.getLine(position.row).slice(position.column)))
+                return;
             while (!is(token, "tag-name")) {
                 token = iterator.stepBackward();
                 if (token.value == "<") {
@@ -418,7 +423,7 @@ function is(token, type) {
 
         return "start";
     };
-
+    
     this.getCommentFoldWidget = function(session, row) {
         if (/comment/.test(session.getState(row)) && /<!-/.test(session.getLine(row)))
             return "start";
@@ -661,4 +666,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/xml"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            

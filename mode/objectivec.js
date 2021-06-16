@@ -76,7 +76,7 @@ var c_cppHighlightRules = function() {
     );
 
     var keywordOperators = (
-        "and|and_eq|bitand|bitor|compl|not|not_eq|or|or_eq|typeid|xor|xor_eq" +
+        "and|and_eq|bitand|bitor|compl|not|not_eq|or|or_eq|typeid|xor|xor_eq|" +
         "const_cast|dynamic_cast|reinterpret_cast|static_cast|sizeof|namespace"
     );
 
@@ -730,4 +730,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    ace.acequire(["ace/mode/objectivec"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            
