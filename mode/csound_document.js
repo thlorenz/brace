@@ -536,7 +536,7 @@ var LuaHighlightRules = function() {
                         }
                         return "string.end";
                     },
-
+                    
                     regex : /\]=*\]/,
                     next  : "start"
                 }, {
@@ -573,7 +573,7 @@ var LuaHighlightRules = function() {
             regex : "\\s+|\\w+"
         } ]
     };
-
+    
     this.normalizeRules();
 };
 
@@ -2712,7 +2712,7 @@ var CssHighlightRules = function() {
         }, {
             caseInsensitive: true
         }],
-
+        
         "media": [{
             include : ["strings", "url", "comments"]
         }, {
@@ -2781,7 +2781,7 @@ var CssHighlightRules = function() {
         }, {
             caseInsensitive: true
         }],
-
+        
         url: [{
             token : "support.function",
             regex : "(?:url(:?-prefix)?|domain|regexp)\\(",
@@ -2793,7 +2793,7 @@ var CssHighlightRules = function() {
                 defaultToken: "string"
             }]
         }],
-
+        
         strings: [{
             token : "string.start",
             regex : "'",
@@ -2831,7 +2831,7 @@ var CssHighlightRules = function() {
             token : "constant.language.escape",
             regex : /\\([a-fA-F\d]{1,6}|[^a-fA-F\d])/
         }]
-
+        
     };
 
     this.normalizeRules();
@@ -2854,7 +2854,7 @@ var DocCommentHighlightRules = function() {
         "start" : [ {
             token : "comment.doc.tag",
             regex : "@[\\w\\d_]+" // TODO: fix email addresses
-        },
+        }, 
         DocCommentHighlightRules.getTagRule(),
         {
             defaultToken : "comment.doc",

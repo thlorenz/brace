@@ -536,7 +536,7 @@ var LuaHighlightRules = function() {
                         }
                         return "string.end";
                     },
-
+                    
                     regex : /\]=*\]/,
                     next  : "start"
                 }, {
@@ -573,7 +573,7 @@ var LuaHighlightRules = function() {
             regex : "\\s+|\\w+"
         } ]
     };
-
+    
     this.normalizeRules();
 };
 

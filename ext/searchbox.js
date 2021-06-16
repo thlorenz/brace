@@ -190,7 +190,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
     var div = dom.createElement("div");
     div.innerHTML = html;
     this.element = div.firstChild;
-
+    
     this.setSession = this.setSession.bind(this);
 
     this.$init();
@@ -203,7 +203,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
         editor.renderer.scroller.appendChild(this.element);
         this.editor = editor;
     };
-
+    
     this.setSession = function(e) {
         this.searchRange = null;
         this.$syncOptions(true);
@@ -354,7 +354,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
             sb.$syncOptions();
         }
     }]);
-
+    
     this.setSearchRange = function(range) {
         this.searchRange = range;
         if (range) {
@@ -406,11 +406,11 @@ var SearchBox = function(editor, range, showReplaceForm) {
             var value = this.searchRange
                 ? editor.session.getTextRange(this.searchRange)
                 : editor.getValue();
-
+            
             var offset = editor.session.doc.positionToIndex(editor.selection.anchor);
             if (this.searchRange)
                 offset -= editor.session.doc.positionToIndex(this.searchRange.start);
-
+                
             var last = regex.lastIndex = 0;
             var m;
             while ((m = regex.exec(value))) {
@@ -466,7 +466,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
         this.active = false;
         this.setSearchRange(null);
         this.editor.off("changeSession", this.setSession);
-
+        
         this.element.style.display = "none";
         this.editor.keyBinding.removeKeyboardHandler(this.$closeSearchBarKb);
         this.editor.focus();
@@ -476,7 +476,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
         this.editor.on("changeSession", this.setSession);
         this.element.style.display = "";
         this.replaceOption.checked = isReplace;
-
+        
         if (value)
             this.searchInput.value = value;
         
@@ -484,7 +484,7 @@ var SearchBox = function(editor, range, showReplaceForm) {
         this.searchInput.select();
 
         this.editor.keyBinding.addKeyboardHandler(this.$closeSearchBarKb);
-
+        
         this.$syncOptions(true);
     };
 

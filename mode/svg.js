@@ -418,7 +418,7 @@ function is(token, type) {
 
         return "start";
     };
-
+    
     this.getCommentFoldWidget = function(session, row) {
         if (/comment/.test(session.getState(row)) && /<!-/.test(session.getLine(row)))
             return "start";

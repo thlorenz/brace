@@ -84,7 +84,7 @@ var LatexHighlightRules = function() {
             defaultToken : "text"
         }]
     };
-
+    
     this.normalizeRules();
 };
 oop.inherits(LatexHighlightRules, TextHighlightRules);
