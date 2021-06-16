@@ -6,6 +6,8 @@
   "typings": "index.d.ts",
   "scripts": {
     "update": "(cd build && node ./update && node ./update-ts)",
+    "updatejs": "(cd build && node ./update)",
+    "updatets": "(cd build && node ./update-ts)",
     "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html"
   },
   "repository": {
