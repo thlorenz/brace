@@ -1,6 +1,6 @@
 {
   "name": "brace",
-  "version": "0.10.0-simon",
+  "version": "0.11.1-simon",
   "description": "browserify compatible version of the ace editor.",
   "main": "index.js",
   "typings": "index.d.ts",
@@ -13,9 +13,7 @@
     "url": "git://github.com/thlorenz/brace.git"
   },
   "homepage": "https://github.com/thlorenz/brace",
-  "dependencies": {
-    "w3c-blob": "0.0.1"
-  },
+  "dependencies": {},
   "devDependencies": {
     "browserify": "~4.2.0",
     "opener": "~1.3.0",

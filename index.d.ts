@@ -475,6 +475,8 @@ export function         createEditSession(text: string, mode: TextMode): IEditSe
 
         expandFold(arg: any): void;
 
+        foldAll(startRow?: number, endRow?: number, depth?: number): void
+
         unfold(arg1: any, arg2: boolean): void;
 
         screenToDocumentColumn(row: number, column: number): void;
@@ -1038,6 +1040,12 @@ export function         createEditSession(text: string, mode: TextMode): IEditSe
 
         addEventListener(ev: 'change', callback: (ev: EditorChangeEvent) => any): void;
         addEventListener(ev: string, callback: Function): void;
+
+        off(ev: string, callback: Function): void;
+
+        removeListener(ev: string, callback: Function): void;
+
+        removeEventListener(ev: string, callback: Function): void;
 
         inMultiSelectMode: boolean;
 
@@ -2164,7 +2172,15 @@ export function         createEditSession(text: string, mode: TextMode): IEditSe
     **/
     export interface Selection {
 
+        on(ev: string, callback: Function): void;
+
         addEventListener(ev: string, callback: Function): void;
+
+        off(ev: string, callback: Function): void;
+
+        removeListener(ev: string, callback: Function): void;
+
+        removeEventListener(ev: string, callback: Function): void;
 
         moveCursorWordLeft(): void;
 
@@ -2643,6 +2659,8 @@ export function         createEditSession(text: string, mode: TextMode): IEditSe
         characterWidth: number;
 
         lineHeight: number;
+
+        setScrollMargin(top:number, bottom:number, left: number, right: number): void;
 
         screenToTextCoordinates(left: number, top: number): void;
 
