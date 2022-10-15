@@ -67,7 +67,7 @@ var SwiftHighlightRules = function() {
             + "|safe|Self|self|set|struct|subscript|switch|Type|typealias"
             + "|unowned|unsafe|var|weak|where|while|willSet"
             + "|convenience|dynamic|final|infix|lazy|mutating|nonmutating|optional|override|postfix"
-            + "|prefix|acequired|static|guard|defer",
+            + "|prefix|acquired|static|guard|defer",
         "storage.type": "bool|double|Double"
             + "|extension|float|Float|int|Int|private|public|string|String",
         "constant.language":

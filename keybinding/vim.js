@@ -1121,7 +1121,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
     var options = {};
     function defineOption(name, defaultValue, type, aliases, callback) {
       if (defaultValue === undefined && !callback) {
-        throw Error('defaultValue is acequired unless callback is provided');
+        throw Error('defaultValue is acquired unless callback is provided');
       }
       if (!type) { type = 'string'; }
       options[name] = {
@@ -4815,7 +4815,7 @@ dom.importCssString(".normal-mode .ace_cursor{\
       },
       delmarks: function(cm, params) {
         if (!params.argString || !trim(params.argString)) {
-          showConfirm(cm, 'Argument acequired');
+          showConfirm(cm, 'Argument acquired');
           return;
         }
 

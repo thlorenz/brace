@@ -102,7 +102,7 @@ declare namespace AceAjax {
     ////////////////
 
     /**
-     * The main class acequired to set up an Ace instance in the browser.
+     * The main class acquired to set up an Ace instance in the browser.
     **/
 
 

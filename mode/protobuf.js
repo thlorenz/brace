@@ -505,7 +505,7 @@ ace.define("ace/mode/protobuf_highlight_rules",["require","exports","module","ac
         var builtinTypes = "double|float|int32|int64|uint32|uint64|sint32|" +
                            "sint64|fixed32|fixed64|sfixed32|sfixed64|bool|" +
                            "string|bytes";
-        var keywordDeclaration = "message|acequired|optional|repeated|package|" +
+        var keywordDeclaration = "message|acquired|optional|repeated|package|" +
                                  "import|option|enum";
 
         var keywordMapper = this.createKeywordMapper({
