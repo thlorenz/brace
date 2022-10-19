@@ -34,6 +34,8 @@ declare namespace AceAjax {
         addCommands(commands:EditorCommand[]): void;
 
         addCommand(command:EditorCommand): void;
+        
+        removeCommand: (command: EditorCommand, keepCommand?: boolean) => void
 
         exec(name: string, editor: Editor, args: any): void;
     }
