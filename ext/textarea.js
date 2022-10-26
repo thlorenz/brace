@@ -164,7 +164,7 @@ function applyStyles(elm, styles) {
 
 function setupContainer(element, getValue) {
     if (element.type != 'textarea') {
-        throw new Error("Textarea acequired!");
+        throw new Error("Textarea acquired!");
     }
 
     var parentNode = element.parentNode;
