@@ -133,7 +133,7 @@ var SwiftHighlightRules = function() {
                 return val == open ? "paren.lparen" : "paren.rparen";
             },
             nextState: interpStart
-        };
+        }; 
         return [counter, mainRule];
     }
     

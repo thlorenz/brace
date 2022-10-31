@@ -109,7 +109,7 @@ var CssHighlightRules = function() {
         }, {
             caseInsensitive: true
         }],
-
+        
         "media": [{
             include : ["strings", "url", "comments"]
         }, {
@@ -178,7 +178,7 @@ var CssHighlightRules = function() {
         }, {
             caseInsensitive: true
         }],
-
+        
         url: [{
             token : "support.function",
             regex : "(?:url(:?-prefix)?|domain|regexp)\\(",
@@ -190,7 +190,7 @@ var CssHighlightRules = function() {
                 defaultToken: "string"
             }]
         }],
-
+        
         strings: [{
             token : "string.start",
             regex : "'",
@@ -228,7 +228,7 @@ var CssHighlightRules = function() {
             token : "constant.language.escape",
             regex : /\\([a-fA-F\d]{1,6}|[^a-fA-F\d])/
         }]
-
+        
     };
 
     this.normalizeRules();
@@ -12102,7 +12102,7 @@ function is(token, type) {
 
         return "start";
     };
-
+    
     this.getCommentFoldWidget = function(session, row) {
         if (/comment/.test(session.getState(row)) && /<!-/.test(session.getLine(row)))
             return "start";
