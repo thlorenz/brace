@@ -6,7 +6,7 @@
   "typings": "index.d.ts",
   "scripts": {
     "update": "(cd build && node ./update && node ./update-ts)",
-    "test": "browserify test/*.js > test/bundle.js --debug && opener test/index.html"
+    "test": "browserify test/b.js > test/bundle.js --debug && opener test/index.html"
   },
   "repository": {
     "type": "git",

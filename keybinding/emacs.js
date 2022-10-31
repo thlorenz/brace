@@ -92,8 +92,6 @@ dom.importCssString(".ace_occur-highlight {\n\
     background-color: rgba(87, 255, 8, 0.25);\n\
     position: absolute;\n\
     z-index: 4;\n\
-    -moz-box-sizing: border-box;\n\
-    -webkit-box-sizing: border-box;\n\
     box-sizing: border-box;\n\
     box-shadow: 0 0 4px rgb(91, 255, 50);\n\
 }\n\
@@ -565,8 +563,6 @@ dom.importCssString && dom.importCssString("\
 .ace_marker-layer .ace_isearch-result {\
   position: absolute;\
   z-index: 6;\
-  -moz-box-sizing: border-box;\
-  -webkit-box-sizing: border-box;\
   box-sizing: border-box;\
 }\
 div.ace_isearch-result {\
@@ -612,19 +608,6 @@ acequire("../incremental_search");
 var iSearchCommandModule = acequire("../commands/incremental_search_commands");
 
 
-var screenToTextBlockCoordinates = function(x, y) {
-    var canvasPos = this.scroller.getBoundingClientRect();
-    var offsetX = x + this.scrollLeft - canvasPos.left - this.$padding;
-
-    var col = Math.floor(offsetX / this.characterWidth);
-
-    var row = Math.floor(
-        (y + this.scrollTop - canvasPos.top) / this.lineHeight
-    );
-
-    return this.session.screenToDocumentPosition(row, col, offsetX);
-};
-
 var HashHandler = acequire("./hash_handler").HashHandler;
 exports.handler = new HashHandler();
 
@@ -641,8 +624,6 @@ exports.handler.attach = function(editor) {
         dom.importCssString('\
             .emacs-mode .ace_cursor{\
                 border: 1px rgba(50,250,50,0.8) solid!important;\
-                -moz-box-sizing: border-box!important;\
-                -webkit-box-sizing: border-box!important;\
                 box-sizing: border-box!important;\
                 background-color: rgba(0,250,0,0.9);\
                 opacity: 0.5;\
@@ -716,7 +697,7 @@ exports.handler.attach = function(editor) {
 
     editor.on("click", $resetMarkMode);
     editor.on("changeSession", $kbSessionChange);
-    editor.renderer.screenToTextCoordinates = screenToTextBlockCoordinates;
+    editor.renderer.$blockCursor = true;
     editor.setStyle("emacs-mode");
     editor.commands.addCommands(commands);
     exports.handler.platform = editor.commands.platform;
@@ -726,7 +707,7 @@ exports.handler.attach = function(editor) {
 };
 
 exports.handler.detach = function(editor) {
-    delete editor.renderer.screenToTextCoordinates;
+    editor.renderer.$blockCursor = false;
     editor.session.$selectLongWords = $formerLongWords;
     editor.session.$useEmacsStyleLineStart = $formerLineStart;
     editor.removeEventListener("click", $resetMarkMode);
@@ -1128,6 +1109,7 @@ exports.handler.addCommands({
                 editor.$handlesEmacsOnCopy = false;
                 if (editor.inMultiSelectMode) editor.forEachSelection({exec: deselect});
                 else deselect();
+                editor.setEmacsMark(null);
                 editor.session.$emacsMarkRing = marks.concat(deselectedMarks.reverse());
             }, 0);
         },
@@ -1178,4 +1160,11 @@ exports.killRing = {
     }
 };
 
-});
+});                (function() {
+                    ace.acequire(["ace/keyboard/emacs"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            
