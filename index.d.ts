@@ -2975,8 +2975,9 @@ export function         createEditSession(text: string, mode: TextMode): IEditSe
         /**
          * [Adds a new class, `style`, to the editor.]{: #VirtualRenderer.setStyle}
          * @param style A class name
+         * @param include Adds class if true, removes class if false (optional)
         **/
-        setStyle(style: string): void;
+        setStyle(style: string, include?: boolean): void;
 
         /**
          * [Removes the class `style` from the editor.]{: #VirtualRenderer.unsetStyle}
